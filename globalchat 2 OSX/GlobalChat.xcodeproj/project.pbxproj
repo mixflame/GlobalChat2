@@ -1,0 +1,381 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		42B66141161614E100381E59 /* myIcon.iconset in Resources */ = {isa = PBXBuildFile; fileRef = 42B66140161614E100381E59 /* myIcon.iconset */; };
+		EF0D4E271579F7EA006FE21B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF0D4E261579F7EA006FE21B /* Cocoa.framework */; };
+		EF0D4E321579F7EA006FE21B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EF0D4E301579F7EA006FE21B /* InfoPlist.strings */; };
+		EF0D4E341579F7EA006FE21B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0D4E331579F7EA006FE21B /* main.m */; };
+		EF0D4E391579F7EA006FE21B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF0D4E371579F7EA006FE21B /* MainMenu.xib */; };
+		EF0D4E3C1579F7EA006FE21B /* rb_main.rb in Resources */ = {isa = PBXBuildFile; fileRef = EF0D4E3B1579F7EA006FE21B /* rb_main.rb */; };
+		EF0D4E3E1579F7EA006FE21B /* AppDelegate.rb in Resources */ = {isa = PBXBuildFile; fileRef = EF0D4E3D1579F7EA006FE21B /* AppDelegate.rb */; };
+		EF0D4E4A1579F82C006FE21B /* GlobalChatController.rb in Resources */ = {isa = PBXBuildFile; fileRef = EF0D4E491579F82C006FE21B /* GlobalChatController.rb */; };
+		EF434CA815903F3E00B3C8D1 /* MacRuby.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF434CA715903F3E00B3C8D1 /* MacRuby.framework */; };
+		EF434CAA15905C2B00B3C8D1 /* ServerListController.rb in Resources */ = {isa = PBXBuildFile; fileRef = EF434CA915905C2B00B3C8D1 /* ServerListController.rb */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		EF0D4E2B1579F7EA006FE21B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EF0D4E191579F7EA006FE21B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EF0D4E211579F7EA006FE21B;
+			remoteInfo = GlobalChat;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		42B66140161614E100381E59 /* myIcon.iconset */ = {isa = PBXFileReference; lastKnownFileType = folder.iconset; path = myIcon.iconset; sourceTree = "<group>"; };
+		EF0D4E221579F7EA006FE21B /* GlobalChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GlobalChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF0D4E261579F7EA006FE21B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		EF0D4E2F1579F7EA006FE21B /* GlobalChat-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GlobalChat-Info.plist"; sourceTree = "<group>"; };
+		EF0D4E311579F7EA006FE21B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		EF0D4E331579F7EA006FE21B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		EF0D4E351579F7EA006FE21B /* GlobalChat-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GlobalChat-Prefix.pch"; sourceTree = "<group>"; };
+		EF0D4E381579F7EA006FE21B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		EF0D4E3B1579F7EA006FE21B /* rb_main.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = rb_main.rb; sourceTree = "<group>"; };
+		EF0D4E3D1579F7EA006FE21B /* AppDelegate.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = AppDelegate.rb; sourceTree = "<group>"; };
+		EF0D4E491579F82C006FE21B /* GlobalChatController.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = GlobalChatController.rb; sourceTree = SOURCE_ROOT; };
+		EF1D0374157ADD1400F87BFF /* GlobalChat.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = GlobalChat.entitlements; sourceTree = "<group>"; };
+		EF434CA715903F3E00B3C8D1 /* MacRuby.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MacRuby.framework; path = /Library/Frameworks/MacRuby.framework; sourceTree = "<absolute>"; };
+		EF434CA915905C2B00B3C8D1 /* ServerListController.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = ServerListController.rb; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EF0D4E1F1579F7EA006FE21B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF434CA815903F3E00B3C8D1 /* MacRuby.framework in Frameworks */,
+				EF0D4E271579F7EA006FE21B /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		EF0D4E171579F7EA006FE21B = {
+			isa = PBXGroup;
+			children = (
+				42B66140161614E100381E59 /* myIcon.iconset */,
+				EF0D4E2D1579F7EA006FE21B /* GlobalChat */,
+				EF0D4E251579F7EA006FE21B /* Frameworks */,
+				EF0D4E231579F7EA006FE21B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EF0D4E231579F7EA006FE21B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EF0D4E221579F7EA006FE21B /* GlobalChat.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EF0D4E251579F7EA006FE21B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EF0D4E261579F7EA006FE21B /* Cocoa.framework */,
+				EF434CA715903F3E00B3C8D1 /* MacRuby.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EF0D4E2D1579F7EA006FE21B /* GlobalChat */ = {
+			isa = PBXGroup;
+			children = (
+				EF434CA915905C2B00B3C8D1 /* ServerListController.rb */,
+				EF1D0374157ADD1400F87BFF /* GlobalChat.entitlements */,
+				EF0D4E491579F82C006FE21B /* GlobalChatController.rb */,
+				EF0D4E3D1579F7EA006FE21B /* AppDelegate.rb */,
+				EF0D4E361579F7EA006FE21B /* Resources */,
+				EF0D4E3A1579F7EA006FE21B /* Other Sources */,
+				EF0D4E2E1579F7EA006FE21B /* Supporting Files */,
+			);
+			path = GlobalChat;
+			sourceTree = "<group>";
+		};
+		EF0D4E2E1579F7EA006FE21B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				EF0D4E2F1579F7EA006FE21B /* GlobalChat-Info.plist */,
+				EF0D4E301579F7EA006FE21B /* InfoPlist.strings */,
+				EF0D4E331579F7EA006FE21B /* main.m */,
+				EF0D4E351579F7EA006FE21B /* GlobalChat-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EF0D4E361579F7EA006FE21B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				EF0D4E371579F7EA006FE21B /* MainMenu.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		EF0D4E3A1579F7EA006FE21B /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				EF0D4E3B1579F7EA006FE21B /* rb_main.rb */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		EF0D4E2A1579F7EA006FE21B /* Production */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "--compile --embed";
+			buildConfigurationList = EF0D4E441579F7EA006FE21B /* Build configuration list for PBXLegacyTarget "Production" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/local/bin/macruby_deploy;
+			buildWorkingDirectory = "/Users/jsilverman2/coding/GlobalChat2/globalchat 2 OSX";
+			dependencies = (
+				EF0D4E2C1579F7EA006FE21B /* PBXTargetDependency */,
+			);
+			name = Production;
+			passBuildSettingsInEnvironment = 1;
+			productName = Deployment;
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXNativeTarget section */
+		EF0D4E211579F7EA006FE21B /* GlobalChat */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EF0D4E411579F7EA006FE21B /* Build configuration list for PBXNativeTarget "GlobalChat" */;
+			buildPhases = (
+				EF0D4E1E1579F7EA006FE21B /* Sources */,
+				EF0D4E1F1579F7EA006FE21B /* Frameworks */,
+				EF0D4E201579F7EA006FE21B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GlobalChat;
+			productName = GlobalChat;
+			productReference = EF0D4E221579F7EA006FE21B /* GlobalChat.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EF0D4E191579F7EA006FE21B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = EF0D4E1C1579F7EA006FE21B /* Build configuration list for PBXProject "GlobalChat" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = EF0D4E171579F7EA006FE21B;
+			productRefGroup = EF0D4E231579F7EA006FE21B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EF0D4E211579F7EA006FE21B /* GlobalChat */,
+				EF0D4E2A1579F7EA006FE21B /* Production */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EF0D4E201579F7EA006FE21B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF0D4E321579F7EA006FE21B /* InfoPlist.strings in Resources */,
+				EF0D4E391579F7EA006FE21B /* MainMenu.xib in Resources */,
+				EF0D4E3C1579F7EA006FE21B /* rb_main.rb in Resources */,
+				EF0D4E3E1579F7EA006FE21B /* AppDelegate.rb in Resources */,
+				EF0D4E4A1579F82C006FE21B /* GlobalChatController.rb in Resources */,
+				EF434CAA15905C2B00B3C8D1 /* ServerListController.rb in Resources */,
+				42B66141161614E100381E59 /* myIcon.iconset in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		EF0D4E1E1579F7EA006FE21B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF0D4E341579F7EA006FE21B /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		EF0D4E2C1579F7EA006FE21B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EF0D4E211579F7EA006FE21B /* GlobalChat */;
+			targetProxy = EF0D4E2B1579F7EA006FE21B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		EF0D4E301579F7EA006FE21B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EF0D4E311579F7EA006FE21B /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		EF0D4E371579F7EA006FE21B /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EF0D4E381579F7EA006FE21B /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		EF0D4E3F1579F7EA006FE21B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		EF0D4E401579F7EA006FE21B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		EF0D4E421579F7EA006FE21B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = x86_64;
+				CODE_SIGN_ENTITLEMENTS = GlobalChat/GlobalChat.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+					/Library/Frameworks,
+				);
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GlobalChat/GlobalChat-Prefix.pch";
+				INFOPLIST_FILE = "GlobalChat/GlobalChat-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		EF0D4E431579F7EA006FE21B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = x86_64;
+				CODE_SIGN_ENTITLEMENTS = GlobalChat/GlobalChat.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+					/Library/Frameworks,
+				);
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GlobalChat/GlobalChat-Prefix.pch";
+				INFOPLIST_FILE = "GlobalChat/GlobalChat-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		EF0D4E451579F7EA006FE21B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		EF0D4E461579F7EA006FE21B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EF0D4E1C1579F7EA006FE21B /* Build configuration list for PBXProject "GlobalChat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EF0D4E3F1579F7EA006FE21B /* Debug */,
+				EF0D4E401579F7EA006FE21B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EF0D4E411579F7EA006FE21B /* Build configuration list for PBXNativeTarget "GlobalChat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EF0D4E421579F7EA006FE21B /* Debug */,
+				EF0D4E431579F7EA006FE21B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EF0D4E441579F7EA006FE21B /* Build configuration list for PBXLegacyTarget "Production" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EF0D4E451579F7EA006FE21B /* Debug */,
+				EF0D4E461579F7EA006FE21B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EF0D4E191579F7EA006FE21B /* Project object */;
+}

@@ -1,0 +1,13 @@
+GlobalChat 2
+
+Real-time Global Channel communications with ScrollBack
+
+Based on IRC and GlobalChat 1
+
+This version removes all HTTP support in favor of TCP Socket communications.
+
+This greatly increases speed and usability.
+
+GlobalChat is troll-free IRC: No kicking/banning, no topics and no channels to get lost in. GlobalChat is an implementation of Blizzard-style global channels with ZNC bouncer style scrollback that is not found in Vanilla IRC chatting. Just set a password or leave the room private (don't ping the Nexus MSL). Moderation tools are not included on the auspicions that this would be harmful to enterprise chat software (i.e., why would you kick your employees out of the chat room?)
+
+

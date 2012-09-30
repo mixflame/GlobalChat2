@@ -1,0 +1,14 @@
+require 'guard'
+require 'guard/guard'
+require 'guard/test'
+
+guard :test do
+  watching = [
+    /^spec\/(.+)\.rb$/,
+   
+  ].each do |regex|
+    watch(regex) do
+      system("macbacon spec/*")
+    end
+  end
+end
