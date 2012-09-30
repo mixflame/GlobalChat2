@@ -1,5 +1,3 @@
-# DEATH TO MY HATERS
-
 require 'gserver'
 
 class GlobalChatServer < GServer
