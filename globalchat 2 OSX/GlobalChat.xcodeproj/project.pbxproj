@@ -137,7 +137,7 @@
 			buildPhases = (
 			);
 			buildToolPath = /usr/local/bin/macruby_deploy;
-			buildWorkingDirectory = "/Users/jsilverman2/coding/GlobalChat2/globalchat 2 OSX";
+			buildWorkingDirectory = "/Users/jsilverman2/mdks/GlobalChat2/globalchat 2 OSX";
 			dependencies = (
 				EF0D4E2C1579F7EA006FE21B /* PBXTargetDependency */,
 			);
@@ -171,7 +171,7 @@
 		EF0D4E191579F7EA006FE21B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = EF0D4E1C1579F7EA006FE21B /* Build configuration list for PBXProject "GlobalChat" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -262,7 +262,7 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -282,7 +282,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -299,6 +299,7 @@
 				ARCHS = x86_64;
 				CODE_SIGN_ENTITLEMENTS = GlobalChat/GlobalChat.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
@@ -319,6 +320,7 @@
 				ARCHS = x86_64;
 				CODE_SIGN_ENTITLEMENTS = GlobalChat/GlobalChat.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
@@ -336,12 +338,14 @@
 		EF0D4E451579F7EA006FE21B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 			};
 			name = Debug;
 		};
 		EF0D4E461579F7EA006FE21B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 			};
 			name = Release;
 		};
