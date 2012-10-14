@@ -6,7 +6,7 @@ class GlobalChatServerController
 
   attr_accessor :gchatserv, :application
 
-  attr_accessor :server_name, :password, :server_status, :publicize_button, :published
+  attr_accessor :server_name, :password, :server_status, :publicize_button, :published, :host
 
   $queue = Dispatch::Queue.new('com.mdx.globalchat')
 
@@ -22,9 +22,7 @@ class GlobalChatServerController
 
   def quit(sender)
     if @server_name.stringValue != "" && @published == true
-      $queue.async do
         nexus_offline
-      end
     end
     @application.terminate(self)
   end
@@ -38,11 +36,11 @@ class GlobalChatServerController
 
   def ping_nexus
     NSLog "Pinging NexusNet that I'm Online!!"
-    url = "http://globalchatnet.herokuapp.com"
+    host = @host.stringValue
     chatnet_name = @server_name.stringValue
     port = 9994
     uri = URI.parse("http://nexusnet.herokuapp.com/online")
-    query = {:url => url, :name => chatnet_name, :port => port}
+    query = {:name => chatnet_name, :port => port, :host => host}
     uri.query = URI.encode_www_form( query )
     Net::HTTP.get(uri)
     @published = true
