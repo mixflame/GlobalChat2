@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 require 'gserver'
+require 'net/http'
+require 'uri'
 
 class GlobalChatServer < GServer
   
@@ -137,8 +139,30 @@ class GlobalChatServer < GServer
   end
 end
 
+def ping_nexus(chatnet_name, host, port=9994)
+  puts "Pinging NexusNet that I'm Online!!"
+  uri = URI.parse("http://nexusnet.herokuapp.com/online")
+  query = {:name => chatnet_name, :port => port, :host => host}
+  uri.query = URI.encode_www_form( query )
+  Net::HTTP.get(uri)
+  @published = true
+end
+
+def nexus_offline
+  puts "Informing NexusNet that I have exited!!!"
+  Net::HTTP.get_print("nexusnet.herokuapp.com", "/offline")
+end
+
+ping_nexus("MyChatServer", "myhost.com")
+
+at_exit do
+  nexus_offline
+end
+
 gc = GlobalChatServer.new(9994, '0.0.0.0', 1000, $stderr, true)
 gc.password = "" # set a password here
 gc.start
 gc.join
+
+
 
