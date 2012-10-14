@@ -58,6 +58,14 @@ class GlobalChatController
       handle = parr[1]
       msg = parr[2]
       add_msg(handle, msg)
+    elsif command == "JOIN"
+      handle = parr[1]
+      self.nicks << handle
+      self.chat_buffer += "#{handle} has entered\n"
+    elsif command == "LEAVE"
+      handle = parr[1]
+      self.chat_buffer += "#{handle} has exited\n"
+      self.nicks.delete(handle)
     end
   end
   
@@ -95,13 +103,16 @@ end
 
 gcc = GlobalChatController.new
 gcc.handle = "jsilver2"
-gcc.host = "localhost"
+gcc.host = "mdks.org"
 gcc.port = 9994
 gcc.password = ""
 gcc.nicks = []
 gcc.chat_buffer = ""
 gcc.sign_on
 
+at_exit do
+  gcc.quit
+end
 
 while message = gets
   message = message.chop
