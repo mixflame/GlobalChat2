@@ -139,7 +139,7 @@ class GlobalChatServer < GServer
   end
 end
 
-def ping_nexus(chatnet_name, host, port=9994)
+def ping_nexus(chatnet_name, host, port)
   puts "Pinging NexusNet that I'm Online!!"
   uri = URI.parse("http://nexusnet.herokuapp.com/online")
   query = {:name => chatnet_name, :port => port, :host => host}
@@ -153,8 +153,6 @@ def nexus_offline
   Net::HTTP.get_print("nexusnet.herokuapp.com", "/offline")
 end
 
-ping_nexus("MyChatServer", "myhost.com")
-
 at_exit do
   nexus_offline
 end
@@ -164,5 +162,6 @@ gc.password = "" # set a password here
 gc.start
 gc.join
 
+ping_nexus("MyChatServer", "myhost.com", gc.port)
 
 
