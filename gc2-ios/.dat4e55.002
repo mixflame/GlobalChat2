@@ -1,0 +1,68 @@
+p $gcc.nicks
+p $gcc.sign_out
+p $gcc.sign_out
+p $gcc.sign_out
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+/quit
+quit
+/quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+$gcc.nicks
+quit
+quit
+quit
+quit
+quit
+quit
+$gcc.chat_window_text
+$gcc.scroll_view
+$gcc.scroll_view.contentOffset = CGPoint.new(0, 0)
+$gcc.chat_window_text.contentOffset = CGPoint.new(0, 0)
+$gcc.chat_window_text.contentSize.height - $gcc.chat_window_text.frame.size.height
+$gcc.chat_window_text.contentOffset = CGPoint.new(0, 25038)
+$gcc.chat_window_text.contentOffset = CGPoint.new(0, 25040)
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+Dispatch::Queue.gcd
+Dispatch::Queue
+Dispatch::Queue.main
+Dispatch::Queue.inspect
+Dispatch::Queue.description
+err = Pointer.new
+err = Pointer.new(NSError.type)
+err = Pointer.new(:ns_error)
+err = Pointer.new(:object)
+err = Pointer.new(NSError.new)
+err = Pointer.new(NSError.class)
+err = Pointer.new(NSError.class.to_str)
+err = Pointer.new(NSError.class.to_s)
+@mutex = Mutex.new
+quit

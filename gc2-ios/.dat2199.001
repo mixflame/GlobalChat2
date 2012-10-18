@@ -1,0 +1,69 @@
+@ts.writeData("SIGNON::!!::jsilver", withTimeout: -1, tag: 0)
+NSData term = "\n".dataUsingEncoding(NSUTF8StringEncoding)
+term = "\n".dataUsingEncoding(NSUTF8StringEncoding)
+[socket readDataToData:term withTimeout:-1 tag:0];
+@ts.readDataToData(term, withTimeout: -1, tag: 0)
+socket = GCDAsyncSocket.alloc.initWithDelegate(self, delegateQueue:dispatch_get_main_queue())
+Dispatch::Queue.main
+socket = GCDAsyncSocket.alloc.initWithDelegate(self, delegateQueue:Dispatch::Queue.main)
+socket.connectToHost("localhost", onPort:9994, error:nil)
+def socket(sender, didConnectToHost:host, port:port)
+NSLog("Cool, I'm connected! That was easy.")
+end
+socket.connectToHost("localhost", onPort:9994, error:nil)
+socket.connectToHost("localhost", onPort:9994, error:nil)
+socket = nil
+socket = GCDAsyncSocket.alloc.initWithDelegate(self, delegateQueue:Dispatch::Queue.main)
+socket.connectToHost("localhost", onPort:9994, error:nil)
+UInt16
+(UInt16)
+quit
+quit
+NSLog "test"
+quit
+socket = AsyncSocket.alloc.initWithDelegate(self, delegateQueue:Dispatch::Queue.main)
+socket.connectToHost("localhost", onPort:9994, error:nil)
+def socket(sender, didConnectToHost:host, port:port)
+p "Connecting to: #{host} #{port}"
+end
+socket = nil
+socket = AsyncSocket.alloc.initWithDelegate(self, delegateQueue:Dispatch::Queue.main)
+socket.connectToHost("localhost", onPort:9994, error:nil)
+socket.delegate
+quit
+quit
+quit
+"hi".inspect
+"hi".description
+GlobalChatController
+GlobalChatController.new
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+$gcc
+$gcc.nicks
+$gcc.get_handles
+$gcc.nicks
+$gcc.chat_token
+$gcc.send_message "GETBUFFER", [@chat_token]
+quit
+quit
+quit
+p $gcc
+$gcc.description
+p $gcc.nicks
+p $gcc.sign_out
+p $gcc.sign_out
+p $gcc.sign_out
+quit

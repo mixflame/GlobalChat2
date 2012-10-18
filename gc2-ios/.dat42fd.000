@@ -1,0 +1,33 @@
+{:host => par[1], :name => par[0], :port => par[2]}
+end
+end
+server_list_hash
+HTTP.get('http://nexusnet.herokuapp.com/msl') do |resp|
+server_list_hash = resp.body.to_str.
+split("\n").
+collect do |s|
+par = s.split("-!!!-")
+{:host => par[1], :name => par[0], :port => par[2]}
+end
+end
+include BubbleWrap
+HTTP.get('http://nexusnet.herokuapp.com/msl') do |resp|
+server_list_hash = resp.body.to_str.
+split("\n").
+collect do |s|
+par = s.split("-!!!-")
+{:host => par[1], :name => par[0], :port => par[2]}
+end
+end
+puts server_list_hash
+@names = @server_list_hash.collect do |s| s[:name] end
+include BubbleWrap
+s = ServerListController.new
+s.get_servers
+quit
+s = ServerListController.new
+s.get_servers
+s.names
+s.server_list_hash
+quit
+quit

@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2840" systemVersion="12C60" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="pni-Xz-BEu">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1926"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="Y84-0A-4sj">
+            <objects>
+                <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="pni-Xz-BEu" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="yP2-Pz-mVU">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="bLW-QQ-F16" kind="relationship" relationship="rootViewController" id="oB3-Qj-Vwt"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TeN-H3-cRb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-289" y="-11"/>
+        </scene>
+        <!--Server List Controller - Server List-->
+        <scene sceneID="pWC-kO-dWF">
+            <objects>
+                <viewController autoresizesArchivedViewToFullSize="NO" title="Server List" id="bLW-QQ-F16" customClass="ServerListController" sceneMemberID="viewController">
+                    <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="xyj-Cg-YzA">
+                        <rect key="frame" x="0.0" y="20" width="568" height="300"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Oax-uN-jr0">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="144" id="06X-WI-3sw"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="dataSource" destination="bLW-QQ-F16" id="tFH-fR-Uhi"/>
+                                    <outlet property="delegate" destination="bLW-QQ-F16" id="dkx-08-j5O"/>
+                                </connections>
+                            </tableView>
+                            <label autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="left" text="Handle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Law-Q7-Xec">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="63" id="QIi-Cu-fwg"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PA1-bG-hn9">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="105" id="iS8-oc-2Ig"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="bLW-QQ-F16" id="sjf-aG-66c"/>
+                                </connections>
+                            </textField>
+                            <label autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="left" text="Host" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Gu-16-xcv">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="42" id="qwC-fE-i71"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eWJ-Qt-oRx">
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="bLW-QQ-F16" id="JQE-BX-Ht8"/>
+                                </connections>
+                            </textField>
+                            <label autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="left" text="Port" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qdf-oa-SsY">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="42" id="mUb-K4-twe"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7E0-Mr-gED">
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="74" id="RBZ-rP-5s7"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="bLW-QQ-F16" id="W2R-lC-cbn"/>
+                                </connections>
+                            </textField>
+                            <label autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="left" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EIB-o1-gzW">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="87" id="TXf-il-csd"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6Xn-N3-24U">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="105" id="gPC-Eq-Pev"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="bLW-QQ-F16" id="85k-N9-hAw"/>
+                                </connections>
+                            </textField>
+                            <button opaque="NO" autoresizesSubviews="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QJD-JH-jlg">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="73" id="cCa-WJ-S2A"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Refresh">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="refresh:" destination="bLW-QQ-F16" eventType="touchUpInside" id="eEy-Lo-L49"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" autoresizesSubviews="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Fd-7h-Ha9">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="73" id="Ihh-Nw-LQP"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Connect">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="connect:" destination="bLW-QQ-F16" eventType="touchUpInside" id="lJT-Id-p3p"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="eWJ-Qt-oRx" secondAttribute="bottom" constant="67" id="15q-Fv-u4b"/>
+                            <constraint firstItem="Oax-uN-jr0" firstAttribute="top" secondItem="xyj-Cg-YzA" secondAttribute="top" type="default" id="6rt-ty-qsf"/>
+                            <constraint firstItem="PA1-bG-hn9" firstAttribute="trailing" secondItem="eWJ-Qt-oRx" secondAttribute="trailing" type="default" id="7Bh-4n-Tij"/>
+                            <constraint firstItem="EIB-o1-gzW" firstAttribute="baseline" secondItem="6Xn-N3-24U" secondAttribute="baseline" type="default" id="7ow-YY-NoT"/>
+                            <constraint firstItem="eWJ-Qt-oRx" firstAttribute="baseline" secondItem="qdf-oa-SsY" secondAttribute="baseline" type="default" id="7vx-I4-EOz"/>
+                            <constraint firstItem="Law-Q7-Xec" firstAttribute="top" secondItem="Oax-uN-jr0" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="Aaq-ZB-SfV"/>
+                            <constraint firstItem="7E0-Mr-gED" firstAttribute="leading" secondItem="6Xn-N3-24U" secondAttribute="leading" type="default" id="BIB-SS-89Y"/>
+                            <constraint firstItem="EIB-o1-gzW" firstAttribute="leading" secondItem="qdf-oa-SsY" secondAttribute="leading" type="default" id="Nai-Wj-vsC"/>
+                            <constraint firstItem="EIB-o1-gzW" firstAttribute="baseline" secondItem="PA1-bG-hn9" secondAttribute="baseline" type="default" id="O8E-Ck-ceS"/>
+                            <constraint firstItem="QJD-JH-jlg" firstAttribute="leading" secondItem="xyj-Cg-YzA" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="PFa-vj-pgA"/>
+                            <constraint firstAttribute="trailing" secondItem="EIB-o1-gzW" secondAttribute="trailing" constant="125" id="Qti-eV-Dbw"/>
+                            <constraint firstItem="QJD-JH-jlg" firstAttribute="baseline" secondItem="3Fd-7h-Ha9" secondAttribute="baseline" type="default" id="TQy-2J-sZ6"/>
+                            <constraint firstAttribute="bottom" secondItem="6Xn-N3-24U" secondAttribute="bottom" constant="113" id="TZc-sk-mHG"/>
+                            <constraint firstAttribute="bottom" secondItem="QJD-JH-jlg" secondAttribute="bottom" constant="7" id="WT1-qa-h6Q"/>
+                            <constraint firstAttribute="trailing" secondItem="3Fd-7h-Ha9" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="Y3Z-hh-WwO"/>
+                            <constraint firstItem="PA1-bG-hn9" firstAttribute="leading" secondItem="eWJ-Qt-oRx" secondAttribute="leading" type="default" id="bAL-7a-JHc"/>
+                            <constraint firstAttribute="bottom" secondItem="8Gu-16-xcv" secondAttribute="bottom" constant="72" id="c7f-AI-MuL"/>
+                            <constraint firstItem="Oax-uN-jr0" firstAttribute="leading" secondItem="xyj-Cg-YzA" secondAttribute="leading" type="default" id="cI6-vf-H4B"/>
+                            <constraint firstItem="8Gu-16-xcv" firstAttribute="leading" secondItem="xyj-Cg-YzA" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="eZU-k6-cXA"/>
+                            <constraint firstItem="qdf-oa-SsY" firstAttribute="baseline" secondItem="7E0-Mr-gED" secondAttribute="baseline" type="default" id="fXY-k4-JcR"/>
+                            <constraint firstItem="Law-Q7-Xec" firstAttribute="leading" secondItem="xyj-Cg-YzA" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="mOY-tw-604"/>
+                            <constraint firstAttribute="trailing" secondItem="6Xn-N3-24U" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="qD5-gG-gfK"/>
+                            <constraint firstItem="Oax-uN-jr0" firstAttribute="trailing" secondItem="xyj-Cg-YzA" secondAttribute="trailing" type="default" id="viB-Kc-KP1"/>
+                            <constraint firstItem="PA1-bG-hn9" firstAttribute="leading" secondItem="xyj-Cg-YzA" secondAttribute="leading" constant="115" id="xz3-cr-Rlj"/>
+                        </constraints>
+                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Connect to a Server" id="Fpj-IM-K8W"/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+                    <connections>
+                        <outlet property="handle" destination="PA1-bG-hn9" id="Nir-DR-yDB"/>
+                        <outlet property="host" destination="eWJ-Qt-oRx" id="hlJ-GQ-YIF"/>
+                        <outlet property="password" destination="6Xn-N3-24U" id="8oP-1k-1Dd"/>
+                        <outlet property="port" destination="7E0-Mr-gED" id="eyi-dK-4DH"/>
+                        <outlet property="server_list_table" destination="Oax-uN-jr0" id="E43-TX-pxu"/>
+                        <segue destination="6Pa-eO-HLl" kind="push" identifier="Connect2Server" id="yWe-7y-Eb2"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YHI-Ua-ECC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="575" y="-13"/>
+        </scene>
+        <!--Global Chat Controller-->
+        <scene sceneID="giR-1s-nhw">
+            <objects>
+                <viewController id="6Pa-eO-HLl" customClass="GlobalChatController" sceneMemberID="viewController">
+                    <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="aZp-cF-7Pg">
+                        <rect key="frame" x="0.0" y="20" width="568" height="300"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <tableView autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="oW8-Av-eRK">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="270" id="3HG-vP-48J"/>
+                                    <constraint firstAttribute="width" constant="178" id="9vu-Xj-8hB"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="dataSource" destination="6Pa-eO-HLl" id="LBl-n9-oim"/>
+                                    <outlet property="delegate" destination="6Pa-eO-HLl" id="mMW-s4-a1c"/>
+                                </connections>
+                            </tableView>
+                            <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9rd-qq-zGS">
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                <connections>
+                                    <outlet property="delegate" destination="6Pa-eO-HLl" id="F9D-l3-eml"/>
+                                </connections>
+                            </textField>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eyw-YI-O7a">
+                                <subviews>
+                                    <textView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7EW-sa-a55">
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="7EW-sa-a55" firstAttribute="bottom" secondItem="eyw-YI-O7a" secondAttribute="bottom" type="default" id="C94-q7-wLz"/>
+                                    <constraint firstItem="7EW-sa-a55" firstAttribute="top" secondItem="eyw-YI-O7a" secondAttribute="top" type="default" id="JII-y6-cVE"/>
+                                    <constraint firstItem="7EW-sa-a55" firstAttribute="centerX" secondItem="eyw-YI-O7a" secondAttribute="centerX" type="default" id="aBZ-d6-eUd"/>
+                                    <constraint firstItem="7EW-sa-a55" firstAttribute="centerY" secondItem="eyw-YI-O7a" secondAttribute="centerY" type="default" id="ceO-yg-3Ih"/>
+                                    <constraint firstItem="7EW-sa-a55" firstAttribute="trailing" secondItem="eyw-YI-O7a" secondAttribute="trailing" type="default" id="hmU-cF-u9a"/>
+                                    <constraint firstItem="7EW-sa-a55" firstAttribute="leading" secondItem="eyw-YI-O7a" secondAttribute="leading" type="default" id="svE-y2-dvN"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="9rd-qq-zGS" firstAttribute="leading" secondItem="aZp-cF-7Pg" secondAttribute="leading" type="default" id="0yI-pk-NTr"/>
+                            <constraint firstItem="9rd-qq-zGS" firstAttribute="bottom" secondItem="aZp-cF-7Pg" secondAttribute="bottom" type="default" id="KgD-pm-x95"/>
+                            <constraint firstItem="oW8-Av-eRK" firstAttribute="leading" secondItem="aZp-cF-7Pg" secondAttribute="leading" type="default" id="NbX-bd-VWF"/>
+                            <constraint firstItem="eyw-YI-O7a" firstAttribute="bottom" secondItem="oW8-Av-eRK" secondAttribute="bottom" type="default" id="Nng-Nh-2VT"/>
+                            <constraint firstItem="oW8-Av-eRK" firstAttribute="top" secondItem="aZp-cF-7Pg" secondAttribute="top" type="default" id="RfJ-cE-Ydq"/>
+                            <constraint firstItem="eyw-YI-O7a" firstAttribute="top" secondItem="aZp-cF-7Pg" secondAttribute="top" type="default" id="cJE-kY-oCA"/>
+                            <constraint firstItem="eyw-YI-O7a" firstAttribute="trailing" secondItem="aZp-cF-7Pg" secondAttribute="trailing" type="default" id="n3p-b6-fZ3"/>
+                            <constraint firstItem="eyw-YI-O7a" firstAttribute="leading" secondItem="aZp-cF-7Pg" secondAttribute="leading" constant="177" id="rfK-v6-XfN"/>
+                            <constraint firstItem="9rd-qq-zGS" firstAttribute="trailing" secondItem="aZp-cF-7Pg" secondAttribute="trailing" type="default" id="s5G-MN-rrG"/>
+                        </constraints>
+                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="BZy-EX-e8l"/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+                    <connections>
+                        <outlet property="chat_message" destination="9rd-qq-zGS" id="6z9-Pf-67t"/>
+                        <outlet property="chat_window_text" destination="7EW-sa-a55" id="bcg-7s-4eR"/>
+                        <outlet property="nicks_table" destination="oW8-Av-eRK" id="CHa-OK-Hzq"/>
+                        <outlet property="scroll_view" destination="eyw-YI-O7a" id="ZQt-vT-TqL"/>
+                        <segue destination="bLW-QQ-F16" kind="push" identifier="Back2Login" id="Swn-ZU-zaF"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZYM-bR-itL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1277" y="-11"/>
+        </scene>
+    </scenes>
+    <classes>
+        <class className="GlobalChatController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/GlobalChatController.h"/>
+            <relationships>
+                <relationship kind="action" name="get_handles"/>
+                <relationship kind="action" name="get_log"/>
+                <relationship kind="action" name="parse_line:"/>
+                <relationship kind="action" name="post_message:"/>
+                <relationship kind="action" name="quit:"/>
+                <relationship kind="action" name="scroll_the_scroll_view_down"/>
+                <relationship kind="action" name="sendMessage:"/>
+                <relationship kind="action" name="sign_on"/>
+                <relationship kind="action" name="sign_out"/>
+                <relationship kind="action" name="update_and_scroll"/>
+                <relationship kind="action" name="update_chat_views"/>
+                <relationship kind="action" name="viewDidLoad"/>
+                <relationship kind="outlet" name="chat_message"/>
+                <relationship kind="outlet" name="chat_window_text"/>
+                <relationship kind="outlet" name="nicks_table"/>
+                <relationship kind="outlet" name="scroll_view"/>
+            </relationships>
+        </class>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="ServerListController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ServerListController.h"/>
+            <relationships>
+                <relationship kind="action" name="connect:"/>
+                <relationship kind="action" name="get_servers"/>
+                <relationship kind="action" name="load_prefs"/>
+                <relationship kind="action" name="refresh:"/>
+                <relationship kind="action" name="viewDidLoad"/>
+                <relationship kind="outlet" name="handle"/>
+                <relationship kind="outlet" name="host" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="names"/>
+                <relationship kind="outlet" name="password" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="port" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="server_list_table"/>
+            </relationships>
+        </class>
+    </classes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="Swn-ZU-zaF"/>
+    </inferredMetricsTieBreakers>
+</document>

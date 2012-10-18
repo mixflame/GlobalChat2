@@ -1,0 +1,50 @@
+collect do |s|
+par = s.split("-!!!-")
+{:host => par[1], :name => par[0], :port => par[2]}
+end
+end
+puts server_list_hash
+@names = @server_list_hash.collect do |s| s[:name] end
+include BubbleWrap
+s = ServerListController.new
+s.get_servers
+quit
+s = ServerListController.new
+s.get_servers
+s.names
+s.server_list_hash
+quit
+quit
+slc = ServerListController.new
+slc.names
+slc.get_servers
+slc.names
+slc = ServerListController.new
+slc.names
+slc.names
+slc.names
+slc.names
+slc.names
+slc.names
+slc.names
+quit
+slc = ServerListController.new
+slc.names
+quit
+slc = ServerListController.new
+slc.names
+slc.load_prefs
+$prefs = NSUserDefaults.standardUserDefaults
+slc.load_prefs
+quit
+$prefs = NSUserDefaults.standardUserDefaults
+slc = ServerListController.new
+slc.load_prefs
+quit
+quit
+slc = ServerListController.new
+quit
+quit
+quit
+quit
+quit
