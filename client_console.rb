@@ -14,11 +14,8 @@ class GlobalChatController
     
   end
 
-
-  # hook on exit.. same as nexus
   def quit
     sign_out
-    
   end
 
   def sendMessage(message)
@@ -28,7 +25,7 @@ class GlobalChatController
   end
 
   def sign_on
-    puts "Connecting to: #{@host} #{@port}"
+    log "Connecting to: #{@host} #{@port}"
     @ts = TCPSocket.open(@host, @port)
     sign_on_array = @password == "" ? [@handle] : [@handle, @password]
     send_message("SIGNON", sign_on_array)
@@ -37,16 +34,20 @@ class GlobalChatController
   
   def begin_async_read_queue
     Thread.new do
-      while line = @ts.gets   # Read lines from the socket
-        line = line.chop
-        parse_line(line)
+      loop do
+        data = ""
+        while line = @ts.recv(1)
+          break if line == "\0" 
+          data += line
+        end
+        log data
+        parse_line(data)
       end
     end
   end
   
   def parse_line(line)
     parr = line.split("::!!::")
-    #puts line
     command = parr.first
     if command == "TOKEN"
       self.chat_token = parr.last
@@ -54,6 +55,8 @@ class GlobalChatController
       get_log
     elsif command == "HANDLE"
       self.nicks << parr.last
+      @nicks_table.dataSource = self
+      @nicks_table.reloadData
     elsif command == "SAY"
       handle = parr[1]
       msg = parr[2]
@@ -62,23 +65,31 @@ class GlobalChatController
       handle = parr[1]
       self.nicks << handle
       self.chat_buffer += "#{handle} has entered\n"
+      @nicks_table.dataSource = self
+      @nicks_table.reloadData
     elsif command == "LEAVE"
       handle = parr[1]
       self.chat_buffer += "#{handle} has exited\n"
       self.nicks.delete(handle)
+      @nicks_table.dataSource = self
+      @nicks_table.reloadData
     end
   end
   
   def send_message(opcode, args)
     msg = opcode + "::!!::" + args.join("::!!::")
-    #puts msg
-    @ts.puts msg
+    sock_send @ts, msg
+  end
+  
+  def sock_send io, msg
+    msg = "#{msg}\0"
+    log msg
+    io.send msg, 0
   end
 
   def post_message(message)
     send_message "MESSAGE", [message, @chat_token]
-    # cant disable gets saying so Ill disable local re-saying
-    #add_msg(self.handle, message)
+    add_msg(self.handle, message)
   end
   
   def add_msg(handle, message)
@@ -98,12 +109,23 @@ class GlobalChatController
   def sign_out
     send_message "SIGNOFF", [@chat_token]
   end
+  
+  def log(msg)
+    #NSLog(msg)
+    #puts msg
+  end
 
 end
 
+
+#puts 'enter name'
+#name = gets
+#puts 'enter server'
+#server = gets
+
 gcc = GlobalChatController.new
-gcc.handle = "jsilver2"
-gcc.host = "mdks.org"
+gcc.handle = "jsilver" #name.strip
+gcc.host = "localhost" #server.strip
 gcc.port = 9994
 gcc.password = ""
 gcc.nicks = []

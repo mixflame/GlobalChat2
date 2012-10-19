@@ -70,16 +70,20 @@ class GlobalChatController
   
   def begin_async_read_queue
     @queue.async do
-      while line = @ts.gets   # Read lines from the socket
-        line = line.chop
-        parse_line(line)
+      loop do
+        data = ""
+        while line = @ts.recv(1)
+          break if line == "\0" 
+          data += line
+        end
+        log data
+        parse_line(data)
       end
     end
   end
   
   def parse_line(line)
     parr = line.split("::!!::")
-    NSLog line
     command = parr.first
     if command == "TOKEN"
       self.chat_token = parr.last
@@ -110,8 +114,13 @@ class GlobalChatController
   
   def send_message(opcode, args)
     msg = opcode + "::!!::" + args.join("::!!::")
-    NSLog msg
-    @ts.puts msg
+    sock_send @ts, msg
+  end
+  
+  def sock_send io, msg
+    log msg
+    msg = "#{msg}\0"
+    io.send msg, 0
   end
 
   def post_message(message)
@@ -121,7 +130,6 @@ class GlobalChatController
   
   def add_msg(handle, message)
     msg = "#{handle}: #{message}\n"
-    NSLog msg
     self.chat_buffer += msg
   end
 
@@ -135,6 +143,11 @@ class GlobalChatController
 
   def sign_out
     send_message "SIGNOFF", [@chat_token]
+  end
+  
+  def log(msg)
+    #NSLog(msg)
+    p msg
   end
 
 end

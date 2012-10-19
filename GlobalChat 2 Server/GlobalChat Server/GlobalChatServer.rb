@@ -7,12 +7,13 @@ class GlobalChatServer < GServer
   def initialize(port=9994, *args)
     super(port, *args)
     self.audit = true
+    self.debug = true
     @handle_keys = {}
     @socket_keys = {}
+    @port_keys = {}
     @handles = []
     @sockets = []
     @buffer = []
-    
     @mutex = Mutex.new
   end
   
@@ -20,13 +21,16 @@ class GlobalChatServer < GServer
     @mutex.synchronize do
       @sockets.each do |socket|
         begin
-          socket.puts message unless socket == sender
+          #socket.send message unless socket == sender
+          sock_send(socket, message) unless socket == sender
         rescue
+          log "dead socket event #{socket.peeraddr[1]}"
           @sockets.delete socket
           ct = @socket_keys[socket]
           handle = @handle_keys[ct]
           @handles.delete handle
           @handle_keys.delete ct
+          @socket_keys.delete socket
         end
       end
     end
@@ -45,22 +49,26 @@ class GlobalChatServer < GServer
   # server tell a single socket
   def send_message(io, opcode, args)
     msg = opcode + "::!!::" + args.join("::!!::")
-    NSLog(msg)
-    io.puts msg
+    sock_send io, msg
+  end
+  
+  def sock_send io, msg
+    msg = "#{msg}\0"
+    log msg
+    io.send msg, 0
   end
   
   # server tell all sockets except
+  # if sender is nil then everyone
   def broadcast_message(sender, opcode, args)
     msg = opcode + "::!!::" + args.join("::!!::")
-    NSLog "broadcast: #{msg}"
     broadcast msg, sender
   end
   
   
   # react to allowed commands
   def parse_line(line, io)
-    NSLog(line)
-    parr = line.strip.split("::!!::")
+    parr = line.split("::!!::")
     command = parr[0]
     if command == "SIGNON"
       handle = parr[1]
@@ -72,6 +80,7 @@ class GlobalChatServer < GServer
         @mutex.synchronize do
           @handle_keys[chat_token] = handle
           @socket_keys[io] = chat_token
+          @port_keys[io.peeraddr[1]] = chat_token
           @handles << handle
           @sockets << io
         end
@@ -109,28 +118,50 @@ class GlobalChatServer < GServer
     end
   end
   
-  def serve(io)
-    loop do
-      line = io.readline
-      parse_line(line, io)
-    end
-  end
-  
   def connecting(client)
     super(client)
   end
   def disconnecting(clientPort)
+    log "disconnect event"
+    ct = @port_keys[clientPort]
+    handle = @handle_keys[ct]
+    if handle
+      socket = @socket_keys.key(ct)
+      @handles.delete handle
+      @handle_keys.delete ct
+      @port_keys.delete clientPort
+      @socket_keys.delete socket
+      broadcast_message(socket, "LEAVE", [handle])
+    end
     super(clientPort)
   end
   def starting
-    log("Starting...")
+    log("GlobalChat2 Server Running")
     super
   end
-  def stopping
-    log("Stopping.")
-    super
+  # doesnt happen.. quits
+  #def stopping
+  #  log("Stopping.")
+  #  #super
+  #end
+  
+  def serve(io)
+    loop do
+      data = ""
+      while line = io.recv(1)
+        log line
+        break if line == "\0" 
+        data += line
+      end
+      if data
+        log "#{data}"
+        parse_line(data, io)
+      end
+    end
   end
+  
   def log(msg)
-    NSLog(msg)
+    #NSLog(msg.inspect)
+    p msg
   end
 end

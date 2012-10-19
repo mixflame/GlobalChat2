@@ -3,7 +3,9 @@ class AppDelegate
 
   def application(application, didFinishLaunchingWithOptions:launchOptions)
       $prefs = NSUserDefaults.standardUserDefaults
-      $term = AsyncSocket.LFData # main bug of this app FIXME
+      $term = AsyncSocket.ZeroData
+      #'^!!^'.dataUsingEncoding(NSUTF8StringEncoding)
+      #AsyncSocket.LFData # main bug of this app FIXME
       true
   end
 

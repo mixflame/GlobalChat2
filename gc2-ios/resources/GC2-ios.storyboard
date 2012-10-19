@@ -108,7 +108,7 @@
                                     <outlet property="delegate" destination="bLW-QQ-F16" id="85k-N9-hAw"/>
                                 </connections>
                             </textField>
-                            <button opaque="NO" autoresizesSubviews="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QJD-JH-jlg">
+                            <button autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QJD-JH-jlg">
                                 <constraints>
                                     <constraint firstAttribute="width" constant="73" id="cCa-WJ-S2A"/>
                                 </constraints>
@@ -124,7 +124,7 @@
                                     <action selector="refresh:" destination="bLW-QQ-F16" eventType="touchUpInside" id="eEy-Lo-L49"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" autoresizesSubviews="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Fd-7h-Ha9">
+                            <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Fd-7h-Ha9">
                                 <constraints>
                                     <constraint firstAttribute="width" constant="73" id="Ihh-Nw-LQP"/>
                                 </constraints>
@@ -280,9 +280,6 @@
                 <relationship kind="outlet" name="nicks_table"/>
                 <relationship kind="outlet" name="scroll_view"/>
             </relationships>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
         </class>
         <class className="ServerListController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ServerListController.h"/>

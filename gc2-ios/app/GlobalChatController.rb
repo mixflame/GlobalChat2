@@ -78,7 +78,6 @@ class GlobalChatController < UIViewController
     if command == "TOKEN"
       @chat_token = parr.last
       get_handles
-      sleep 1
       get_log
     elsif command == "HANDLE"
       @nicks << parr.last
@@ -111,19 +110,20 @@ class GlobalChatController < UIViewController
 
   def onSocket(sock, didReadData:data, withTag:tag)
     line = NSString.stringWithUTF8String(data.bytes)
-    line = line.strip
+    p line
     parse_line(line)
     read_line
   end
 
   def send_message(opcode, args)
-    msg = opcode + "::!!::" + args.join("::!!::")
-    data = "#{msg}\n".dataUsingEncoding(NSUTF8StringEncoding)
-    @ts.writeData(data, withTimeout:5, tag: 0)
+    msg = opcode + "::!!::" + args.join("::!!::") + "\0"
+    p msg
+    data = msg.dataUsingEncoding(NSUTF8StringEncoding)
+    @ts.writeData(data, withTimeout:-1, tag: 0)
   end
 
   def read_line
-    @ts.readDataToData($term, withTimeout:5, tag:0)
+    @ts.readDataToData($term, withTimeout:-1, tag:0)
   end
   
 
