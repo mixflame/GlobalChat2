@@ -71,7 +71,7 @@ class GlobalChatController
   def begin_async_read_queue
     @queue.async do
       loop do
-        break if @ts.closed?
+        #break if @ts.closed?
         data = ""
         while line = @ts.recv(1)
           break if line == "\0" 
