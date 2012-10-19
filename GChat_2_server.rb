@@ -28,13 +28,14 @@ class GlobalChatServer < GServer
           #socket.send message unless socket == sender
           sock_send(socket, message) unless socket == sender
         rescue
-          log "dead socket event #{socket.peeraddr[1]}"
+          log "dead socket event"
           @sockets.delete socket
           ct = @socket_keys[socket]
           handle = @handle_keys[ct]
           @handles.delete handle
           @handle_keys.delete ct
           @socket_keys.delete socket
+          broadcast_message(socket, "LEAVE", [handle])
         end
       end
     end
@@ -77,6 +78,10 @@ class GlobalChatServer < GServer
     if command == "SIGNON"
       handle = parr[1]
       password = parr[2]
+
+      if @handles.include?(handle)
+        handle = "#{handle}#{rand(1000)}"
+      end
       
       if (@password == password) || ((password === nil) && (@password == ""))
         
@@ -153,18 +158,19 @@ class GlobalChatServer < GServer
     loop do
       data = ""
       while line = io.recv(1)
-        log line
         break if line == "\0" 
         data += line
       end
-      log "#{data}"
-      parse_line(data, io)
+      unless data == ""
+        log "#{data}"
+        parse_line(data, io)
+      end
     end
   end
   
   def log(msg)
     #NSLog(msg.inspect)
-    p msg
+    p msg #unless msg == ""
   end
 end
 

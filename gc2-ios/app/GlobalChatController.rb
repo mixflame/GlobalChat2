@@ -149,6 +149,7 @@ class GlobalChatController < UIViewController
 
   def sign_out
     send_message "SIGNOFF", [@chat_token]
+    @ts.disconnect
     self.performSegueWithIdentifier("Back2Login", sender:self)
   end
 

@@ -40,8 +40,10 @@ class GlobalChatController
           break if line == "\0" 
           data += line
         end
-        log data
-        parse_line(data)
+        unless data == ""
+          # log data
+          parse_line(data)
+        end
       end
     end
   end
@@ -55,8 +57,6 @@ class GlobalChatController
       get_log
     elsif command == "HANDLE"
       self.nicks << parr.last
-      @nicks_table.dataSource = self
-      @nicks_table.reloadData
     elsif command == "SAY"
       handle = parr[1]
       msg = parr[2]
@@ -65,14 +65,10 @@ class GlobalChatController
       handle = parr[1]
       self.nicks << handle
       self.chat_buffer += "#{handle} has entered\n"
-      @nicks_table.dataSource = self
-      @nicks_table.reloadData
     elsif command == "LEAVE"
       handle = parr[1]
       self.chat_buffer += "#{handle} has exited\n"
       self.nicks.delete(handle)
-      @nicks_table.dataSource = self
-      @nicks_table.reloadData
     end
   end
   
@@ -108,6 +104,7 @@ class GlobalChatController
 
   def sign_out
     send_message "SIGNOFF", [@chat_token]
+    @ts.close
   end
   
   def log(msg)
@@ -124,7 +121,7 @@ end
 #server = gets
 
 gcc = GlobalChatController.new
-gcc.handle = "jsilver" #name.strip
+gcc.handle = "jsilver-console" #name.strip
 gcc.host = "localhost" #server.strip
 gcc.port = 9994
 gcc.password = ""

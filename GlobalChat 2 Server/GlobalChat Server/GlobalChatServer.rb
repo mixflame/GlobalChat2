@@ -74,6 +74,10 @@ class GlobalChatServer < GServer
       handle = parr[1]
       password = parr[2]
       
+      if @handles.include?(handle)
+        handle = "#{handle}#{rand(1000)}"
+      end
+      
       if (@password == password) || ((password === nil) && (@password == ""))
         
         chat_token = rand(36**8).to_s(36)
