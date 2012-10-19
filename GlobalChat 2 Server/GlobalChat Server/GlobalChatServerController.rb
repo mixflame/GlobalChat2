@@ -16,7 +16,7 @@ class GlobalChatServerController
     else
       @server_status.setStringValue("Running")
       @gchatserv.password = @password.stringValue
-      @publicize_button.setEnabled (@server_name.stringValue != "" && @published == false)
+      @publicize_button.setEnabled (@host.stringValue != "" && @server_name.stringValue != "" && @published == false)
     end
   end
 

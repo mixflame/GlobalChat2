@@ -153,11 +153,10 @@ class GlobalChatServer < GServer
     loop do
       data = ""
       while line = io.recv(1)
-        log line
         break if line == "\0" 
         data += line
       end
-      if data
+      if data != ""
         log "#{data}"
         parse_line(data, io)
       end

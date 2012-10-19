@@ -71,6 +71,7 @@ class GlobalChatController
   def begin_async_read_queue
     @queue.async do
       loop do
+        break if @ts.closed?
         data = ""
         while line = @ts.recv(1)
           break if line == "\0" 
@@ -143,6 +144,7 @@ class GlobalChatController
 
   def sign_out
     send_message "SIGNOFF", [@chat_token]
+    @ts.close
   end
   
   def log(msg)
