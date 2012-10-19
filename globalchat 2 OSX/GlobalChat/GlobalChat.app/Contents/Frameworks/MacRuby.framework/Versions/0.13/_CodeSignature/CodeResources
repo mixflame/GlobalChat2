@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>files</key>
+	<dict>
+		<key>Resources/English.lproj/InfoPlist.strings</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			IT9FK/XKm7qtoswplh2G1tFtQok=
+			</data>
+			<key>optional</key>
+			<true/>
+		</dict>
+		<key>Resources/Info.plist</key>
+		<data>
+		Mf0RNNk7IS3C9dWXvOgXbHHRJpI=
+		</data>
+		<key>Resources/Templates/File Templates/Ruby/Ruby File.xctemplate/TemplateInfo.plist</key>
+		<data>
+		n6e23hJKpceMQ2UY3Dd2rgozQOY=
+		</data>
+		<key>Resources/Templates/File Templates/Ruby/Ruby File.xctemplate/___FILEBASENAME___.rb</key>
+		<data>
+		ghI2EG0+84p8Cp+X4XPHpOtVD80=
+		</data>
+		<key>Resources/Templates/Project Templates/Base/MacRuby Application.xctemplate/TemplateInfo.plist</key>
+		<data>
+		Rpqwa8Q/pMo30DV28mUtFzwS/dM=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/Application/MacRuby Application.xctemplate/MainMenuApp.xib</key>
+		<data>
+		HHFQ+P5pLL0YmxAviltIbhjv17w=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/Application/MacRuby Application.xctemplate/TemplateIcon.icns</key>
+		<data>
+		9ZTyzZPFmR506JEC7vSsso8yxx8=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/Application/MacRuby Application.xctemplate/TemplateInfo.plist</key>
+		<data>
+		BwCCttYezxFDxtdVVWOTIN6Vffw=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/Application/MacRuby Application.xctemplate/rb_main.rb</key>
+		<data>
+		ZYYu8ryNRm9QRbkNo55liO0ioBU=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/Application/MacRuby Core Data Application.xctemplate/TemplateInfo.plist</key>
+		<data>
+		DErPk+BkHtVfP97bRilRaugB/Kk=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/Application/MacRuby Core Data Application.xctemplate/___PACKAGENAMEASIDENTIFIER___.xcdatamodeld/___PACKAGENAMEASIDENTIFIER___.xcdatamodel/elements</key>
+		<data>
+		WXumcqjnoLm1Er+6X24p96xRaCQ=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/Application/MacRuby Core Data Application.xctemplate/___PACKAGENAMEASIDENTIFIER___.xcdatamodeld/___PACKAGENAMEASIDENTIFIER___.xcdatamodel/layout</key>
+		<data>
+		qRz82tRJpU3rwNP2yBzTxRHgVmk=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/Application/MacRuby Core Data Application.xctemplate/___VARIABLE_documentClassName___.xcdatamodeld/___VARIABLE_documentClassName___.xcdatamodel/elements</key>
+		<data>
+		WXumcqjnoLm1Er+6X24p96xRaCQ=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/Application/MacRuby Core Data Application.xctemplate/___VARIABLE_documentClassName___.xcdatamodeld/___VARIABLE_documentClassName___.xcdatamodel/layout</key>
+		<data>
+		qRz82tRJpU3rwNP2yBzTxRHgVmk=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/Application/MacRuby Core Data Spotlight Application.xctemplate/TemplateInfo.plist</key>
+		<data>
+		X5vRGkXULfAivByaZeAhzA77LjA=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/Application/MacRuby Document-based Application.xctemplate/Document.xib</key>
+		<data>
+		GulP+u2wYVpUaa0ElxmxEPY3eFg=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/Application/MacRuby Document-based Application.xctemplate/MainMenuDoc.xib</key>
+		<data>
+		3fbsFpicHi4XpPP6qevAxzhZzIs=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/Application/MacRuby Document-based Application.xctemplate/TemplateInfo.plist</key>
+		<data>
+		LteV+aL3CEfbp9aXkGVgRTqn0oA=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/System Plug-in/MacRuby Preference Pane.xctemplate/TemplateIcon.icns</key>
+		<data>
+		IrmJWXHdqj7r4315g3PDnA4ex2Y=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/System Plug-in/MacRuby Preference Pane.xctemplate/TemplateInfo.plist</key>
+		<data>
+		QkGr1Jzi780oAnKYpQiq4dZJHYs=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/System Plug-in/MacRuby Preference Pane.xctemplate/___PACKAGENAMEASIDENTIFIER___.m</key>
+		<data>
+		YDJEdldM6pb59DZLH/82aYKTZ+k=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/System Plug-in/MacRuby Preference Pane.xctemplate/___PACKAGENAMEASIDENTIFIER___.rb</key>
+		<data>
+		Dip0d1IcSgehzAvM68k7TEKjmhU=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/System Plug-in/MacRuby Preference Pane.xctemplate/___PACKAGENAMEASIDENTIFIER___.tiff</key>
+		<data>
+		c3ogSUbB3M/rm+KGA6UruzQvNHI=
+		</data>
+		<key>Resources/Templates/Project Templates/Mac/System Plug-in/MacRuby Preference Pane.xctemplate/___PACKAGENAMEASIDENTIFIER___.xib</key>
+		<data>
+		IWZtu/JAMY0AUzmJfDqFWYsF8Hk=
+		</data>
+	</dict>
+	<key>rules</key>
+	<dict>
+		<key>^Resources/</key>
+		<true/>
+		<key>^Resources/.*\.lproj/</key>
+		<dict>
+			<key>optional</key>
+			<true/>
+			<key>weight</key>
+			<real>1000</real>
+		</dict>
+		<key>^Resources/.*\.lproj/locversion.plist$</key>
+		<dict>
+			<key>omit</key>
+			<true/>
+			<key>weight</key>
+			<real>1100</real>
+		</dict>
+		<key>^version.plist$</key>
+		<true/>
+	</dict>
+</dict>
+</plist>

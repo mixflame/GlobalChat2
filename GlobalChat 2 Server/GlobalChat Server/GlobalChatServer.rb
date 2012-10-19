@@ -24,7 +24,6 @@ class GlobalChatServer < GServer
           #socket.send message unless socket == sender
           sock_send(socket, message) unless socket == sender
         rescue
-          log "dead socket event #{socket.peeraddr[1]}"
           @sockets.delete socket
           ct = @socket_keys[socket]
           handle = @handle_keys[ct]
@@ -135,7 +134,7 @@ class GlobalChatServer < GServer
       @handle_keys.delete ct
       @port_keys.delete clientPort
       @socket_keys.delete socket
-      broadcast_message(socket, "LEAVE", [handle])
+      #broadcast_message(nil, "LEAVE", [handle])
     end
     super(clientPort)
   end
@@ -152,9 +151,21 @@ class GlobalChatServer < GServer
   def serve(io)
     loop do
       data = ""
-      while line = io.recv(1)
-        break if line == "\0" 
-        data += line
+      begin
+        while line = io.recv(1)
+          break if line == "\0" 
+          data += line
+        end
+      rescue
+        log "socket quit"
+        socket = io
+        @sockets.delete socket
+        ct = @socket_keys[socket]
+        handle = @handle_keys[ct]
+        @handles.delete handle
+        @handle_keys.delete ct
+        @socket_keys.delete socket
+        broadcast_message(socket, "LEAVE", [handle])
       end
       if data != ""
         log "#{data}"
