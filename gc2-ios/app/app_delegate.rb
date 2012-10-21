@@ -7,7 +7,7 @@ class AppDelegate
       true
   end
 
-  def applicationWillResignActive(application)
+  def applicationWillTerminate(application)
     $gcc.sign_out
   end
   
