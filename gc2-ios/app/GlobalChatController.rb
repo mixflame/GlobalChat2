@@ -69,13 +69,19 @@ class GlobalChatController < UIViewController
     #p parr
     command = parr.first
     if command == "TOKEN"
-      @chat_token = parr.last
+      @chat_token = parr[1]
+      @handle = parr[2]
       get_handles
       get_log
-    elsif command == "HANDLE"
-      @nicks << parr.last
-      @nicks.uniq!
+    elsif command == "HANDLES"
+      @nicks = parr.last.split("\n")
       nicks_table.reloadData
+    elsif command == "BUFFER"
+      buffer = parr[1]
+      unless buffer.nil?
+        @chat_buffer = buffer
+        update_and_scroll
+      end
     elsif command == "SAY"
       handle = parr[1]
       msg = parr[2]

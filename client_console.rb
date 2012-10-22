@@ -52,11 +52,18 @@ class GlobalChatController
     parr = line.split("::!!::")
     command = parr.first
     if command == "TOKEN"
-      self.chat_token = parr.last
+      @chat_token = parr[1]
+      @handle = parr[2]
       get_handles
       get_log
-    elsif command == "HANDLE"
-      self.nicks << parr.last
+    elsif command == "HANDLES"
+      @nicks = parr.last.split("\n")
+      output_to_chat_window @nicks.inspect
+    elsif command == "BUFFER"
+      buffer = parr[1]
+      unless buffer.nil?
+        output_to_chat_window buffer
+      end
     elsif command == "SAY"
       handle = parr[1]
       msg = parr[2]
@@ -64,10 +71,10 @@ class GlobalChatController
     elsif command == "JOIN"
       handle = parr[1]
       self.nicks << handle
-      self.chat_buffer += "#{handle} has entered\n"
+      output_to_chat_window "#{handle} has entered\n"
     elsif command == "LEAVE"
       handle = parr[1]
-      self.chat_buffer += "#{handle} has exited\n"
+      output_to_chat_window "#{handle} has exited\n"
       self.nicks.delete(handle)
     end
   end
@@ -90,8 +97,12 @@ class GlobalChatController
   
   def add_msg(handle, message)
     msg = "#{handle}: #{message}\n"
-    puts msg
+    output_to_chat_window msg
     #self.chat_buffer += msg
+  end
+
+  def output_to_chat_window str
+    puts str
   end
 
   def get_log
@@ -109,15 +120,15 @@ class GlobalChatController
   
   def log(msg)
     #NSLog(msg)
-    #puts msg
+    #output_to_chat_window msg
   end
 
 end
 
 
-#puts 'enter name'
+#output_to_chat_window 'enter name'
 #name = gets
-#puts 'enter server'
+#output_to_chat_window 'enter server'
 #server = gets
 
 gcc = GlobalChatController.new

@@ -2,7 +2,7 @@ require 'gserver'
 
 class GlobalChatServer < GServer
   
-  attr_accessor :handles, :buffer, :handle_keys, :sockets, :password, :socket_keys
+  attr_accessor :handles, :buffer, :handle_keys, :sockets, :password, :socket_keys, :scrollback
   
   def initialize(port=9994, *args)
     super(port, *args)
@@ -24,14 +24,24 @@ class GlobalChatServer < GServer
           #socket.send message unless socket == sender
           sock_send(socket, message) unless socket == sender
         rescue
-          @sockets.delete socket
-          ct = @socket_keys[socket]
-          handle = @handle_keys[ct]
-          @handles.delete handle
-          @handle_keys.delete ct
-          @socket_keys.delete socket
+          log "broadcast fail removal event"
+          remove_dead_socket socket
         end
       end
+    end
+  end
+
+  def remove_dead_socket(socket, broadcast=false)
+    @sockets.delete socket
+    ct = @socket_keys[socket]
+    handle = @handle_keys[ct]
+    @handles.delete handle
+    @handle_keys.delete ct
+    @socket_keys.delete socket
+    # dont wanna broadcast a LEAVE
+    # in a dead socket cleanup function
+    if broadcast
+      broadcast_message(socket, "LEAVE", [handle])
     end
   end
   
@@ -64,6 +74,18 @@ class GlobalChatServer < GServer
     broadcast msg, sender
   end
   
+  def build_chat_log
+    return "" unless @scrollback
+    out = ""
+    @buffer.each do |msg|
+      out += "#{msg[0]}: #{msg[1]}\n"
+    end
+    out
+  end
+  
+  def build_handle_list
+    @handles.join("\n")
+  end
   
   # react to allowed commands
   def parse_line(line, io)
@@ -72,7 +94,7 @@ class GlobalChatServer < GServer
     if command == "SIGNON"
       handle = parr[1]
       password = parr[2]
-      
+
       if @handles.include?(handle)
         handle = "#{handle}#{rand(1000)}"
       end
@@ -87,7 +109,7 @@ class GlobalChatServer < GServer
           @handles << handle
           @sockets << io
         end
-        send_message(io, "TOKEN", [chat_token])
+        send_message(io, "TOKEN", [chat_token, handle])
         broadcast_message(io, "JOIN", [handle])
       end
       
@@ -101,13 +123,10 @@ class GlobalChatServer < GServer
     if check_token(chat_token)
       handle = get_handle(chat_token)
       if command == "GETHANDLES"
-        @handles.each do |handle|
-          send_message(io, "HANDLE", [handle])
-        end
+        send_message(io, "HANDLES", [build_handle_list])
       elsif command == "GETBUFFER"
-        @buffer.each do |msg|
-          send_message(io, "SAY", [msg[0], msg[1]])
-        end
+        buffer = build_chat_log
+        send_message(io, "BUFFER", [buffer])
       elsif command == "MESSAGE"
         msg = parr[1]
         message = "#{handle}: #{msg}\n"
@@ -129,12 +148,8 @@ class GlobalChatServer < GServer
     ct = @port_keys[clientPort]
     handle = @handle_keys[ct]
     if handle
-      socket = @socket_keys.key(ct)
-      @handles.delete handle
-      @handle_keys.delete ct
-      @port_keys.delete clientPort
-      @socket_keys.delete socket
-      #broadcast_message(nil, "LEAVE", [handle])
+      log "disconnect removal event"
+      remove_dead_socket ct #, true
     end
     super(clientPort)
   end
@@ -157,17 +172,10 @@ class GlobalChatServer < GServer
           data += line
         end
       rescue
-        log "socket quit"
-        socket = io
-        @sockets.delete socket
-        ct = @socket_keys[socket]
-        handle = @handle_keys[ct]
-        @handles.delete handle
-        @handle_keys.delete ct
-        @socket_keys.delete socket
-        broadcast_message(socket, "LEAVE", [handle])
+          log "recv break removal event"
+          remove_dead_socket io, true
       end
-      if data != ""
+      unless data == ""
         log "#{data}"
         parse_line(data, io)
       end
@@ -176,6 +184,6 @@ class GlobalChatServer < GServer
   
   def log(msg)
     #NSLog(msg.inspect)
-    p msg
+    puts msg #unless msg == ""
   end
 end

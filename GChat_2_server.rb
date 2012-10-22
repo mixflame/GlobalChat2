@@ -4,9 +4,11 @@ require 'gserver'
 require 'net/http'
 require 'uri'
 
+require 'gserver'
+
 class GlobalChatServer < GServer
   
-  attr_accessor :handles, :buffer, :handle_keys, :sockets, :password, :socket_keys
+  attr_accessor :handles, :buffer, :handle_keys, :sockets, :password, :socket_keys, :scrollback
   
   def initialize(port=9994, *args)
     super(port, *args)
@@ -78,6 +80,18 @@ class GlobalChatServer < GServer
     broadcast msg, sender
   end
   
+  def build_chat_log
+    return "" unless @scrollback
+    out = ""
+    @buffer.each do |msg|
+      out += "#{msg[0]}: #{msg[1]}\n"
+    end
+    out
+  end
+  
+  def build_handle_list
+    @handles.join("\n")
+  end
   
   # react to allowed commands
   def parse_line(line, io)
@@ -115,13 +129,10 @@ class GlobalChatServer < GServer
     if check_token(chat_token)
       handle = get_handle(chat_token)
       if command == "GETHANDLES"
-        @handles.each do |handle|
-          send_message(io, "HANDLE", [handle])
-        end
+        send_message(io, "HANDLES", [build_handle_list])
       elsif command == "GETBUFFER"
-        @buffer.each do |msg|
-          send_message(io, "SAY", [msg[0], msg[1]])
-        end
+        buffer = build_chat_log
+        send_message(io, "BUFFER", [buffer])
       elsif command == "MESSAGE"
         msg = parr[1]
         message = "#{handle}: #{msg}\n"
@@ -144,7 +155,7 @@ class GlobalChatServer < GServer
     handle = @handle_keys[ct]
     if handle
       log "disconnect removal event"
-      remove_dead_socket ct, true
+      remove_dead_socket ct #, true
     end
     super(clientPort)
   end
@@ -168,7 +179,7 @@ class GlobalChatServer < GServer
         end
       rescue
           log "recv break removal event"
-          #remove_dead_socket io
+          remove_dead_socket io, true
       end
       unless data == ""
         log "#{data}"
@@ -204,6 +215,7 @@ end
 
 gc = GlobalChatServer.new(9994, '0.0.0.0', 1000, $stderr, true)
 gc.password = "" # set a password here
+gc.scrollback = false
 gc.start
 gc.join
 

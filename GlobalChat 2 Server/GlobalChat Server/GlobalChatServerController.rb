@@ -6,25 +6,34 @@ class GlobalChatServerController
 
   attr_accessor :gchatserv, :application
 
-  attr_accessor :server_name, :password, :server_status, :publicize_button, :published, :host
+  attr_accessor :server_name, :password, :server_status, :publicize_button, :privatize_button, :scrollback_mode, :published, :host
 
   $queue = Dispatch::Queue.new('com.mdx.globalchat')
+  $mutex = Mutex.new
 
   def checkStatus # change server setting
     if @gchatserv.stopped?
       @server_status.setStringValue("Stopped")
     else
-      @server_status.setStringValue("Running")
+      @server_status.setStringValue("Running Scrollback:#{@scrollback_mode.state==1} Published:#{@published}")
       @gchatserv.password = @password.stringValue
+      @gchatserv.scrollback = (@scrollback_mode.state==1)
       @publicize_button.setEnabled (@host.stringValue != "" && @server_name.stringValue != "" && @published == false)
+      @privatize_button.setEnabled (@host.stringValue != "" && @server_name.stringValue != "" && @published == true)
     end
   end
 
   def quit(sender)
     if @server_name.stringValue != "" && @published == true
-        nexus_offline
+        unpingNexus(sender)
     end
     @application.terminate(self)
+  end
+  
+  def unpingNexus(sender)
+    $queue.async do
+      nexus_offline
+    end
   end
 
 
@@ -49,6 +58,7 @@ class GlobalChatServerController
   def nexus_offline
     NSLog "Informing NexusNet that I have exited!!!"
     Net::HTTP.get_print("nexusnet.herokuapp.com", "/offline")
+    @published = false
   end
 
 
