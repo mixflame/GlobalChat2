@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env jruby
 
 require 'gserver'
 require 'net/http'
@@ -35,14 +35,18 @@ class GlobalChatServer < GServer
     end
   end
 
-  def remove_dead_socket(socket)
+  def remove_dead_socket(socket, broadcast=false)
     @sockets.delete socket
     ct = @socket_keys[socket]
     handle = @handle_keys[ct]
     @handles.delete handle
     @handle_keys.delete ct
     @socket_keys.delete socket
-    broadcast_message(socket, "LEAVE", [handle])
+    # dont wanna broadcast a LEAVE
+    # in a dead socket cleanup function
+    if broadcast
+      broadcast_message(socket, "LEAVE", [handle])
+    end
   end
   
   def check_token(chat_token)
@@ -140,7 +144,7 @@ class GlobalChatServer < GServer
     handle = @handle_keys[ct]
     if handle
       log "disconnect removal event"
-      remove_dead_socket ct
+      remove_dead_socket ct, true
     end
     super(clientPort)
   end
@@ -164,7 +168,7 @@ class GlobalChatServer < GServer
         end
       rescue
           log "recv break removal event"
-          remove_dead_socket io
+          #remove_dead_socket io
       end
       unless data == ""
         log "#{data}"

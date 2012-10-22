@@ -55,10 +55,11 @@ class ServerListController
       @gcc.password = @password.stringValue
       @gcc.nicks = []
       @gcc.chat_buffer = ""
-      @gcc.sign_on
-  
-      self.server_list_window.close
-      self.chat_window.makeKeyAndOrderFront(nil)
+      
+      if @gcc.sign_on
+        #self.server_list_window.close
+        self.chat_window.makeKeyAndOrderFront(nil)
+      end 
   end
 
 

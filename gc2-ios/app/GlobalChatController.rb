@@ -22,13 +22,9 @@ class GlobalChatController < UIViewController
     super(animated)
   end
 
-  def viewWillDisappear(animated)
-    # log "i should disappear"
-    @disconnect_timer.invalidate
-    @disconnect_timer = nil
-    super(animated)
-    # @scroll_timer.invalidate
-  end
+  # def viewWillDisappear(animated)
+  #   super(animated)
+  # end
 
   def tableView(tableView, cellForRowAtIndexPath:indexPath)
     cell = tableView.dequeueReusableCellWithIdentifier("GlobalChat2")
@@ -69,28 +65,10 @@ class GlobalChatController < UIViewController
     @ts = AsyncSocket.alloc.initWithDelegate(self, delegateQueue:Dispatch::Queue.main)
     @ts.connectToHost(@host, onPort:@port, error:nil)
     @scroll_timer = NSTimer.scheduledTimerWithTimeInterval(0.1,
-                                           target:self,
-                                           selector:"update_and_scroll",
-                                           userInfo:nil,
-                                           repeats:true)
-    @disconnect_timer = NSTimer.scheduledTimerWithTimeInterval(5,
-                                           target:self,
-                                           selector:"disconnect_timer",
-                                           userInfo:nil,
-                                           repeats:true)
-  end
-
-  # smart: autoreconnect timer & return to server server list view
-  def disconnect_timer
-    # log "connected: #{@ts.isConnected}"
-    unless @ts.isConnected
-      if @times < 3
-        sign_on
-        @times += 1
-        return
-      end
-      $nav.pop
-    end
+    target:self,
+    selector:"update_and_scroll",
+    userInfo:nil,
+    repeats:true)
   end
 
   def update_and_scroll
@@ -110,7 +88,7 @@ class GlobalChatController < UIViewController
       get_log
     elsif command == "HANDLE"
       @nicks << parr.last
-      # @nicks.uniq!
+      @nicks.uniq!
       nicks_table.reloadData
     elsif command == "SAY"
       handle = parr[1]
@@ -119,25 +97,23 @@ class GlobalChatController < UIViewController
     elsif command == "JOIN"
       handle = parr[1]
       @nicks << handle
-      # @chat_buffer += "#{handle} has entered\n"
       output_to_chat_window("#{handle} has entered")
       nicks_table.dataSource = self
       nicks_table.reloadData
     elsif command == "LEAVE"
       handle = parr[1]
-      # @chat_buffer += "#{handle} has exited\n"
       output_to_chat_window("#{handle} has exited")
       @nicks.delete(handle)
       nicks_table.reloadData
     end
   end
 
-  def output_to_chat_window str 
+  def output_to_chat_window str
     @chat_buffer += "#{str}\n"
   end
 
   def onSocket(sock, didConnectToHost:host, port:port)
-    puts "connected #{host}:#{port}"
+    log "connected #{host}:#{port}"
     sign_on_array = @password == "" ? [@handle] : [@handle, @password]
     send_message("SIGNON", sign_on_array)
     read_line
@@ -157,6 +133,13 @@ class GlobalChatController < UIViewController
 
   def onSocketDidDisconnect(sock)
     log "disconnected"
+
+    if @times < 10
+      sign_on
+      @times += 1
+      return
+    end
+    $nav.pop
   end
 
   def send_message(opcode, args)
@@ -169,7 +152,7 @@ class GlobalChatController < UIViewController
   def read_line
     @ts.readDataToData($term, withTimeout:-1, tag:0)
   end
-  
+
 
   def post_message(message)
     send_message "MESSAGE", [message, @chat_token]
@@ -177,8 +160,8 @@ class GlobalChatController < UIViewController
   end
 
   def add_msg(handle, message)
-    msg = "#{handle}: #{message}\n"
-    @chat_buffer += msg
+    msg = "#{handle}: #{message}"
+    output_to_chat_window(msg)
   end
 
   def get_log

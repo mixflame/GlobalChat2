@@ -9,7 +9,7 @@ class GlobalChatController
 
 
   def initialize
-    #@mutex = Mutex.new
+    @mutex = Mutex.new
     @queue = Dispatch::Queue.new('com.jonsoft.globalchat')
   end
 
@@ -47,8 +47,15 @@ class GlobalChatController
   end
 
   def sign_on
-    NSLog "Connecting to: #{@host} #{@port}"
-    @ts = TCPSocket.open(@host, @port)
+    log "Connecting to: #{@host} #{@port}"
+    begin
+      @ts = TCPSocket.open(@host, @port)
+    rescue
+      alert = NSAlert.new
+      alert.setMessageText("Could not connect to GlobalChat server.")
+      alert.runModal
+      return false
+    end
     sign_on_array = @password == "" ? [@handle] : [@handle, @password]
     send_message("SIGNON", sign_on_array)
     begin_async_read_queue
@@ -57,6 +64,18 @@ class GlobalChatController
                                            selector:"update_and_scroll",
                                            userInfo:nil,
                                            repeats:true)
+    true
+  end
+  
+  def return_to_server_list
+    @mutex.synchronize do
+      #@queue = nil
+      alert = NSAlert.new
+      alert.setMessageText("GlobalChat connection crashed.")
+      alert.runModal
+      self.server_list_window.makeKeyAndOrderFront(nil)
+      #self.chat_window.close
+    end
   end
   
   def update_and_scroll
@@ -73,11 +92,17 @@ class GlobalChatController
       loop do
         #break if @ts.closed?
         data = ""
-        while line = @ts.recv(1)
-          break if line == "\0" 
-          data += line
+        begin
+          while line = @ts.recv(1)
+            break if line == "\0" 
+            data += line
+          end
+        rescue
+          return_to_server_list
+          break
         end
-        log data
+          
+        p data
         parse_line(data)
       end
     end
@@ -92,6 +117,7 @@ class GlobalChatController
       get_log
     elsif command == "HANDLE"
       self.nicks << parr.last
+      self.nicks.uniq!
       @nicks_table.dataSource = self
       @nicks_table.reloadData
     elsif command == "SAY"
@@ -101,12 +127,12 @@ class GlobalChatController
     elsif command == "JOIN"
       handle = parr[1]
       self.nicks << handle
-      self.chat_buffer += "#{handle} has entered\n"
+      output_to_chat_window("#{handle} has entered")
       @nicks_table.dataSource = self
       @nicks_table.reloadData
     elsif command == "LEAVE"
       handle = parr[1]
-      self.chat_buffer += "#{handle} has exited\n"
+      output_to_chat_window("#{handle} has exited")
       self.nicks.delete(handle)
       @nicks_table.dataSource = self
       @nicks_table.reloadData
@@ -119,9 +145,13 @@ class GlobalChatController
   end
   
   def sock_send io, msg
-    log msg
-    msg = "#{msg}\0"
-    io.send msg, 0
+    begin
+      p msg
+      msg = "#{msg}\0"
+      io.send msg, 0
+    rescue
+      return_to_server_list
+    end
   end
 
   def post_message(message)
@@ -130,8 +160,8 @@ class GlobalChatController
   end
   
   def add_msg(handle, message)
-    msg = "#{handle}: #{message}\n"
-    self.chat_buffer += msg
+    msg = "#{handle}: #{message}"
+    output_to_chat_window(msg)
   end
 
   def get_log
@@ -147,9 +177,17 @@ class GlobalChatController
     @ts.close
   end
   
-  def log(msg)
-    #NSLog(msg)
-    p msg
+  def p obj
+    NSLog obj.description
+  end
+  
+  def log str
+    # NSLog str
+    output_to_chat_window(str)
+  end
+  
+  def output_to_chat_window str
+    @chat_buffer += "#{str}\n"
   end
 
 end
