@@ -14,17 +14,8 @@ class GlobalChatController < UIViewController
   end
 
   def viewWillAppear(animated)
-    $gcc = self
-    @times = 0
-    @chat_buffer = ""
-    @mutex = Mutex.new
-    sign_on
     super(animated)
   end
-
-  # def viewWillDisappear(animated)
-  #   super(animated)
-  # end
 
   def tableView(tableView, cellForRowAtIndexPath:indexPath)
     cell = tableView.dequeueReusableCellWithIdentifier("GlobalChat2")
@@ -64,11 +55,6 @@ class GlobalChatController < UIViewController
   def sign_on
     @ts = AsyncSocket.alloc.initWithDelegate(self, delegateQueue:Dispatch::Queue.main)
     @ts.connectToHost(@host, onPort:@port, error:nil)
-    @scroll_timer = NSTimer.scheduledTimerWithTimeInterval(0.1,
-    target:self,
-    selector:"update_and_scroll",
-    userInfo:nil,
-    repeats:true)
   end
 
   def update_and_scroll
@@ -110,10 +96,11 @@ class GlobalChatController < UIViewController
 
   def output_to_chat_window str
     @chat_buffer += "#{str}\n"
+    update_and_scroll
   end
 
   def onSocket(sock, didConnectToHost:host, port:port)
-    log "connected #{host}:#{port}"
+    $app.switch_to_vc($gcc)
     sign_on_array = @password == "" ? [@handle] : [@handle, @password]
     send_message("SIGNON", sign_on_array)
     read_line
@@ -126,20 +113,15 @@ class GlobalChatController < UIViewController
     read_line
   end
 
-  def onSocket(sock, willDisconnectWithError:err)
-    log "error disconnecting"
-  end
-
 
   def onSocketDidDisconnect(sock)
-    log "disconnected"
-
-    if @times < 10
-      sign_on
-      @times += 1
-      return
+    log "disconnected" do
+      return_to_server_list
     end
-    $nav.pop
+  end
+
+  def return_to_server_list
+    $app.switch_to_vc($slc)
   end
 
   def send_message(opcode, args)
@@ -177,12 +159,13 @@ class GlobalChatController < UIViewController
   def sign_out
     send_message "SIGNOFF", [@chat_token]
     @ts.disconnect
-    self.performSegueWithIdentifier("Back2Login", sender:self)
+    return_to_server_list
   end
 
-  def log str
+  def log str, &block
     # NSLog str
-    output_to_chat_window(str)
+    # output_to_chat_window(str)
+    UIAlertView.alert(str) do block.call end
   end
 
 end

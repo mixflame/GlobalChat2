@@ -72,25 +72,22 @@ class ServerListController < UIViewController
     get_servers
   end
 
-  def prepareForSegue(segue, sender:sender)
-
-    gcc = segue.destinationViewController
-    gcc.handle = handle.text
-    gcc.host = host.text
-    gcc.port = port.text
-    gcc.password = password.text
-    
-
-  end
-
-
   def connect(sender)
     # save defaults
     $prefs.setObject(host.text, :forKey => "host")
     $prefs.setObject(handle.text, :forKey => "handle")
     $prefs.setObject(port.text, :forKey => "port")
 
-    self.performSegueWithIdentifier("Connect2Server", sender:self)
+    $gcc = $app.load_vc("ChatWindow")
+    $gcc.handle = handle.text
+    $gcc.host = host.text
+    $gcc.port = port.text
+    $gcc.password = password.text
+    $gcc.chat_buffer = ""
+    $gcc.nicks = []
+    $gcc.ts = nil
+    $gcc.times = 0
+    $gcc.sign_on
 
   end
 

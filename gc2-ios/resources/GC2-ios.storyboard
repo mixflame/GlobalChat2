@@ -1,29 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2840" systemVersion="12C60" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="pni-Xz-BEu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2840" systemVersion="12C60" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="bLW-QQ-F16">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1926"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
-        <scene sceneID="Y84-0A-4sj">
-            <objects>
-                <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="pni-Xz-BEu" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="eMG-EM-etQ"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="yP2-Pz-mVU">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="bLW-QQ-F16" kind="relationship" relationship="rootViewController" id="oB3-Qj-Vwt"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="TeN-H3-cRb" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-289" y="-11"/>
-        </scene>
-        <!--Server List Controller - Server List-->
+        <!--Server List Controller - ServerList-->
         <scene sceneID="pWC-kO-dWF">
             <objects>
-                <viewController autoresizesArchivedViewToFullSize="NO" title="Server List" id="bLW-QQ-F16" customClass="ServerListController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ServerList" autoresizesArchivedViewToFullSize="NO" title="ServerList" id="bLW-QQ-F16" customClass="ServerListController" sceneMemberID="viewController">
                     <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="xyj-Cg-YzA">
                         <rect key="frame" x="0.0" y="20" width="568" height="300"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -180,17 +164,16 @@
                         <outlet property="password" destination="6Xn-N3-24U" id="8oP-1k-1Dd"/>
                         <outlet property="port" destination="7E0-Mr-gED" id="eyi-dK-4DH"/>
                         <outlet property="server_list_table" destination="Oax-uN-jr0" id="E43-TX-pxu"/>
-                        <segue destination="6Pa-eO-HLl" kind="push" identifier="Connect2Server" id="yWe-7y-Eb2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YHI-Ua-ECC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="575" y="-13"/>
+            <point key="canvasLocation" x="259" y="-29"/>
         </scene>
-        <!--Global Chat Controller-->
+        <!--Global Chat Controller - ChatWindow-->
         <scene sceneID="giR-1s-nhw">
             <objects>
-                <viewController id="6Pa-eO-HLl" customClass="GlobalChatController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChatWindow" autoresizesArchivedViewToFullSize="NO" title="ChatWindow" id="6Pa-eO-HLl" customClass="GlobalChatController" sceneMemberID="viewController">
                     <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="aZp-cF-7Pg">
                         <rect key="frame" x="0.0" y="20" width="568" height="300"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -252,12 +235,11 @@
                         <outlet property="chat_window_text" destination="7EW-sa-a55" id="bcg-7s-4eR"/>
                         <outlet property="nicks_table" destination="oW8-Av-eRK" id="CHa-OK-Hzq"/>
                         <outlet property="scroll_view" destination="eyw-YI-O7a" id="ZQt-vT-TqL"/>
-                        <segue destination="bLW-QQ-F16" kind="push" identifier="Back" id="7vI-ks-PZJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZYM-bR-itL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1277" y="-11"/>
+            <point key="canvasLocation" x="1049" y="-29"/>
         </scene>
     </scenes>
     <classes>
@@ -311,7 +293,4 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
-    <inferredMetricsTieBreakers>
-        <segue reference="7vI-ks-PZJ"/>
-    </inferredMetricsTieBreakers>
 </document>
