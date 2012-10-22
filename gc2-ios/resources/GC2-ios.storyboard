@@ -8,6 +8,7 @@
         <scene sceneID="Y84-0A-4sj">
             <objects>
                 <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="pni-Xz-BEu" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="eMG-EM-etQ"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="yP2-Pz-mVU">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -251,7 +252,7 @@
                         <outlet property="chat_window_text" destination="7EW-sa-a55" id="bcg-7s-4eR"/>
                         <outlet property="nicks_table" destination="oW8-Av-eRK" id="CHa-OK-Hzq"/>
                         <outlet property="scroll_view" destination="eyw-YI-O7a" id="ZQt-vT-TqL"/>
-                        <segue destination="bLW-QQ-F16" kind="push" identifier="Back2Login" id="Swn-ZU-zaF"/>
+                        <segue destination="bLW-QQ-F16" kind="push" identifier="Back" id="7vI-ks-PZJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZYM-bR-itL" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -265,13 +266,16 @@
             <relationships>
                 <relationship kind="action" name="get_handles"/>
                 <relationship kind="action" name="get_log"/>
+                <relationship kind="action" name="log:"/>
+                <relationship kind="action" name="onSocketDidDisconnect:"/>
                 <relationship kind="action" name="parse_line:"/>
                 <relationship kind="action" name="post_message:"/>
-                <relationship kind="action" name="quit:"/>
+                <relationship kind="action" name="read_line"/>
                 <relationship kind="action" name="scroll_the_scroll_view_down"/>
-                <relationship kind="action" name="sendMessage:"/>
+                <relationship kind="action" name="send_the_chat_message"/>
                 <relationship kind="action" name="sign_on"/>
                 <relationship kind="action" name="sign_out"/>
+                <relationship kind="action" name="textFieldShouldReturn:"/>
                 <relationship kind="action" name="update_and_scroll"/>
                 <relationship kind="action" name="update_chat_views"/>
                 <relationship kind="action" name="viewDidLoad"/>
@@ -281,6 +285,9 @@
                 <relationship kind="outlet" name="scroll_view"/>
             </relationships>
         </class>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
         <class className="ServerListController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ServerListController.h"/>
             <relationships>
@@ -288,6 +295,7 @@
                 <relationship kind="action" name="get_servers"/>
                 <relationship kind="action" name="load_prefs"/>
                 <relationship kind="action" name="refresh:"/>
+                <relationship kind="action" name="textFieldShouldReturn:"/>
                 <relationship kind="action" name="viewDidLoad"/>
                 <relationship kind="outlet" name="handle"/>
                 <relationship kind="outlet" name="host" candidateClass="UITextField"/>
@@ -304,6 +312,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Swn-ZU-zaF"/>
+        <segue reference="7vI-ks-PZJ"/>
     </inferredMetricsTieBreakers>
 </document>

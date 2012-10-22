@@ -21,10 +21,12 @@ class ServerListController < UIViewController
     port.text = $prefs.stringForKey("port") || ""
   end
 
-  def viewDidLoad
+  def viewWillAppear(animated)
+    $slc = self
+    $nav = self.parentViewController
     load_prefs
     get_servers
-    # super
+    super(animated)
   end
 
 

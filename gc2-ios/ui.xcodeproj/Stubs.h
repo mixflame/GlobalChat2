@@ -14,18 +14,21 @@
 
 
 
+-(IBAction) textFieldShouldReturn:(id) textField;
 -(IBAction) viewDidLoad;
--(IBAction) quit:(id) sender;
--(IBAction) sendMessage:(id) sender;
+-(IBAction) send_the_chat_message;
 -(IBAction) scroll_the_scroll_view_down;
 -(IBAction) update_chat_views;
 -(IBAction) sign_on;
 -(IBAction) update_and_scroll;
 -(IBAction) parse_line:(id) line;
+-(IBAction) onSocketDidDisconnect:(id) sock;
+-(IBAction) read_line;
 -(IBAction) post_message:(id) message;
 -(IBAction) get_log;
 -(IBAction) get_handles;
 -(IBAction) sign_out;
+-(IBAction) log:(id) str;
 
 @end
 
@@ -41,6 +44,7 @@
 
 
 
+-(IBAction) textFieldShouldReturn:(id) textField;
 -(IBAction) load_prefs;
 -(IBAction) viewDidLoad;
 -(IBAction) get_servers;

@@ -1,7 +1,7 @@
 class GlobalChatController < UIViewController
   extend IB
 
-  attr_accessor :chat_token, :chat_buffer, :nicks, :handle, :last_scroll_view_height, :host, :port, :password, :ts
+  attr_accessor :chat_token, :chat_buffer, :nicks, :handle, :last_scroll_view_height, :host, :port, :password, :ts, :times, :disconnect_timer, :scroll_timer
 
   outlet :chat_window_text
   outlet :nicks_table
@@ -13,10 +13,21 @@ class GlobalChatController < UIViewController
     textField.resignFirstResponder
   end
 
-  def viewDidLoad
+  def viewWillAppear(animated)
     $gcc = self
+    @times = 0
+    @chat_buffer = ""
     @mutex = Mutex.new
     sign_on
+    super(animated)
+  end
+
+  def viewWillDisappear(animated)
+    # log "i should disappear"
+    @disconnect_timer.invalidate
+    @disconnect_timer = nil
+    super(animated)
+    # @scroll_timer.invalidate
   end
 
   def tableView(tableView, cellForRowAtIndexPath:indexPath)
@@ -57,11 +68,29 @@ class GlobalChatController < UIViewController
   def sign_on
     @ts = AsyncSocket.alloc.initWithDelegate(self, delegateQueue:Dispatch::Queue.main)
     @ts.connectToHost(@host, onPort:@port, error:nil)
-    NSTimer.scheduledTimerWithTimeInterval(0.1,
+    @scroll_timer = NSTimer.scheduledTimerWithTimeInterval(0.1,
                                            target:self,
                                            selector:"update_and_scroll",
                                            userInfo:nil,
                                            repeats:true)
+    @disconnect_timer = NSTimer.scheduledTimerWithTimeInterval(5,
+                                           target:self,
+                                           selector:"disconnect_timer",
+                                           userInfo:nil,
+                                           repeats:true)
+  end
+
+  # smart: autoreconnect timer & return to server server list view
+  def disconnect_timer
+    # log "connected: #{@ts.isConnected}"
+    unless @ts.isConnected
+      if @times < 3
+        sign_on
+        @times += 1
+        return
+      end
+      $nav.pop
+    end
   end
 
   def update_and_scroll
@@ -73,7 +102,7 @@ class GlobalChatController < UIViewController
 
   def parse_line(line)
     parr = line.split("::!!::")
-    p parr
+    #p parr
     command = parr.first
     if command == "TOKEN"
       @chat_token = parr.last
@@ -90,15 +119,21 @@ class GlobalChatController < UIViewController
     elsif command == "JOIN"
       handle = parr[1]
       @nicks << handle
-      @chat_buffer += "#{handle} has entered\n"
+      # @chat_buffer += "#{handle} has entered\n"
+      output_to_chat_window("#{handle} has entered")
       nicks_table.dataSource = self
       nicks_table.reloadData
     elsif command == "LEAVE"
       handle = parr[1]
-      @chat_buffer += "#{handle} has exited\n"
+      # @chat_buffer += "#{handle} has exited\n"
+      output_to_chat_window("#{handle} has exited")
       @nicks.delete(handle)
       nicks_table.reloadData
     end
+  end
+
+  def output_to_chat_window str 
+    @chat_buffer += "#{str}\n"
   end
 
   def onSocket(sock, didConnectToHost:host, port:port)
@@ -115,9 +150,18 @@ class GlobalChatController < UIViewController
     read_line
   end
 
+  def onSocket(sock, willDisconnectWithError:err)
+    log "error disconnecting"
+  end
+
+
+  def onSocketDidDisconnect(sock)
+    log "disconnected"
+  end
+
   def send_message(opcode, args)
     msg = opcode + "::!!::" + args.join("::!!::") + "\0"
-    p msg
+    # p msg
     data = msg.dataUsingEncoding(NSUTF8StringEncoding)
     @ts.writeData(data, withTimeout:-1, tag: 0)
   end
@@ -151,6 +195,11 @@ class GlobalChatController < UIViewController
     send_message "SIGNOFF", [@chat_token]
     @ts.disconnect
     self.performSegueWithIdentifier("Back2Login", sender:self)
+  end
+
+  def log str
+    # NSLog str
+    output_to_chat_window(str)
   end
 
 end
