@@ -29,16 +29,20 @@ class GlobalChatServer < GServer
           sock_send(socket, message) unless socket == sender
         rescue
           log "broadcast fail removal event"
-          @sockets.delete socket
-          ct = @socket_keys[socket]
-          handle = @handle_keys[ct]
-          @handles.delete handle
-          @handle_keys.delete ct
-          @socket_keys.delete socket
-          broadcast_message(socket, "LEAVE", [handle])
+          remove_dead_socket socket
         end
       end
     end
+  end
+
+  def remove_dead_socket(socket)
+    @sockets.delete socket
+    ct = @socket_keys[socket]
+    handle = @handle_keys[ct]
+    @handles.delete handle
+    @handle_keys.delete ct
+    @socket_keys.delete socket
+    broadcast_message(socket, "LEAVE", [handle])
   end
   
   def check_token(chat_token)
@@ -136,12 +140,7 @@ class GlobalChatServer < GServer
     handle = @handle_keys[ct]
     if handle
       log "disconnect removal event"
-      socket = @socket_keys.key(ct)
-      @handles.delete handle
-      @handle_keys.delete ct
-      @port_keys.delete clientPort
-      @socket_keys.delete socket
-      broadcast_message(socket, "LEAVE", [handle])
+      remove_dead_socket ct
     end
     super(clientPort)
   end
@@ -165,14 +164,7 @@ class GlobalChatServer < GServer
         end
       rescue
           log "recv break removal event"
-          socket = io
-          @sockets.delete socket
-          ct = @socket_keys[socket]
-          handle = @handle_keys[ct]
-          @handles.delete handle
-          @handle_keys.delete ct
-          @socket_keys.delete socket
-          broadcast_message(socket, "LEAVE", [handle])
+          remove_dead_socket io
       end
       unless data == ""
         log "#{data}"
