@@ -1,4 +1,4 @@
-#!/usr/bin/env jruby
+#!/usr/bin/env ruby
 
 require 'gserver'
 require 'net/http'
@@ -217,8 +217,10 @@ gc = GlobalChatServer.new(9994, '0.0.0.0', 1000, $stderr, true)
 gc.password = "" # set a password here
 gc.scrollback = false
 gc.start
-gc.join
 
-ping_nexus("MyChatServer", "myhost.com", gc.port)
+if ENV["RUBY_VERSION"].include?("1.9")
+  ping_nexus("GlobalChatNet", "mdks.org", gc.port)
+end
+gc.join
 
 
