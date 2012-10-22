@@ -12,6 +12,6 @@ group :RubyMotion do
   gem 'sugarcube', :github => "rubymotion/sugarcube"
   gem 'ib', :github => "yury/ib"
   gem 'bubble-wrap', :github => "rubymotion/BubbleWrap"
-  gem 'cocoapods', :github => "CocoaPods/CocoaPods"
-  gem 'motion-cocoapods', :github => "HipByte/motion-cocoapods"
+  gem 'cocoapods' #, :github => "CocoaPods/CocoaPods"
+  gem 'motion-cocoapods' #, :github => "HipByte/motion-cocoapods"
 end

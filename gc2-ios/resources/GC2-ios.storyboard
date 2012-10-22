@@ -12,7 +12,7 @@
                         <rect key="frame" x="0.0" y="20" width="568" height="300"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Oax-uN-jr0">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Oax-uN-jr0">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
@@ -178,7 +178,7 @@
                         <rect key="frame" x="0.0" y="20" width="568" height="300"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="oW8-Av-eRK">
+                            <tableView autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="oW8-Av-eRK">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="270" id="3HG-vP-48J"/>
@@ -248,11 +248,12 @@
             <relationships>
                 <relationship kind="action" name="get_handles"/>
                 <relationship kind="action" name="get_log"/>
-                <relationship kind="action" name="log:"/>
                 <relationship kind="action" name="onSocketDidDisconnect:"/>
+                <relationship kind="action" name="output_to_chat_window:"/>
                 <relationship kind="action" name="parse_line:"/>
                 <relationship kind="action" name="post_message:"/>
                 <relationship kind="action" name="read_line"/>
+                <relationship kind="action" name="return_to_server_list"/>
                 <relationship kind="action" name="scroll_the_scroll_view_down"/>
                 <relationship kind="action" name="send_the_chat_message"/>
                 <relationship kind="action" name="sign_on"/>
@@ -260,7 +261,7 @@
                 <relationship kind="action" name="textFieldShouldReturn:"/>
                 <relationship kind="action" name="update_and_scroll"/>
                 <relationship kind="action" name="update_chat_views"/>
-                <relationship kind="action" name="viewDidLoad"/>
+                <relationship kind="action" name="viewWillAppear:"/>
                 <relationship kind="outlet" name="chat_message"/>
                 <relationship kind="outlet" name="chat_window_text"/>
                 <relationship kind="outlet" name="nicks_table"/>
@@ -278,7 +279,7 @@
                 <relationship kind="action" name="load_prefs"/>
                 <relationship kind="action" name="refresh:"/>
                 <relationship kind="action" name="textFieldShouldReturn:"/>
-                <relationship kind="action" name="viewDidLoad"/>
+                <relationship kind="action" name="viewWillAppear:"/>
                 <relationship kind="outlet" name="handle"/>
                 <relationship kind="outlet" name="host" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="names"/>
