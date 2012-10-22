@@ -115,7 +115,7 @@ class GlobalChatServer < GServer
           @handles << handle
           @sockets << io
         end
-        send_message(io, "TOKEN", [chat_token])
+        send_message(io, "TOKEN", [chat_token, handle])
         broadcast_message(io, "JOIN", [handle])
       end
       
