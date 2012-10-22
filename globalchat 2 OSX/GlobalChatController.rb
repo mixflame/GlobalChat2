@@ -122,7 +122,7 @@ class GlobalChatController
       @nicks_table.reloadData
     elsif command == "BUFFER"
       buffer = parr[1]
-      unless buffer == ""
+      unless buffer == "" || buffer == nil
         @chat_buffer = buffer
         update_and_scroll
       end
