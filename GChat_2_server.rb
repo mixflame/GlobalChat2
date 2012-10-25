@@ -4,6 +4,7 @@ require 'gserver'
 require 'net/http'
 require 'uri'
 require 'securerandom'
+require "pstore"
 
 # require 'pry'
 
@@ -15,12 +16,14 @@ class GlobalChatServer < GServer
     super(port, *args)
     self.audit = true
     self.debug = true
+    @pstore = PStore.new("gchat.pstore")
     @handle_keys = {}
     @socket_keys = {}
     @port_keys = {}
     @handles = []
     @sockets = []
     @buffer = []
+    load_chat_log
     @mutex = Mutex.new
   end
   
@@ -154,9 +157,6 @@ class GlobalChatServer < GServer
     end
   end
   
-  def connecting(client)
-    super(client)
-  end
   def disconnecting(clientPort)
     log "disconnect event"
     ct = @port_keys[clientPort]
@@ -169,7 +169,6 @@ class GlobalChatServer < GServer
   end
   def starting
     log("GlobalChat2 Server Running")
-    super
   end
   
   def serve(io)
@@ -182,7 +181,7 @@ class GlobalChatServer < GServer
         end
       rescue
           log "recv break removal event"
-          remove_dead_socket io, true
+          remove_dead_socket io #, true
       end
       unless data == ""
         log "#{data}"
@@ -194,6 +193,25 @@ class GlobalChatServer < GServer
   def log(msg)
     puts msg
   end
+
+
+  def save_chat_log
+    log "saving chatlog"
+    @pstore.transaction do
+      @pstore[:log] = @buffer
+      #p @pstore[:log] 
+    end
+
+  end
+
+  def load_chat_log
+    log "loading chatlog"
+    @pstore.transaction(true) do
+      @buffer = @pstore[:log] || []
+      #p @buffer
+    end
+  end
+
 end
 
 
@@ -213,16 +231,17 @@ end
 
 at_exit do
   nexus_offline
+  $gc.save_chat_log
 end
 
-gc = GlobalChatServer.new(9994, '0.0.0.0', 1000, $stderr, true)
-gc.password = "" # set a password here
-gc.scrollback = false
-gc.start
+$gc = GlobalChatServer.new(9994, '0.0.0.0', 1000, $stderr, true)
+$gc.password = "" # set a password here
+$gc.scrollback = true
+$gc.start
 
 if ENV["RUBY_VERSION"] && ENV["RUBY_VERSION"].include?("1.9")
-  ping_nexus("GlobalChatNet", "mdks.org", gc.port)
+  ping_nexus("GlobalChatNet2", "localhost", $gc.port)
 end
-gc.join
+$gc.join
 
 

@@ -92,13 +92,11 @@ class GlobalChatController
 
   def post_message(message)
     send_message "MESSAGE", [message, @chat_token]
-    add_msg(self.handle, message)
   end
   
   def add_msg(handle, message)
     msg = "#{handle}: #{message}\n"
     output_to_chat_window msg
-    #self.chat_buffer += msg
   end
 
   def output_to_chat_window str
@@ -126,14 +124,14 @@ class GlobalChatController
 end
 
 
-#output_to_chat_window 'enter name'
-#name = gets
-#output_to_chat_window 'enter server'
-#server = gets
+puts 'enter handle'
+name = gets
+puts 'enter server'
+server = gets
 
 gcc = GlobalChatController.new
-gcc.handle = "jsilver-console" #name.strip
-gcc.host = "mdks.org" #server.strip
+gcc.handle = name.strip || "jsilver-console"
+gcc.host = server.strip || "mdks.org"
 gcc.port = 9994
 gcc.password = ""
 gcc.nicks = []
