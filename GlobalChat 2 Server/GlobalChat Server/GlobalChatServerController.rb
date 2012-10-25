@@ -27,6 +27,7 @@ class GlobalChatServerController
     if @server_name.stringValue != "" && @published == true
         unpingNexus(sender)
     end
+    @gchatserv.save_chat_log
     @application.terminate(self)
   end
   
