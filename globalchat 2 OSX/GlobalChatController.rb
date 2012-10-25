@@ -40,10 +40,7 @@ class GlobalChatController
   end
 
   def update_chat_views
-    
-      @chat_window_text.setString(NSString.stringWithUTF8String(self.chat_buffer))
-      @last_buffer = self.chat_buffer
-    
+    @chat_window_text.setString(NSString.stringWithUTF8String(self.chat_buffer))
   end
 
   def sign_on
@@ -59,38 +56,27 @@ class GlobalChatController
     sign_on_array = @password == "" ? [@handle] : [@handle, @password]
     send_message("SIGNON", sign_on_array)
     begin_async_read_queue
-    NSTimer.scheduledTimerWithTimeInterval(0.1,
-                                           target:self,
-                                           selector:"update_and_scroll",
-                                           userInfo:nil,
-                                           repeats:true)
     true
   end
   
   def return_to_server_list
     @mutex.synchronize do
-      #@queue = nil
       alert = NSAlert.new
       alert.setMessageText("GlobalChat connection crashed.")
       alert.runModal
       self.server_list_window.makeKeyAndOrderFront(nil)
-      #self.chat_window.close
+      self.chat_window.orderOut(self)
     end
   end
   
   def update_and_scroll
-      if self.chat_buffer != @last_buffer
-        update_chat_views
-      end
-    
-      scroll_the_scroll_view_down
-    
+    update_chat_views
+    scroll_the_scroll_view_down
   end
   
   def begin_async_read_queue
     @queue.async do
       loop do
-        #break if @ts.closed?
         data = ""
         begin
           while line = @ts.recv(1)
@@ -194,6 +180,7 @@ class GlobalChatController
   
   def output_to_chat_window str
     @chat_buffer += "#{str}\n"
+    update_and_scroll
   end
 
 end

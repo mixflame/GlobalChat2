@@ -1,9 +1,9 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env ir
 
 require 'gserver'
 require 'net/http'
 require 'uri'
-
+require 'securerandom'
 require 'gserver'
 
 class GlobalChatServer < GServer
@@ -107,7 +107,7 @@ class GlobalChatServer < GServer
       
       if (@password == password) || ((password === nil) && (@password == ""))
         
-        chat_token = rand(36**8).to_s(36)
+        chat_token = SecureRandom.uuid
         @mutex.synchronize do
           @handle_keys[chat_token] = handle
           @socket_keys[io] = chat_token
@@ -218,7 +218,7 @@ gc.password = "" # set a password here
 gc.scrollback = false
 gc.start
 
-if ENV["RUBY_VERSION"].include?("1.9")
+if ENV["RUBY_VERSION"] && ENV["RUBY_VERSION"].include?("1.9")
   ping_nexus("GlobalChatNet", "mdks.org", gc.port)
 end
 gc.join

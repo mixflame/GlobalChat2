@@ -57,7 +57,7 @@ class ServerListController
       @gcc.chat_buffer = ""
       
       if @gcc.sign_on
-        #self.server_list_window.close
+        self.server_list_window.orderOut(self)
         self.chat_window.makeKeyAndOrderFront(nil)
       end 
   end
