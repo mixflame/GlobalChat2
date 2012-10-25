@@ -1,10 +1,11 @@
-#!/usr/bin/env ir
+#!/usr/bin/env ruby
 
 require 'gserver'
 require 'net/http'
 require 'uri'
 require 'securerandom'
-require 'gserver'
+
+# require 'pry'
 
 class GlobalChatServer < GServer
   
@@ -27,7 +28,6 @@ class GlobalChatServer < GServer
     @mutex.synchronize do
       @sockets.each do |socket|
         begin
-          #socket.send message unless socket == sender
           sock_send(socket, message) unless socket == sender
         rescue
           log "broadcast fail removal event"
@@ -44,8 +44,6 @@ class GlobalChatServer < GServer
     @handles.delete handle
     @handle_keys.delete ct
     @socket_keys.delete socket
-    # dont wanna broadcast a LEAVE
-    # in a dead socket cleanup function
     if broadcast
       broadcast_message(socket, "LEAVE", [handle])
     end
@@ -89,7 +87,17 @@ class GlobalChatServer < GServer
     out
   end
   
+
+  def clean_handles
+    @handle_keys.each do |k, v| 
+      if @socket_keys.key(k).closed?
+        @handles.delete(v)
+      end
+    end
+  end
+
   def build_handle_list
+    clean_handles
     @handles.join("\n")
   end
   
@@ -107,7 +115,7 @@ class GlobalChatServer < GServer
       
       if (@password == password) || ((password === nil) && (@password == ""))
         
-        chat_token = SecureRandom.uuid
+        chat_token = rand(36**8).to_s(36)
         @mutex.synchronize do
           @handle_keys[chat_token] = handle
           @socket_keys[io] = chat_token
@@ -155,7 +163,7 @@ class GlobalChatServer < GServer
     handle = @handle_keys[ct]
     if handle
       log "disconnect removal event"
-      remove_dead_socket ct #, true
+      remove_dead_socket ct
     end
     super(clientPort)
   end
@@ -163,11 +171,6 @@ class GlobalChatServer < GServer
     log("GlobalChat2 Server Running")
     super
   end
-  # doesnt happen.. quits
-  #def stopping
-  #  log("Stopping.")
-  #  #super
-  #end
   
   def serve(io)
     loop do
@@ -189,8 +192,7 @@ class GlobalChatServer < GServer
   end
   
   def log(msg)
-    #NSLog(msg.inspect)
-    puts msg #unless msg == ""
+    puts msg
   end
 end
 

@@ -44,7 +44,7 @@ class GlobalChatController
   end
 
   def sign_on
-    log "Connecting to: #{@host} #{@port}"
+    #log "Connecting to: #{@host} #{@port}"
     begin
       @ts = TCPSocket.open(@host, @port)
     rescue
@@ -77,6 +77,7 @@ class GlobalChatController
   def begin_async_read_queue
     @queue.async do
       loop do
+        sleep 0.1
         data = ""
         begin
           while line = @ts.recv(1)
@@ -108,10 +109,9 @@ class GlobalChatController
       @nicks_table.reloadData
     elsif command == "BUFFER"
       buffer = parr[1]
-      unless buffer == "" || buffer == nil
-        @chat_buffer = buffer
-        update_and_scroll
-      end
+      #unless buffer == "" || buffer == nil
+      output_to_chat_window(buffer)
+      #end
     elsif command == "SAY"
       handle = parr[1]
       msg = parr[2]
@@ -119,12 +119,12 @@ class GlobalChatController
     elsif command == "JOIN"
       handle = parr[1]
       self.nicks << handle
-      output_to_chat_window("#{handle} has entered")
+      output_to_chat_window("#{handle} has entered\n")
       @nicks_table.dataSource = self
       @nicks_table.reloadData
     elsif command == "LEAVE"
       handle = parr[1]
-      output_to_chat_window("#{handle} has exited")
+      output_to_chat_window("#{handle} has exited\n")
       self.nicks.delete(handle)
       @nicks_table.dataSource = self
       @nicks_table.reloadData
@@ -155,7 +155,7 @@ class GlobalChatController
     if @handle != handle && message.include?(@handle)
       NSBeep()
     end
-    msg = "#{handle}: #{message}"
+    msg = "#{handle}: #{message}\n"
     output_to_chat_window(msg)
   end
 
@@ -182,8 +182,10 @@ class GlobalChatController
   end
   
   def output_to_chat_window str
-    @chat_buffer += "#{str}\n"
-    update_and_scroll
+    @mutex.synchronize do
+      @chat_buffer += "#{str}"
+      update_and_scroll
+    end
   end
 
 end
