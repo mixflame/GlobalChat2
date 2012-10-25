@@ -133,7 +133,7 @@ end
 
 gcc = GlobalChatController.new
 gcc.handle = "jsilver-console" #name.strip
-gcc.host = "localhost" #server.strip
+gcc.host = "mdks.org" #server.strip
 gcc.port = 9994
 gcc.password = ""
 gcc.nicks = []

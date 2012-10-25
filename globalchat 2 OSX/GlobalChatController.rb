@@ -152,6 +152,9 @@ class GlobalChatController
   end
   
   def add_msg(handle, message)
+    if @handle != handle && message.include?(@handle)
+      NSBeep()
+    end
     msg = "#{handle}: #{message}"
     output_to_chat_window(msg)
   end
