@@ -14,7 +14,9 @@ class GlobalChatController
   end
 
   def quit(sender)
-    sign_out
+    unless @ts.nil?
+      sign_out
+    end
     @application.terminate(self)
   end
 
