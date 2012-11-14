@@ -20,10 +20,4 @@ easy wins so far not present in traditional IRC:
 
 * tons (millions) of useless "features" removed from IRC not useful to everday productivity
 
-[![Click here to lend your support to: GlobalChat: Beat IRC in Pure Ruby
-and make a donation at www.pledgie.com !][]][]
-
-  [Click here to lend your support to: GlobalChat: Beat IRC in Pure Ruby
-  and make a donation at www.pledgie.com !]: http://www.pledgie.com/campaigns/18682.png?skin_name=chrome
-  [![Click here to lend your support to: GlobalChat: Beat IRC in Pure
-  Ruby and make a donation at www.pledgie.com !][]]: http://www.pledgie.com/campaigns/18682
+<a href='http://www.pledgie.com/campaigns/18682'><img alt='Click here to lend your support to: GlobalChat: Beat IRC in Pure Ruby and make a donation at www.pledgie.com !' src='http://www.pledgie.com/campaigns/18682.png?skin_name=chrome' border='0' /></a>
