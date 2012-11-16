@@ -14,9 +14,12 @@ class GlobalChatController
   end
 
   def quit(sender)
-    unless @ts.nil?
-      sign_out
-    end
+    #unless @ts.nil?
+      #sign_out
+      # dont sign out
+      # you will be gc'd
+      # by the pingponger
+    #end
     @application.terminate(self)
   end
 
@@ -29,7 +32,7 @@ class GlobalChatController
   end
   
   def cycle_chat_messages
-    @chat_message.setStringValue @sent_messages[@sent_msg_index % @sent_messages.length ]
+    @chat_message.setStringValue @sent_messages[@sent_msg_index % @sent_messages.length]
   end
   
   def control(control, textView:fieldEditor, doCommandBySelector:commandSelector)
@@ -49,6 +52,13 @@ class GlobalChatController
 
     return false
 
+  end
+  
+  def cleanup
+    @chat_message.setStringValue('')
+    @nicks = []
+    @nicks_table.reloadData
+    @chat_window_text.setString(NSString.stringWithUTF8String(''))
   end
 
   def sendMessage(sender)
@@ -71,12 +81,16 @@ class GlobalChatController
   end
 
   def scroll_the_scroll_view_down
-    y = self.scroll_view.documentView.frame.size.height - self.scroll_view.contentSize.height
-    self.scroll_view.contentView.scrollToPoint(NSMakePoint(0, y))
+    run_on_main_thread do
+      y = self.scroll_view.documentView.frame.size.height - self.scroll_view.contentSize.height
+      self.scroll_view.contentView.scrollToPoint(NSMakePoint(0, y))
+    end
   end
 
   def update_chat_views
-    @chat_window_text.setString(NSString.stringWithUTF8String(self.chat_buffer))
+    run_on_main_thread do
+      @chat_window_text.setString(NSString.stringWithUTF8String(self.chat_buffer))
+    end
   end
 
   def sign_on
@@ -84,11 +98,7 @@ class GlobalChatController
     begin
       @ts = TCPSocket.open(@host, @port)
     rescue
-      #main_thread do
-        alert = NSAlert.new
-        alert.setMessageText("Could not connect to GlobalChat server.")
-        alert.runModal
-      #end
+      alert("Could not connect to GlobalChat server.")
       return false
     end
     sign_on_array = @password == "" ? [@handle] : [@handle, @password]
@@ -97,16 +107,26 @@ class GlobalChatController
     true
   end
   
-  def return_to_server_list
-    @mutex.synchronize do
-      #Thread.main do
-        alert = NSAlert.new
-        alert.setMessageText("GlobalChat connection crashed.")
-        alert.runModal
-        self.server_list_window.makeKeyAndOrderFront(nil)
-        self.chat_window.orderOut(self)
-      #end
+  def alert(msg)
+    run_on_main_thread do
+      alert = NSAlert.new
+      alert.setMessageText(msg)
+      alert.runModal
     end
+    #block.performSelectorOnMainThread "call:", withObject:nil, waitUntilDone:false
+  end
+  
+  def run_on_main_thread &block
+    block.performSelectorOnMainThread "call:", withObject:nil, waitUntilDone:false
+  end
+  
+  def return_to_server_list
+    #@mutex.synchronize do
+    alert("GlobalChat connection crashed.")
+    cleanup
+    self.server_list_window.makeKeyAndOrderFront(nil)
+    self.chat_window.orderOut(self)
+    #end
   end
   
   def update_and_scroll
@@ -117,7 +137,7 @@ class GlobalChatController
   def begin_async_read_queue
     @queue.async do
       loop do
-        sleep 0.1
+        #sleep 0.1
         data = ""
         begin
           while line = @ts.recv(1)
@@ -215,7 +235,7 @@ class GlobalChatController
   end
   
   def ping
-    sleep rand(10)
+    sleep 3 # necessitas?
     send_message("PING", [@chat_token])
   end
   
@@ -230,10 +250,10 @@ class GlobalChatController
   end
   
   def output_to_chat_window str
-    @mutex.synchronize do
+    #@mutex.synchronize do
       @chat_buffer += "#{str}"
       update_and_scroll
-    end
+    #end
   end
 
 end

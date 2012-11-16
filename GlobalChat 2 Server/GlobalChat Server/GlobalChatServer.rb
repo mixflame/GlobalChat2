@@ -27,12 +27,12 @@ class GlobalChatServer < GServer
   def broadcast(message, sender=nil)
     @mutex.synchronize do
       @sockets.each do |socket|
-        begin
+        #begin
           sock_send(socket, message) unless socket == sender
-        rescue
-          log "broadcast fail removal event"
-          remove_dead_socket socket
-        end
+        #rescue
+        #  log "broadcast fail removal event"
+        #  remove_dead_socket socket
+        #end
       end
     end
   end
@@ -148,6 +148,9 @@ class GlobalChatServer < GServer
         @buffer << [handle, msg]
         broadcast_message(io, "SAY", [handle, msg])
       elsif command == "PING"
+        unless @handles.include?(handle)
+          @handles << handle
+        end
         @handle_last_pinged[handle] = Time.now
         clean_handles
         send_message(io, "PONG", [build_handle_list])
