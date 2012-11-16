@@ -16,6 +16,7 @@ class GlobalChatServer < GServer
     @handle_keys = {}
     @socket_keys = {}
     @port_keys = {}
+    @handle_last_pinged = {} # used for clone removal
     @handles = []
     @sockets = []
     @buffer = []
@@ -89,14 +90,14 @@ class GlobalChatServer < GServer
 
   def clean_handles
     @handle_keys.each do |k, v| 
-      if @socket_keys.key(k).closed?
+      if @handle_last_pinged[v] < Time.now - 30 #@socket_keys.key(k).closed?
+        log "removed clone handle: #{v}"
         @handles.delete(v)
       end
     end
   end
 
   def build_handle_list
-    clean_handles
     @handles.join("\n")
   end
   
@@ -119,6 +120,7 @@ class GlobalChatServer < GServer
           @handle_keys[chat_token] = handle
           @socket_keys[io] = chat_token
           @port_keys[io.peeraddr[1]] = chat_token
+          # not on list until pinged.
           @handles << handle
           @sockets << io
         end
@@ -145,6 +147,10 @@ class GlobalChatServer < GServer
         message = "#{handle}: #{msg}\n"
         @buffer << [handle, msg]
         broadcast_message(io, "SAY", [handle, msg])
+      elsif command == "PING"
+        @handle_last_pinged[handle] = Time.now
+        clean_handles
+        send_message(io, "PONG", [build_handle_list])
       elsif command == "SIGNOFF"
         @handles.delete handle
         @handle_keys.delete chat_token

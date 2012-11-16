@@ -84,9 +84,11 @@ class GlobalChatController
     begin
       @ts = TCPSocket.open(@host, @port)
     rescue
-      alert = NSAlert.new
-      alert.setMessageText("Could not connect to GlobalChat server.")
-      alert.runModal
+      #main_thread do
+        alert = NSAlert.new
+        alert.setMessageText("Could not connect to GlobalChat server.")
+        alert.runModal
+      #end
       return false
     end
     sign_on_array = @password == "" ? [@handle] : [@handle, @password]
@@ -97,11 +99,13 @@ class GlobalChatController
   
   def return_to_server_list
     @mutex.synchronize do
-      alert = NSAlert.new
-      alert.setMessageText("GlobalChat connection crashed.")
-      alert.runModal
-      self.server_list_window.makeKeyAndOrderFront(nil)
-      self.chat_window.orderOut(self)
+      #Thread.main do
+        alert = NSAlert.new
+        alert.setMessageText("GlobalChat connection crashed.")
+        alert.runModal
+        self.server_list_window.makeKeyAndOrderFront(nil)
+        self.chat_window.orderOut(self)
+      #end
     end
   end
   
@@ -139,6 +143,11 @@ class GlobalChatController
       @handle = parr[2]
       get_handles
       get_log
+      ping
+    elsif command == "PONG"
+      @nicks = parr.last.split("\n")
+      @nicks_table.reloadData
+      ping
     elsif command == "HANDLES"
       @nicks = parr.last.split("\n")
       @nicks_table.reloadData
@@ -204,6 +213,12 @@ class GlobalChatController
     send_message "SIGNOFF", [@chat_token]
     @ts.close
   end
+  
+  def ping
+    sleep rand(10)
+    send_message("PING", [@chat_token])
+  end
+  
   
   def p obj
     NSLog obj.description
