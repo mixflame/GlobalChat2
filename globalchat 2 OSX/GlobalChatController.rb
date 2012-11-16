@@ -1,6 +1,18 @@
 require 'uri'
 require 'socket'
 
+module Notification
+  module_function
+  def send(title, text)
+    notification = NSUserNotification.alloc.init
+    notification.title = title
+    notification.informativeText = text
+        
+    center = NSUserNotificationCenter.defaultUserNotificationCenter
+    center.scheduleNotification(notification)
+  end
+end
+
 class GlobalChatController
 
   attr_accessor :chat_token, :chat_buffer, :nicks, :handle, :handle_text_field, :connect_button, :server_list_window, :chat_window, :chat_window_text, :chat_message, :nicks_table, :application, :scroll_view, :last_scroll_view_height, :host, :port, :password, :ts
@@ -14,12 +26,6 @@ class GlobalChatController
   end
 
   def quit(sender)
-    #unless @ts.nil?
-      #sign_out
-      # dont sign out
-      # you will be gc'd
-      # by the pingponger
-    #end
     if $connected == false
       @application.terminate(self)
     else
@@ -74,7 +80,7 @@ class GlobalChatController
         @sent_messages << @message
       end
     rescue
-      # no-op to show the fail
+      autoreconnect
     end
   end
   
@@ -94,6 +100,8 @@ class GlobalChatController
       frame_height = self.scroll_view.documentView.frame.size.height
       content_size = self.scroll_view.contentSize.height
       y = frame_height - content_size
+    
+      self.scroll_view.setDrawsBackground false
     
       while currentScrollPosition.y < y #|| (self.chat_window_text.stringValue == "")
         currentScrollPosition = self.scroll_view.contentView.bounds.origin
@@ -139,7 +147,7 @@ class GlobalChatController
     unless $autoreconnect == false
       @queue.async do
         while sign_on == false
-          log "offline! autoreconnecting in 3 sec\n"
+          output_to_chat_window "offline! autoreconnecting in 3 sec\n"
           sleep 3
         end
       end
@@ -259,6 +267,11 @@ class GlobalChatController
   def add_msg(handle, message)
     if @handle != handle && message.include?(@handle)
       NSBeep()
+      Notification.send(handle, message)
+      NSApp.requestUserAttention 0
+      @msg_count ||= 0
+      @msg_count += 1
+      NSApplication.sharedApplication.dockTile.setBadgeLabel(@msg_count.to_s)
     end
     msg = NSString.stringWithUTF8String("#{handle}: #{message}\n")
     output_to_chat_window(msg)

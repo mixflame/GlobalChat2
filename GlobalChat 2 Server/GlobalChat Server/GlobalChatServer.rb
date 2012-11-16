@@ -56,7 +56,7 @@ class GlobalChatServer < GServer
     @handles.delete handle
     @handle_keys.delete ct
     @socket_keys.delete socket
-    broadcast_message(socket, "LEAVE", [handle])
+    #broadcast_message(socket, "LEAVE", [handle])
   end
   
   def check_token(chat_token)
@@ -125,12 +125,9 @@ class GlobalChatServer < GServer
       password = parr[2]
 
       if @handles.include?(handle)
-        # since this is private,
-        # give us any handle we want
-        # and try to drop the clone
-        # when multi user connecting
-        # pinging will do
-        remove_user_by_handle(handle)
+        send_message(io, "ALERT", ["Your handle is in use."])
+        io.close
+        return
       end
       
       if handle == nil || handle == ""
@@ -221,6 +218,7 @@ class GlobalChatServer < GServer
       rescue
           log "recv break removal event"
           remove_dead_socket io #, true
+          break
       end
       unless data == ""
         log "#{data}"

@@ -14,7 +14,11 @@ class AppDelegate
       
       
     end
-    
+  
+  
+    def applicationDidBecomeActive(a_notification)
+      NSApplication.sharedApplication.dockTile.setBadgeLabel(nil)
+    end
 
 end
 
