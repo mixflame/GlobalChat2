@@ -15,7 +15,7 @@ end
 
 class GlobalChatController
 
-  attr_accessor :chat_token, :chat_buffer, :nicks, :handle, :handle_text_field, :connect_button, :server_list_window, :chat_window, :chat_window_text, :chat_message, :nicks_table, :application, :scroll_view, :last_scroll_view_height, :host, :port, :password, :ts
+  attr_accessor :chat_token, :chat_buffer, :nicks, :handle, :handle_text_field, :connect_button, :server_list_window, :chat_window, :chat_window_text, :chat_message, :nicks_table, :application, :scroll_view, :last_scroll_view_height, :host, :port, :password, :ts, :msg_count
 
 
   def initialize
@@ -105,7 +105,8 @@ class GlobalChatController
     
       while currentScrollPosition.y < y #|| (self.chat_window_text.stringValue == "")
         currentScrollPosition = self.scroll_view.contentView.bounds.origin
-        self.scroll_view.contentView.scrollToPoint(NSMakePoint(0, currentScrollPosition.y + 1))
+        #self.scroll_view.contentView.scrollToPoint(NSMakePoint(0, currentScrollPosition.y + 1))
+        self.chat_window_text.scrollRangeToVisible NSRange.new(@chat_window_text.string.length, 0)
         self.scroll_view.reflectScrolledClipView(self.scroll_view.contentView)
       end
   end

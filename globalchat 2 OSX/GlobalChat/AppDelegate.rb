@@ -18,6 +18,7 @@ class AppDelegate
   
     def applicationDidBecomeActive(a_notification)
       NSApplication.sharedApplication.dockTile.setBadgeLabel(nil)
+      self.gcc.msg_count = 0
     end
 
 end
