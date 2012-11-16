@@ -1,9 +1,13 @@
 
 
 class AppDelegate
-    attr_accessor :window, :gcsc
+    attr_accessor :window, :gcsc, :server_name
 
     def applicationDidFinishLaunching(a_notification)
+      $app = self
+      $prefs = NSUserDefaults.standardUserDefaults
+      @server_name.setStringValue($prefs.stringForKey("server_name") || "")
+      
       # entry
       @gcsc.gchatserv = GlobalChatServer.new
       
@@ -14,6 +18,12 @@ class AppDelegate
       NSTimer.scheduledTimerWithTimeInterval(1,
         target:@gcsc,
         selector:"checkStatus",
+        userInfo:nil,
+        repeats:true)
+      
+      NSTimer.scheduledTimerWithTimeInterval(5,
+        target:@gcsc,
+        selector:"pongAll",
         userInfo:nil,
         repeats:true)
       

@@ -16,11 +16,7 @@ class ServerListController
       {:host => par[1], :name => par[0], :port => par[2]}
     end
 
-    @names = Net::HTTP.get('nexusnet.herokuapp.com', '/msl').
-    split("\n").
-    collect do |s|
-      s.split("-!!!-")[0]
-    end
+    @names = @server_list_hash.map { |i| i[:name] }
     
   end
 
@@ -56,10 +52,10 @@ class ServerListController
       @gcc.nicks = []
       @gcc.chat_buffer = ""
       
-      if @gcc.sign_on
-        self.server_list_window.orderOut(self)
-        self.chat_window.makeKeyAndOrderFront(nil)
-      end 
+      unless @gcc.sign_on
+        @gcc.alert("Could not connect.")
+      end
+
   end
 
 

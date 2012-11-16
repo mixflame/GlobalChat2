@@ -20,7 +20,11 @@ class GlobalChatController
       # you will be gc'd
       # by the pingponger
     #end
-    @application.terminate(self)
+    if $connected == false
+      @application.terminate(self)
+    else
+      return_to_server_list
+    end
   end
 
   def tableView(view, objectValueForTableColumn:column, row:index)
@@ -62,11 +66,15 @@ class GlobalChatController
   end
 
   def sendMessage(sender)
-    @message = sender.stringValue
-    if @message != ""
-      post_message(@message)
-      @chat_message.setStringValue('')
-      @sent_messages << @message
+    begin
+      @message = sender.stringValue
+      if @message != ""
+        post_message(@message)
+        @chat_message.setStringValue('')
+        @sent_messages << @message
+      end
+    rescue
+      autoreconnect
     end
   end
   
@@ -94,17 +102,20 @@ class GlobalChatController
   end
 
   def sign_on
+    cleanup
     #log "Connecting to: #{@host} #{@port}"
     begin
       @ts = TCPSocket.open(@host, @port)
     rescue
-      alert("Could not connect to GlobalChat server.")
+      #alert("Could not connect to GlobalChat server.")
+      $connected = false
       return false
     end
     sign_on_array = @password == "" ? [@handle] : [@handle, @password]
     send_message("SIGNON", sign_on_array)
     begin_async_read_queue
-    true
+    $connected = true
+    $connected
   end
   
   def alert(msg)
@@ -113,25 +124,39 @@ class GlobalChatController
       alert.setMessageText(msg)
       alert.runModal
     end
-    #block.performSelectorOnMainThread "call:", withObject:nil, waitUntilDone:false
   end
   
   def run_on_main_thread &block
     block.performSelectorOnMainThread "call:", withObject:nil, waitUntilDone:false
   end
   
+  def autoreconnect
+    @queue.async do
+      while sign_on == false
+        log "offline! autoreconnecting in 3 sec\n"
+        sleep 3
+      end
+    end
+  end
+  
   def return_to_server_list
-    #@mutex.synchronize do
-    alert("GlobalChat connection crashed.")
-    cleanup
-    self.server_list_window.makeKeyAndOrderFront(nil)
-    self.chat_window.orderOut(self)
-    #end
+    @mutex.synchronize do
+      $connected = false
+      self.server_list_window.makeKeyAndOrderFront(nil)
+      self.chat_window.orderOut(self)
+      cleanup
+      @ts.close
+    end
   end
   
   def update_and_scroll
     update_chat_views
-    scroll_the_scroll_view_down
+  end
+  
+  def controlTextDidChange(notification)
+    if notification.object.class == NSTextView
+      scroll_the_scroll_view_down
+    end
   end
   
   def begin_async_read_queue
@@ -141,11 +166,12 @@ class GlobalChatController
         data = ""
         begin
           while line = @ts.recv(1)
+            #raise if @last_ping < Time.now - 30
             break if line == "\0" 
             data += line
           end
         rescue
-          return_to_server_list
+          autoreconnect
           break
         end
           
@@ -161,9 +187,14 @@ class GlobalChatController
     if command == "TOKEN"
       @chat_token = parr[1]
       @handle = parr[2]
+      @server_name = parr[3]
+      @server_list_window.orderOut(self)
+      @chat_window.makeKeyAndOrderFront(nil)
+      log "Connected to #{@server_name} \n"
+      @chat_window.setTitle @server_name
       get_handles
       get_log
-      ping
+      $connected = true
     elsif command == "PONG"
       @nicks = parr.last.split("\n")
       @nicks_table.reloadData
@@ -182,14 +213,20 @@ class GlobalChatController
       add_msg(handle, msg)
     elsif command == "JOIN"
       handle = parr[1]
-      self.nicks << handle
       output_to_chat_window("#{handle} has entered\n")
-      @nicks_table.reloadData
     elsif command == "LEAVE"
       handle = parr[1]
       output_to_chat_window("#{handle} has exited\n")
-      self.nicks.delete(handle)
-      @nicks_table.reloadData
+    elsif command == "ALERT"
+      # if you get an alert
+      # you logged in wrong
+      # native alerts
+      # are not part of
+      # chat experience
+      text = parr[1]
+      alert(text)
+      
+      return_to_server_list
     end
   end
   
@@ -199,13 +236,9 @@ class GlobalChatController
   end
   
   def sock_send io, msg
-    begin
-      p msg
-      msg = "#{msg}\0"
-      io.send msg, 0
-    rescue
-      return_to_server_list
-    end
+    p msg
+    msg = "#{msg}\0"
+    io.send msg, 0
   end
 
   def post_message(message)
@@ -236,6 +269,10 @@ class GlobalChatController
   
   def ping
     sleep 3 # necessitas?
+    # i only ping when ponged
+    # if it has been longer than 30 seconds
+    # autoreconnect
+    # @last_ping = Time.now
     send_message("PING", [@chat_token])
   end
   
@@ -251,8 +288,8 @@ class GlobalChatController
   
   def output_to_chat_window str
     #@mutex.synchronize do
-      @chat_buffer += "#{str}"
-      update_and_scroll
+    @chat_buffer += "#{str}"
+    update_and_scroll
     #end
   end
 
