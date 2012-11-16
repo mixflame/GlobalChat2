@@ -3,14 +3,14 @@ require 'socket'
 
 class GlobalChatController
 
-  
-
   attr_accessor :chat_token, :chat_buffer, :nicks, :handle, :handle_text_field, :connect_button, :server_list_window, :chat_window, :chat_window_text, :chat_message, :nicks_table, :application, :scroll_view, :last_scroll_view_height, :host, :port, :password, :ts
 
 
   def initialize
     @mutex = Mutex.new
     @queue = Dispatch::Queue.new('com.jonsoft.globalchat')
+    @sent_messages = []
+    @sent_msg_index = 0
   end
 
   def quit(sender)
@@ -21,11 +21,34 @@ class GlobalChatController
   end
 
   def tableView(view, objectValueForTableColumn:column, row:index)
-    self.nicks[index]
+    @nicks[index]
   end
 
   def numberOfRowsInTableView(view)
-    self.nicks.size
+    @nicks.size
+  end
+  
+  def cycle_chat_messages
+    @chat_message.setStringValue @sent_messages[@sent_msg_index % @sent_messages.length ]
+  end
+  
+  def control(control, textView:fieldEditor, doCommandBySelector:commandSelector)
+    if commandSelector.description == NSString.stringWithUTF8String("moveUp:")
+      # up
+      @sent_msg_index += 1
+      cycle_chat_messages
+      select_chat_text
+      return true
+    elsif commandSelector.description == NSString.stringWithUTF8String("moveDown:")
+      # down
+      @sent_msg_index -= 1
+      cycle_chat_messages
+      select_chat_text
+      return true
+    end
+
+    return false
+
   end
 
   def sendMessage(sender)
@@ -33,7 +56,18 @@ class GlobalChatController
     if @message != ""
       post_message(@message)
       @chat_message.setStringValue('')
+      @sent_messages << @message
     end
+  end
+  
+  def foghornMe(sender)
+    @chat_message.setStringValue("#{@nicks[sender.selectedRow]}: ")
+    select_chat_text
+  end
+  
+  def select_chat_text
+    @chat_message.selectText self
+    @chat_message.currentEditor.setSelectedRange(NSRange.new(@chat_message.stringValue.length,0))
   end
 
   def scroll_the_scroll_view_down
@@ -107,7 +141,6 @@ class GlobalChatController
       get_log
     elsif command == "HANDLES"
       @nicks = parr.last.split("\n")
-      @nicks_table.dataSource = self
       @nicks_table.reloadData
     elsif command == "BUFFER"
       buffer = parr[1]
@@ -122,13 +155,11 @@ class GlobalChatController
       handle = parr[1]
       self.nicks << handle
       output_to_chat_window("#{handle} has entered\n")
-      @nicks_table.dataSource = self
       @nicks_table.reloadData
     elsif command == "LEAVE"
       handle = parr[1]
       output_to_chat_window("#{handle} has exited\n")
       self.nicks.delete(handle)
-      @nicks_table.dataSource = self
       @nicks_table.reloadData
     end
   end
@@ -157,7 +188,7 @@ class GlobalChatController
     if @handle != handle && message.include?(@handle)
       NSBeep()
     end
-    msg = "#{handle}: #{message}\n"
+    msg = NSString.stringWithUTF8String("#{handle}: #{message}\n")
     output_to_chat_window(msg)
   end
 
