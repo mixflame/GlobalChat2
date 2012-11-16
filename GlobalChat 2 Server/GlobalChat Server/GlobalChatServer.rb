@@ -138,8 +138,8 @@ class GlobalChatServer < GServer
       end
       
       if ((@password == password) || ((password === nil) && (@password == "")))
-        
-        chat_token = rand(36**8).to_s(36)
+        # uuid are guaranteed unique
+        chat_token = SecureRandom.uuid #rand(36**8).to_s(36)
         @mutex.synchronize do
           @handle_keys[chat_token] = handle
           @socket_keys[io] = chat_token
