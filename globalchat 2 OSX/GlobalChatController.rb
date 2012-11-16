@@ -74,7 +74,7 @@ class GlobalChatController
         @sent_messages << @message
       end
     rescue
-      autoreconnect
+      # no-op to show the fail
     end
   end
   
@@ -89,10 +89,17 @@ class GlobalChatController
   end
 
   def scroll_the_scroll_view_down
-    run_on_main_thread do
-      y = self.scroll_view.documentView.frame.size.height - self.scroll_view.contentSize.height
-      self.scroll_view.contentView.scrollToPoint(NSMakePoint(0, y))
-    end
+      y = 0
+      currentScrollPosition = NSPoint.new
+      frame_height = self.scroll_view.documentView.frame.size.height
+      content_size = self.scroll_view.contentSize.height
+      y = frame_height - content_size
+    
+      while currentScrollPosition.y < y #|| (self.chat_window_text.stringValue == "")
+        currentScrollPosition = self.scroll_view.contentView.bounds.origin
+        self.scroll_view.contentView.scrollToPoint(NSMakePoint(0, currentScrollPosition.y + 1))
+        self.scroll_view.reflectScrolledClipView(self.scroll_view.contentView)
+      end
   end
 
   def update_chat_views
@@ -151,12 +158,7 @@ class GlobalChatController
   
   def update_and_scroll
     update_chat_views
-  end
-  
-  def controlTextDidChange(notification)
-    if notification.object.class == NSTextView
-      scroll_the_scroll_view_down
-    end
+    scroll_the_scroll_view_down
   end
   
   def begin_async_read_queue
@@ -207,6 +209,13 @@ class GlobalChatController
       #unless buffer == "" || buffer == nil
       output_to_chat_window(buffer)
       #end
+     # @queue.async do
+        sleep 2
+        NSLog "scrolling..."
+        #run_on_main_thread do
+          scroll_the_scroll_view_down
+        #end
+     # end
     elsif command == "SAY"
       handle = parr[1]
       msg = parr[2]
@@ -236,9 +245,13 @@ class GlobalChatController
   end
   
   def sock_send io, msg
-    p msg
-    msg = "#{msg}\0"
-    io.send msg, 0
+    begin
+      p msg
+      msg = "#{msg}\0"
+      io.send msg, 0
+    rescue
+      autoreconnect
+    end
   end
 
   def post_message(message)

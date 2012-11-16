@@ -213,15 +213,15 @@ class GlobalChatServer < GServer
   def serve(io)
     loop do
       data = ""
-      #begin
+      begin
         while line = io.recv(1)
           break if line == "\0" 
           data += line
         end
-      #rescue
-      #    log "recv break removal event"
-      #    remove_dead_socket io #, true
-      #end
+      rescue
+          log "recv break removal event"
+          remove_dead_socket io #, true
+      end
       unless data == ""
         log "#{data}"
         parse_line(data, io)
