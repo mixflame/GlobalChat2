@@ -10,6 +10,8 @@ class AppDelegate
       @slc.host.setStringValue($prefs.stringForKey("host") || "")
       @slc.port.setStringValue($prefs.stringForKey("port") || "")
       
+      $connected = false
+      
       
     end
     

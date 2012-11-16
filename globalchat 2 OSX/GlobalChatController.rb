@@ -115,14 +115,12 @@ class GlobalChatController
       @ts = TCPSocket.open(@host, @port)
     rescue
       #alert("Could not connect to GlobalChat server.")
-      $connected = false
       return false
     end
     sign_on_array = @password == "" ? [@handle] : [@handle, @password]
     send_message("SIGNON", sign_on_array)
     begin_async_read_queue
-    $connected = true
-    $connected
+    true
   end
   
   def alert(msg)
@@ -138,21 +136,24 @@ class GlobalChatController
   end
   
   def autoreconnect
-    @queue.async do
-      while sign_on == false
-        log "offline! autoreconnecting in 3 sec\n"
-        sleep 3
+    unless $autoreconnect == false
+      @queue.async do
+        while sign_on == false
+          log "offline! autoreconnecting in 3 sec\n"
+          sleep 3
+        end
       end
     end
   end
   
   def return_to_server_list
     @mutex.synchronize do
-      $connected = false
+      $autoreconnect = false
       self.server_list_window.makeKeyAndOrderFront(nil)
       self.chat_window.orderOut(self)
       cleanup
       @ts.close
+      $connected = false
     end
   end
   
@@ -169,6 +170,7 @@ class GlobalChatController
         begin
           while line = @ts.recv(1)
             #raise if @last_ping < Time.now - 30
+            
             break if line == "\0" 
             data += line
           end
@@ -206,16 +208,11 @@ class GlobalChatController
       @nicks_table.reloadData
     elsif command == "BUFFER"
       buffer = parr[1]
-      #unless buffer == "" || buffer == nil
-      output_to_chat_window(buffer)
-      #end
-     # @queue.async do
+      unless buffer == "" || buffer == nil
+        output_to_chat_window(buffer)        
         sleep 0.1
-        #NSLog "scrolling..."
-        #run_on_main_thread do
-          scroll_the_scroll_view_down
-        #end
-     # end
+        scroll_the_scroll_view_down
+      end
     elsif command == "SAY"
       handle = parr[1]
       msg = parr[2]
