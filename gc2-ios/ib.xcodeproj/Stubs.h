@@ -14,7 +14,7 @@
 
 
 
--(IBAction) foghornMe:(id) sender;
+-(IBAction) foghornMe:(id) indexPath;
 -(IBAction) select_chat_text;
 -(IBAction) textFieldShouldReturn:(id) textField;
 -(IBAction) viewWillAppear:(id) animated;

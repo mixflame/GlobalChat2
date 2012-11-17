@@ -8,6 +8,28 @@ class GlobalChatController < UIViewController
   outlet :scroll_view
   outlet :chat_message
 
+  def preferredInterfaceOrientationForPresentation
+    UIDeviceOrientationLandscapeRight
+  end
+
+
+  def supportedInterfaceOrientations
+    UIInterfaceOrientationMaskLandscapeRight # | UIInterfaceOrientationLandscapeRight
+  end
+
+  def shouldAutorotate
+    true
+  end
+
+  def viewDidAppear(animated)
+    super(animated)
+    # self.attemptRotationToDeviceOrientation
+  end
+
+  def shouldAutorotateToInterfaceOrientation(interfaceOrientation)
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+  end
+
 
   def foghornMe(indexPath)
     chat_message.setText("#{@nicks[indexPath.row]}: ")
@@ -102,6 +124,7 @@ class GlobalChatController < UIViewController
       $connected = true
     elsif command == "PONG"
       @nicks = parr.last.split("\n")
+      nicks_table.reloadData
       ping
     elsif command == "HANDLES"
       @nicks = parr.last.split("\n")
@@ -216,7 +239,7 @@ class GlobalChatController < UIViewController
 
   def add_msg(handle, message)
     if @handle != handle && message.include?(@handle)
-      # iOS Notify FIXME
+      AudioServicesPlaySystemSound(KSystemSoundID_Vibrate)
       @msg_count ||= 0
       @msg_count += 1
     end

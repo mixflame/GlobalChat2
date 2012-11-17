@@ -1,89 +1,89 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2840" systemVersion="12C60" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="bLW-QQ-F16">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2840" systemVersion="12C60" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="3FZ-s6-lRm">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1926"/>
     </dependencies>
     <scenes>
         <!--Server List Controller - ServerList-->
-        <scene sceneID="pWC-kO-dWF">
+        <scene sceneID="0ID-2c-2bk">
             <objects>
-                <viewController storyboardIdentifier="ServerList" autoresizesArchivedViewToFullSize="NO" title="ServerList" id="bLW-QQ-F16" customClass="ServerListController" sceneMemberID="viewController">
-                    <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="xyj-Cg-YzA">
-                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                <viewController storyboardIdentifier="ServerList" autoresizesArchivedViewToFullSize="NO" title="ServerList" id="3FZ-s6-lRm" customClass="ServerListController" sceneMemberID="viewController">
+                    <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="Rbs-7G-NLg">
+                        <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Oax-uN-jr0">
-                                <rect key="frame" x="0.0" y="33" width="320" height="172"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="mUv-5I-ftu">
+                                <rect key="frame" x="0.0" y="83" width="768" height="548"/>
                                 <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <gestureRecognizers/>
                                 <connections>
-                                    <outlet property="dataSource" destination="bLW-QQ-F16" id="tFH-fR-Uhi"/>
-                                    <outlet property="delegate" destination="bLW-QQ-F16" id="dkx-08-j5O"/>
+                                    <outlet property="dataSource" destination="3FZ-s6-lRm" id="H7b-zl-Vx2"/>
+                                    <outlet property="delegate" destination="3FZ-s6-lRm" id="lld-G5-vP9"/>
                                 </connections>
                             </tableView>
-                            <label autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="left" text="Handle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Law-Q7-Xec">
-                                <rect key="frame" x="27" y="241" width="63" height="21"/>
+                            <label autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="left" text="Handle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="aB3-Aq-ZOv">
+                                <rect key="frame" x="20" y="766" width="63" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="PA1-bG-hn9">
-                                <rect key="frame" x="115" y="237" width="178" height="30"/>
+                            <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="wtd-3x-8Jf">
+                                <rect key="frame" x="115" y="757" width="254" height="30"/>
                                 <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 <connections>
-                                    <outlet property="delegate" destination="bLW-QQ-F16" id="sjf-aG-66c"/>
+                                    <outlet property="delegate" destination="3FZ-s6-lRm" id="2Li-KR-9zQ"/>
                                 </connections>
                             </textField>
-                            <label autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="left" text="Host" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8Gu-16-xcv">
-                                <rect key="frame" x="27" y="286" width="42" height="21"/>
+                            <label autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="left" text="Host" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2em-SX-XJh">
+                                <rect key="frame" x="20" y="807" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="eWJ-Qt-oRx">
-                                <rect key="frame" x="115" y="277" width="178" height="30"/>
+                            <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="T8Y-Ub-UHd">
+                                <rect key="frame" x="115" y="803" width="254" height="30"/>
                                 <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 <connections>
-                                    <outlet property="delegate" destination="bLW-QQ-F16" id="JQE-BX-Ht8"/>
+                                    <outlet property="delegate" destination="3FZ-s6-lRm" id="0N2-VI-P2k"/>
                                 </connections>
                             </textField>
-                            <label autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="left" text="Port" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qdf-oa-SsY">
-                                <rect key="frame" x="27" y="330" width="42" height="21"/>
+                            <label autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="left" text="Port" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PvC-RL-q4u">
+                                <rect key="frame" x="414" y="806" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="7E0-Mr-gED">
-                                <rect key="frame" x="115" y="321" width="178" height="30"/>
+                            <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="M6j-Gm-lCX">
+                                <rect key="frame" x="501" y="803" width="231" height="30"/>
                                 <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <gestureRecognizers/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 <connections>
-                                    <outlet property="delegate" destination="bLW-QQ-F16" id="W2R-lC-cbn"/>
+                                    <outlet property="delegate" destination="3FZ-s6-lRm" id="s0g-CK-k16"/>
                                 </connections>
                             </textField>
-                            <label autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="left" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EIB-o1-gzW">
-                                <rect key="frame" x="27" y="367" width="87" height="21"/>
+                            <label autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="left" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wIT-an-Ta8">
+                                <rect key="frame" x="414" y="760" width="87" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="6Xn-N3-24U">
-                                <rect key="frame" x="115" y="367" width="178" height="30"/>
+                            <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="2BN-fI-5Jm">
+                                <rect key="frame" x="501" y="757" width="231" height="30"/>
                                 <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
                                 <connections>
-                                    <outlet property="delegate" destination="bLW-QQ-F16" id="85k-N9-hAw"/>
+                                    <outlet property="delegate" destination="3FZ-s6-lRm" id="eIL-wP-Ibp"/>
                                 </connections>
                             </textField>
-                            <button autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="QJD-JH-jlg">
-                                <rect key="frame" x="20" y="405" width="73" height="44"/>
+                            <button autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Vlb-n9-6v0">
+                                <rect key="frame" x="20" y="850" width="73" height="44"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Refresh">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -93,11 +93,11 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="refresh:" destination="bLW-QQ-F16" eventType="touchUpInside" id="eEy-Lo-L49"/>
+                                    <action selector="refresh:" destination="3FZ-s6-lRm" eventType="touchUpInside" id="h2g-la-4iY"/>
                                 </connections>
                             </button>
-                            <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="3Fd-7h-Ha9">
-                                <rect key="frame" x="227" y="405" width="73" height="44"/>
+                            <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="UX6-JX-CMc">
+                                <rect key="frame" x="659" y="850" width="73" height="44"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Connect">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -107,57 +107,58 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="connect:" destination="bLW-QQ-F16" eventType="touchUpInside" id="lJT-Id-p3p"/>
+                                    <action selector="connect:" destination="3FZ-s6-lRm" eventType="touchUpInside" id="XCR-hK-FUz"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.71941650904391641" green="0.88308354591505722" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.5225032951074351" green="0.61121208442922592" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                     </view>
-                    <navigationItem key="navigationItem" title="Connect to a Server" id="Fpj-IM-K8W"/>
+                    <navigationItem key="navigationItem" title="Connect to a Server" id="qbf-aX-Gsg"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <connections>
-                        <outlet property="handle" destination="PA1-bG-hn9" id="Nir-DR-yDB"/>
-                        <outlet property="host" destination="eWJ-Qt-oRx" id="hlJ-GQ-YIF"/>
-                        <outlet property="password" destination="6Xn-N3-24U" id="8oP-1k-1Dd"/>
-                        <outlet property="port" destination="7E0-Mr-gED" id="eyi-dK-4DH"/>
-                        <outlet property="server_list_table" destination="Oax-uN-jr0" id="E43-TX-pxu"/>
+                        <outlet property="handle" destination="wtd-3x-8Jf" id="ETD-JE-xdc"/>
+                        <outlet property="host" destination="T8Y-Ub-UHd" id="CwM-pv-fs8"/>
+                        <outlet property="password" destination="2BN-fI-5Jm" id="Pkh-yA-xuN"/>
+                        <outlet property="port" destination="M6j-Gm-lCX" id="84v-Xx-RSh"/>
+                        <outlet property="server_list_table" destination="mUv-5I-ftu" id="xqT-fJ-2Bw"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="YHI-Ua-ECC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aFN-oH-JO3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="271" y="13"/>
+            <point key="canvasLocation" x="449" y="-215"/>
         </scene>
         <!--Global Chat Controller - ChatWindow-->
-        <scene sceneID="giR-1s-nhw">
+        <scene sceneID="hmq-uX-xrs">
             <objects>
-                <viewController storyboardIdentifier="ChatWindow" autoresizesArchivedViewToFullSize="NO" title="ChatWindow" id="6Pa-eO-HLl" customClass="GlobalChatController" sceneMemberID="viewController">
-                    <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="aZp-cF-7Pg">
-                        <rect key="frame" x="0.0" y="20" width="568" height="300"/>
+                <viewController storyboardIdentifier="ChatWindow" autoresizesArchivedViewToFullSize="NO" title="ChatWindow" id="EsT-HU-Nwg" customClass="GlobalChatController" sceneMemberID="viewController">
+                    <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="Vtz-Qo-syr">
+                        <rect key="frame" x="0.0" y="20" width="1024" height="748"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="oW8-Av-eRK">
-                                <rect key="frame" x="0.0" y="0.0" width="178" height="270"/>
-                                <color key="backgroundColor" red="0.78523528692935674" green="0.84710207500307866" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <tableView autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="WtZ-ab-MVG">
+                                <rect key="frame" x="0.0" y="0.0" width="297" height="710"/>
+                                <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
-                                    <outlet property="dataSource" destination="6Pa-eO-HLl" id="LBl-n9-oim"/>
-                                    <outlet property="delegate" destination="6Pa-eO-HLl" id="mMW-s4-a1c"/>
+                                    <outlet property="dataSource" destination="EsT-HU-Nwg" id="gty-gX-4il"/>
+                                    <outlet property="delegate" destination="EsT-HU-Nwg" id="28u-Ev-drQ"/>
                                 </connections>
                             </tableView>
-                            <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" adjustsFontSizeToFit="NO" minimumFontSize="17" id="9rd-qq-zGS">
-                                <rect key="frame" x="0.0" y="270" width="568" height="30"/>
-                                <color key="backgroundColor" red="0.79526561601681578" green="0.83468668486480779" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" adjustsFontSizeToFit="NO" minimumFontSize="17" id="tlC-Gr-CBB">
+                                <rect key="frame" x="0.0" y="713" width="1024" height="30"/>
+                                <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
                                 <connections>
-                                    <outlet property="delegate" destination="6Pa-eO-HLl" id="F9D-l3-eml"/>
+                                    <outlet property="delegate" destination="EsT-HU-Nwg" id="1YM-Wq-gPw"/>
                                 </connections>
                             </textField>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="eyw-YI-O7a">
-                                <rect key="frame" x="177" y="0.0" width="391" height="270"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="PkP-Ky-mxS">
+                                <rect key="frame" x="305" y="0.0" width="719" height="710"/>
                                 <subviews>
-                                    <textView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" editable="NO" id="7EW-sa-a55">
-                                        <rect key="frame" x="0.0" y="0.0" width="391" height="270"/>
+                                    <textView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" editable="NO" id="FnB-U5-4xO">
+                                        <rect key="frame" x="0.0" y="0.0" width="719" height="715"/>
                                         <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -165,21 +166,22 @@
                                 </subviews>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" red="0.3834769302544202" green="0.36749458729234064" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.54094254086853599" green="0.41875217205763726" blue="0.92815896739130432" alpha="1" colorSpace="calibratedRGB"/>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
-                    <navigationItem key="navigationItem" id="BZy-EX-e8l"/>
+                    <navigationItem key="navigationItem" id="aq3-O4-xcY"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <connections>
-                        <outlet property="chat_message" destination="9rd-qq-zGS" id="6z9-Pf-67t"/>
-                        <outlet property="chat_window_text" destination="7EW-sa-a55" id="bcg-7s-4eR"/>
-                        <outlet property="nicks_table" destination="oW8-Av-eRK" id="CHa-OK-Hzq"/>
-                        <outlet property="scroll_view" destination="eyw-YI-O7a" id="ZQt-vT-TqL"/>
+                        <outlet property="chat_message" destination="tlC-Gr-CBB" id="SdG-VC-GRD"/>
+                        <outlet property="chat_window_text" destination="FnB-U5-4xO" id="nSY-Ym-4Xj"/>
+                        <outlet property="nicks_table" destination="WtZ-ab-MVG" id="K2a-Va-MXL"/>
+                        <outlet property="scroll_view" destination="PkP-Ky-mxS" id="RXz-Hz-n1B"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ZYM-bR-itL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="I5y-bI-Z3C" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1049" y="-29"/>
+            <point key="canvasLocation" x="1441" y="-39"/>
         </scene>
     </scenes>
     <classes>
@@ -230,8 +232,8 @@
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
+        <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
 </document>

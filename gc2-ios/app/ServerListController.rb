@@ -11,6 +11,23 @@ class ServerListController < UIViewController
   outlet :password, UITextField
   outlet :handle
 
+  def preferredInterfaceOrientationForPresentation
+    UIInterfaceOrientationMaskPortrait
+  end
+
+
+  def supportedInterfaceOrientations
+    UIInterfaceOrientationMaskPortrait
+  end
+
+  def shouldAutorotate
+    false
+  end
+
+  def shouldAutorotateToInterfaceOrientation(interface)
+    return interface == UIInterfaceOrientationMaskPortrait
+  end
+
   def textFieldShouldReturn(textField)
     textField.resignFirstResponder
   end
