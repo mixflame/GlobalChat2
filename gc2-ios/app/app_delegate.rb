@@ -2,35 +2,31 @@ class AppDelegate
   attr_accessor :window
 
   def application(application, didFinishLaunchingWithOptions:launchOptions)
-      #application.setStatusBarStyle(UIStatusBarStyleBlackTranslucent)
-      $app = self
-      $prefs = NSUserDefaults.standardUserDefaults
-      $term = AsyncSocket.ZeroData
-      $queue = Dispatch::Queue.new('com.jonsoft.globalchat')
-      $mutex = Mutex.new
+    #application.setStatusBarStyle(UIStatusBarStyleBlackTranslucent)
+    $app = self
+    $prefs = NSUserDefaults.standardUserDefaults
+    $term = AsyncSocket.ZeroData
+    $queue = Dispatch::Queue.new('com.jonsoft.globalchat')
+    $mutex = Mutex.new
 
-      @window = UIWindow.alloc.initWithFrame(UIScreen.mainScreen.bounds)
+    @window = UIWindow.alloc.initWithFrame(UIScreen.mainScreen.bounds)
 
-      switch_to_vc(load_vc("ServerList"))
-      
-      true
+    switch_to_vc(load_vc("ServerList"))
+
+    true
   end
 
   def load_vc(identifier)
     storyboard = UIStoryboard.storyboardWithName("GC2-ios", bundle: NSBundle.mainBundle)
-      vc = storyboard.instantiateViewControllerWithIdentifier(identifier)
+    vc = storyboard.instantiateViewControllerWithIdentifier(identifier)
   end
 
   def switch_to_vc(vc)
-      unless @window.rootViewController == vc
-        @window.rootViewController = vc
-        @window.rootViewController.wantsFullScreenLayout = true
-        @window.makeKeyAndVisible
-      end
+    unless @window.rootViewController == vc
+      @window.rootViewController = vc
+      @window.rootViewController.wantsFullScreenLayout = true
+      @window.makeKeyAndVisible
+    end
   end
 
-  # def applicationWillTerminate(application)
-  #   $gcc.sign_out
-  # end
-  
 end

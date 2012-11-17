@@ -24,6 +24,7 @@ class ServerListController < UIViewController
   def viewWillAppear(animated)
     $slc = self
     $nav = self.parentViewController
+    $autoreconnect = false
     load_prefs
     get_servers
     super(animated)

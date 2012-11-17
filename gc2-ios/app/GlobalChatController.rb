@@ -8,6 +8,10 @@ class GlobalChatController < UIViewController
   outlet :scroll_view
   outlet :chat_message
 
+  def run_on_main_thread &block
+    block.performSelectorOnMainThread "call:", withObject:nil, waitUntilDone:false
+  end
+
   def textFieldShouldReturn(textField)
     send_the_chat_message
     textField.resignFirstResponder
@@ -71,8 +75,15 @@ class GlobalChatController < UIViewController
     if command == "TOKEN"
       @chat_token = parr[1]
       @handle = parr[2]
+      @server_name = parr[3]
+      output_to_chat_window "Connected to #{@server_name} \n"
+      ping
       get_handles
       get_log
+      $connected = true
+    elsif command == "PONG"
+      @nicks = parr.last.split("\n")
+      ping
     elsif command == "HANDLES"
       @nicks = parr.last.split("\n")
       nicks_table.reloadData
@@ -90,13 +101,13 @@ class GlobalChatController < UIViewController
       handle = parr[1]
       @nicks << handle
       output_to_chat_window("#{handle} has entered")
-      nicks_table.dataSource = self
-      nicks_table.reloadData
     elsif command == "LEAVE"
       handle = parr[1]
       output_to_chat_window("#{handle} has exited")
-      @nicks.delete(handle)
-      nicks_table.reloadData
+    elsif command == "ALERT"
+      text = parr[1]
+      log("#{text}\n")
+      return_to_server_list
     end
   end
 
@@ -106,7 +117,10 @@ class GlobalChatController < UIViewController
   end
 
   def onSocket(sock, didConnectToHost:host, port:port)
+    $autoreconnect = true
+    $connected = true
     $app.switch_to_vc($gcc)
+    @last_ping = Time.now # fake ping
     sign_on_array = @password == "" ? [@handle] : [@handle, @password]
     send_message("SIGNON", sign_on_array)
     read_line
@@ -119,11 +133,9 @@ class GlobalChatController < UIViewController
     read_line
   end
 
-
   def onSocketDidDisconnect(sock)
-    log "disconnected" do
-      return_to_server_list
-    end
+    $connected = false
+    autoreconnect
   end
 
   def return_to_server_list
@@ -134,11 +146,41 @@ class GlobalChatController < UIViewController
     msg = opcode + "::!!::" + args.join("::!!::") + "\0"
     # p msg
     data = msg.dataUsingEncoding(NSUTF8StringEncoding)
-    @ts.writeData(data, withTimeout:-1, tag: 0)
+    begin
+      @ts.writeData(data, withTimeout:-1, tag: 0)
+    rescue
+      autoreconnect
+    end
   end
 
   def read_line
-    @ts.readDataToData($term, withTimeout:-1, tag:0)
+    begin
+      @ts.readDataToData($term, withTimeout:-1, tag:0)
+    rescue
+      autoreconnect
+    end
+    autoreconnect if @last_ping < Time.now - 30
+  end
+
+  def autoreconnect
+    $queue.async do
+      unless $autoreconnect == false
+        loop do
+          break if $connected == true
+          run_on_main_thread do
+            output_to_chat_window("Could not connect to GlobalChat. Will retry in 5 seconds..")
+            NSLog "connected? #{$connected}"
+
+            sign_on
+          end
+
+          sleep 5
+
+
+
+        end
+      end
+    end
   end
 
 
@@ -148,6 +190,11 @@ class GlobalChatController < UIViewController
   end
 
   def add_msg(handle, message)
+    if @handle != handle && message.include?(@handle)
+      # iOS Notify FIXME
+      @msg_count ||= 0
+      @msg_count += 1
+    end
     msg = "#{handle}: #{message}"
     output_to_chat_window(msg)
   end
@@ -162,10 +209,10 @@ class GlobalChatController < UIViewController
     send_message "GETHANDLES", [@chat_token]
   end
 
-  def sign_out
-    send_message "SIGNOFF", [@chat_token]
-    @ts.disconnect
-    return_to_server_list
+  def ping
+    sleep 3
+    @last_ping = Time.now
+    send_message("PING", [@chat_token])
   end
 
   def log str, &block

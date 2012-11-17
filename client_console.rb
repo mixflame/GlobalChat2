@@ -30,6 +30,7 @@ class GlobalChatController
       sleep 5
       return false
     end
+    @last_ping = Time.now # fake ping
     sign_on_array = @password == "" ? [@handle] : [@handle, @password]
     send_message("SIGNON", sign_on_array)
     begin_async_read_queue
@@ -53,6 +54,7 @@ class GlobalChatController
         data = ""
         begin
           while line = @ts.recv(1)
+            raise if @last_ping < Time.now - 30
             break if line == "\0"
             data += line
           end
@@ -158,7 +160,7 @@ class GlobalChatController
 
   def ping
     sleep 3
-    # @last_ping = Time.now
+    @last_ping = Time.now
     send_message("PING", [@chat_token])
   end
 
