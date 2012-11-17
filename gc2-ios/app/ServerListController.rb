@@ -12,7 +12,7 @@ class ServerListController < UIViewController
   outlet :handle
 
   def preferredInterfaceOrientationForPresentation
-    UIInterfaceOrientationMaskPortrait
+    UIDeviceOrientationPortrait
   end
 
 
@@ -25,7 +25,7 @@ class ServerListController < UIViewController
   end
 
   def shouldAutorotateToInterfaceOrientation(interface)
-    return interface == UIInterfaceOrientationMaskPortrait
+    return interface == UIDeviceOrientationPortrait
   end
 
   def textFieldShouldReturn(textField)
