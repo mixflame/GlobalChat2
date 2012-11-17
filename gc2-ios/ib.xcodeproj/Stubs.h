@@ -14,6 +14,11 @@
 
 
 
+-(IBAction) preferredInterfaceOrientationForPresentation;
+-(IBAction) supportedInterfaceOrientations;
+-(IBAction) shouldAutorotate;
+-(IBAction) viewDidAppear:(id) animated;
+-(IBAction) shouldAutorotateToInterfaceOrientation:(id) interfaceOrientation;
 -(IBAction) foghornMe:(id) indexPath;
 -(IBAction) select_chat_text;
 -(IBAction) textFieldShouldReturn:(id) textField;
@@ -48,6 +53,10 @@
 
 
 
+-(IBAction) preferredInterfaceOrientationForPresentation;
+-(IBAction) supportedInterfaceOrientations;
+-(IBAction) shouldAutorotate;
+-(IBAction) shouldAutorotateToInterfaceOrientation:(id) interface;
 -(IBAction) textFieldShouldReturn:(id) textField;
 -(IBAction) load_prefs;
 -(IBAction) viewWillAppear:(id) animated;

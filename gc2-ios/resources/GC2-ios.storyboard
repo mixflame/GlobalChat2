@@ -14,7 +14,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Oax-uN-jr0">
                                 <rect key="frame" x="0.0" y="33" width="320" height="172"/>
-                                <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outlet property="dataSource" destination="bLW-QQ-F16" id="tFH-fR-Uhi"/>
@@ -29,7 +29,7 @@
                             </label>
                             <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="PA1-bG-hn9">
                                 <rect key="frame" x="115" y="237" width="178" height="30"/>
-                                <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 <connections>
@@ -44,7 +44,7 @@
                             </label>
                             <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="eWJ-Qt-oRx">
                                 <rect key="frame" x="115" y="277" width="178" height="30"/>
-                                <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 <connections>
@@ -59,7 +59,7 @@
                             </label>
                             <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="7E0-Mr-gED">
                                 <rect key="frame" x="115" y="321" width="178" height="30"/>
-                                <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <gestureRecognizers/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
@@ -75,7 +75,7 @@
                             </label>
                             <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="6Xn-N3-24U">
                                 <rect key="frame" x="115" y="367" width="178" height="30"/>
-                                <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
                                 <connections>
@@ -83,7 +83,7 @@
                                 </connections>
                             </textField>
                             <button autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="QJD-JH-jlg">
-                                <rect key="frame" x="20" y="405" width="73" height="44"/>
+                                <rect key="frame" x="20" y="415" width="94" height="48"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Refresh">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -97,7 +97,7 @@
                                 </connections>
                             </button>
                             <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="3Fd-7h-Ha9">
-                                <rect key="frame" x="227" y="405" width="73" height="44"/>
+                                <rect key="frame" x="198" y="415" width="102" height="48"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Connect">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -111,7 +111,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.71941650904391641" green="0.88308354591505722" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.82099320187644809" green="0.93552961652072419" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                     </view>
                     <navigationItem key="navigationItem" title="Connect to a Server" id="Fpj-IM-K8W"/>
@@ -138,7 +138,7 @@
                         <subviews>
                             <tableView autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="oW8-Av-eRK">
                                 <rect key="frame" x="0.0" y="0.0" width="178" height="270"/>
-                                <color key="backgroundColor" red="0.78523528692935674" green="0.84710207500307866" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <outlet property="dataSource" destination="6Pa-eO-HLl" id="LBl-n9-oim"/>
                                     <outlet property="delegate" destination="6Pa-eO-HLl" id="mMW-s4-a1c"/>
@@ -146,7 +146,7 @@
                             </tableView>
                             <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" adjustsFontSizeToFit="NO" minimumFontSize="17" id="9rd-qq-zGS">
                                 <rect key="frame" x="0.0" y="270" width="568" height="30"/>
-                                <color key="backgroundColor" red="0.79526561601681578" green="0.83468668486480779" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
                                 <connections>
@@ -158,14 +158,13 @@
                                 <subviews>
                                     <textView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" editable="NO" id="7EW-sa-a55">
                                         <rect key="frame" x="0.0" y="0.0" width="391" height="270"/>
-                                        <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                 </subviews>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" red="0.3834769302544202" green="0.36749458729234064" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.83686906936181671" green="0.94267741126063254" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <navigationItem key="navigationItem" id="BZy-EX-e8l"/>
@@ -195,15 +194,20 @@
                 <relationship kind="action" name="parse_line:"/>
                 <relationship kind="action" name="ping"/>
                 <relationship kind="action" name="post_message:"/>
+                <relationship kind="action" name="preferredInterfaceOrientationForPresentation"/>
                 <relationship kind="action" name="read_line"/>
                 <relationship kind="action" name="return_to_server_list"/>
                 <relationship kind="action" name="scroll_the_scroll_view_down"/>
                 <relationship kind="action" name="select_chat_text"/>
                 <relationship kind="action" name="send_the_chat_message"/>
+                <relationship kind="action" name="shouldAutorotate"/>
+                <relationship kind="action" name="shouldAutorotateToInterfaceOrientation:"/>
                 <relationship kind="action" name="sign_on"/>
+                <relationship kind="action" name="supportedInterfaceOrientations"/>
                 <relationship kind="action" name="textFieldShouldReturn:"/>
                 <relationship kind="action" name="update_and_scroll"/>
                 <relationship kind="action" name="update_chat_views"/>
+                <relationship kind="action" name="viewDidAppear:"/>
                 <relationship kind="action" name="viewWillAppear:"/>
                 <relationship kind="outlet" name="chat_message"/>
                 <relationship kind="outlet" name="chat_window_text"/>
@@ -217,7 +221,11 @@
                 <relationship kind="action" name="connect:"/>
                 <relationship kind="action" name="get_servers"/>
                 <relationship kind="action" name="load_prefs"/>
+                <relationship kind="action" name="preferredInterfaceOrientationForPresentation"/>
                 <relationship kind="action" name="refresh:"/>
+                <relationship kind="action" name="shouldAutorotate"/>
+                <relationship kind="action" name="shouldAutorotateToInterfaceOrientation:"/>
+                <relationship kind="action" name="supportedInterfaceOrientations"/>
                 <relationship kind="action" name="textFieldShouldReturn:"/>
                 <relationship kind="action" name="viewWillAppear:"/>
                 <relationship kind="outlet" name="handle"/>

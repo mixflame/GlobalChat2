@@ -17,15 +17,15 @@ class ServerListController < UIViewController
 
 
   def supportedInterfaceOrientations
-    UIInterfaceOrientationMaskPortrait
+    UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown
   end
 
   def shouldAutorotate
-    false
+    true
   end
 
   def shouldAutorotateToInterfaceOrientation(interface)
-    return interface == UIDeviceOrientationPortrait
+    return interface == UIDeviceOrientationPortrait || interface == UIDeviceOrientationPortraitUpsideDown
   end
 
   def textFieldShouldReturn(textField)
