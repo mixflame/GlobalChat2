@@ -7,7 +7,6 @@ class GlobalChatController
 
   attr_accessor :chat_token, :chat_buffer, :nicks, :handle, :handle_text_field, :connect_button, :server_list_window, :chat_window, :chat_window_text, :chat_message, :nicks_table, :application, :scroll_view, :last_scroll_view_height, :host, :port, :password, :ts, :msg_count
 
-
   def initialize
     @sent_messages = []
     @sent_msg_index = 0
@@ -38,10 +37,12 @@ class GlobalChatController
 
   def autoreconnect
     unless $autoreconnect == false
-      Thread.new do
-        while sign_on == false
-          output_to_chat_window "offline! autoreconnecting in 3 sec\n"
-          sleep 3
+      loop do
+        if start_client
+          break
+        else
+          sleep 10
+          output_to_chat_window "offline! autoreconnecting in 10 sec\n"
         end
       end
     end
@@ -74,6 +75,7 @@ class GlobalChatController
       @handle = parr[2]
       @server_name = parr[3]
       log "Connected to #{@server_name} \n"
+      ping
       get_handles
       get_log
       $connected = true
@@ -108,6 +110,7 @@ class GlobalChatController
       log("#{text}\n")
 
       exit
+      # @ts.close
     end
   end
 
@@ -128,7 +131,7 @@ class GlobalChatController
 
   def post_message(message)
     send_message "MESSAGE", [message, @chat_token]
-    add_msg(self.handle, message)
+    #add_msg(self.handle, message)
   end
 
   def add_msg(handle, message)
@@ -173,24 +176,30 @@ end
 
 
 puts 'enter handle'
-name = gets
+$name = gets
 puts 'enter server'
-server = gets
+$server = gets
 
-gcc = GlobalChatController.new
-gcc.handle = name.strip || "jsilver-console"
-gcc.host = server.strip || "localhost"
-gcc.port = 9994
-gcc.password = ""
-gcc.nicks = []
-gcc.chat_buffer = ""
-gcc.sign_on
+def start_client
+  `clear`
+  gcc = GlobalChatController.new
+  gcc.handle = $name.strip || "jsilver-console"
+  gcc.host = $server.strip || "localhost"
+  gcc.port = 9994
+  gcc.password = ""
+  gcc.nicks = []
+  gcc.chat_buffer = ""
+  exit unless gcc.sign_on
 
-while message = gets
-  message = message.chop
-  if message == "/quit"
-    break
-  else
-    gcc.sendMessage(message)
+  while message = gets
+    message = message.chop
+    if message == "/quit"
+      break
+    else
+      gcc.sendMessage(message)
+    end
   end
 end
+
+
+start_client

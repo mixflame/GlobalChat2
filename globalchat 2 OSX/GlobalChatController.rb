@@ -7,7 +7,7 @@ module Notification
     notification = NSUserNotification.alloc.init
     notification.title = title
     notification.informativeText = text
-        
+
     center = NSUserNotificationCenter.defaultUserNotificationCenter
     center.scheduleNotification(notification)
   end
@@ -15,8 +15,27 @@ end
 
 class GlobalChatController
 
-  attr_accessor :chat_token, :chat_buffer, :nicks, :handle, :handle_text_field, :connect_button, :server_list_window, :chat_window, :chat_window_text, :chat_message, :nicks_table, :application, :scroll_view, :last_scroll_view_height, :host, :port, :password, :ts, :msg_count
-
+  attr_accessor :chat_token,
+  :chat_buffer,
+  :nicks,
+  :handle,
+  :handle_text_field,
+  :connect_button,
+  :server_list_window,
+  :chat_window,
+  :chat_window_text,
+  :chat_message,
+  :nicks_table,
+  :application,
+  :scroll_view,
+  :last_scroll_view_height,
+  :host,
+  :port,
+  :password,
+  :ts,
+  :msg_count,
+  :last_pong,
+  :ping_timer
 
   def initialize
     @mutex = Mutex.new
@@ -40,11 +59,11 @@ class GlobalChatController
   def numberOfRowsInTableView(view)
     @nicks.size
   end
-  
+
   def cycle_chat_messages
     @chat_message.setStringValue @sent_messages[@sent_msg_index % @sent_messages.length]
   end
-  
+
   def control(control, textView:fieldEditor, doCommandBySelector:commandSelector)
     if commandSelector.description == NSString.stringWithUTF8String("moveUp:")
       # up
@@ -63,12 +82,16 @@ class GlobalChatController
     return false
 
   end
-  
+
   def cleanup
     @chat_message.setStringValue('')
     @nicks = []
     @nicks_table.reloadData
     @chat_window_text.setString(NSString.stringWithUTF8String(''))
+  end
+
+  def invalidate_ping_timer
+    $should_ping = false
   end
 
   def sendMessage(sender)
@@ -83,32 +106,32 @@ class GlobalChatController
       autoreconnect
     end
   end
-  
+
   def foghornMe(sender)
     @chat_message.setStringValue("#{@nicks[sender.selectedRow]}: ")
     select_chat_text
   end
-  
+
   def select_chat_text
     @chat_message.selectText self
     @chat_message.currentEditor.setSelectedRange(NSRange.new(@chat_message.stringValue.length,0))
   end
 
   def scroll_the_scroll_view_down
-      y = 0
-      currentScrollPosition = NSPoint.new
-      frame_height = self.scroll_view.documentView.frame.size.height
-      content_size = self.scroll_view.contentSize.height
-      y = frame_height - content_size
-    
-      self.scroll_view.setDrawsBackground false
-    
-      while currentScrollPosition.y < y #|| (self.chat_window_text.stringValue == "")
-        currentScrollPosition = self.scroll_view.contentView.bounds.origin
-        #self.scroll_view.contentView.scrollToPoint(NSMakePoint(0, currentScrollPosition.y + 1))
-        self.chat_window_text.scrollRangeToVisible NSRange.new(@chat_window_text.string.length, 0)
-        self.scroll_view.reflectScrolledClipView(self.scroll_view.contentView)
-      end
+    #y = 0
+    #currentScrollPosition = NSPoint.new
+    frame_height = self.scroll_view.documentView.frame.size.height
+    content_size = self.scroll_view.contentSize.height
+    y = frame_height - content_size
+
+    self.scroll_view.setDrawsBackground false
+
+    #while currentScrollPosition.y < y #|| (self.chat_window_text.stringValue == "")
+    #currentScrollPosition = self.scroll_view.contentView.bounds.origin
+    #self.scroll_view.contentView.scrollToPoint(NSMakePoint(0, currentScrollPosition.y + 1))
+    self.chat_window_text.scrollRangeToVisible NSRange.new(@chat_window_text.string.length, 0)
+    self.scroll_view.reflectScrolledClipView(self.scroll_view.contentView)
+    #end
   end
 
   def update_chat_views
@@ -118,7 +141,7 @@ class GlobalChatController
   end
 
   def sign_on
-    cleanup
+    #cleanup
     #log "Connecting to: #{@host} #{@port}"
     begin
       @ts = TCPSocket.open(@host, @port)
@@ -131,7 +154,7 @@ class GlobalChatController
     begin_async_read_queue
     true
   end
-  
+
   def alert(msg)
     run_on_main_thread do
       alert = NSAlert.new
@@ -139,14 +162,15 @@ class GlobalChatController
       alert.runModal
     end
   end
-  
+
   def run_on_main_thread &block
     block.performSelectorOnMainThread "call:", withObject:nil, waitUntilDone:false
   end
-  
+
   def autoreconnect
     unless $autoreconnect == false
       @queue.async do
+        cleanup
         while sign_on == false
           output_to_chat_window "offline! autoreconnecting in 3 sec\n"
           sleep 3
@@ -154,46 +178,61 @@ class GlobalChatController
       end
     end
   end
-  
+
   def return_to_server_list
     @mutex.synchronize do
       $autoreconnect = false
       self.server_list_window.makeKeyAndOrderFront(nil)
       self.chat_window.orderOut(self)
       cleanup
+      invalidate_ping_timer
       @ts.close
       $connected = false
     end
   end
-  
+
   def update_and_scroll
     update_chat_views
     scroll_the_scroll_view_down
   end
-  
+
   def begin_async_read_queue
     @queue.async do
       loop do
-        #sleep 0.1
         data = ""
         begin
           while line = @ts.recv(1)
-            #raise if @last_ping < Time.now - 30
-            
-            break if line == "\0" 
+            break if line == "\0"
             data += line
           end
         rescue
           autoreconnect
           break
         end
-          
+
         p data
         parse_line(data)
       end
     end
   end
-  
+
+  def start_ping_timer
+    # @ping_timer = NSTimer.scheduledTimerWithTimeInterval(5,
+    # target:$gcc,
+    # selector:"ping",
+    # userInfo:nil,
+    # repeats:true)
+    $should_ping = true
+    @queue.async do
+      loop do
+        sleep 3
+        ping
+        break if $should_ping == false
+      end
+    end
+  end
+
+
   def parse_line(line)
     parr = line.split("::!!::")
     command = parr.first
@@ -201,14 +240,20 @@ class GlobalChatController
       @chat_token = parr[1]
       @handle = parr[2]
       @server_name = parr[3]
+      ping
       @server_list_window.orderOut(self)
       @chat_window.makeKeyAndOrderFront(nil)
-      log "Connected to #{@server_name} \n"
-      @chat_window.setTitle @server_name
+      if @server_name
+        log "Connected to #{@server_name} \n"
+        @chat_window.setTitle @server_name
+      end
+      start_ping_timer
       get_handles
       get_log
       $connected = true
+
     elsif command == "PONG"
+      @last_pong = Time.now
       @nicks = parr.last.split("\n")
       @nicks_table.reloadData
       ping
@@ -218,7 +263,7 @@ class GlobalChatController
     elsif command == "BUFFER"
       buffer = parr[1]
       unless buffer == "" || buffer == nil
-        output_to_chat_window(buffer)        
+        output_to_chat_window(buffer)
         sleep 0.1
         scroll_the_scroll_view_down
       end
@@ -240,16 +285,16 @@ class GlobalChatController
       # chat experience
       text = parr[1]
       alert(text)
-      
+
       return_to_server_list
     end
   end
-  
+
   def send_message(opcode, args)
     msg = opcode + "::!!::" + args.join("::!!::")
     sock_send @ts, msg
   end
-  
+
   def sock_send io, msg
     begin
       p msg
@@ -264,7 +309,7 @@ class GlobalChatController
     send_message "MESSAGE", [message, @chat_token]
     add_msg(self.handle, message)
   end
-  
+
   def add_msg(handle, message)
     if @handle != handle && message.include?(@handle)
       NSBeep()
@@ -290,26 +335,21 @@ class GlobalChatController
     send_message "SIGNOFF", [@chat_token]
     @ts.close
   end
-  
+
   def ping
-    sleep 3 # necessitas?
-    # i only ping when ponged
-    # if it has been longer than 30 seconds
-    # autoreconnect
-    # @last_ping = Time.now
     send_message("PING", [@chat_token])
   end
-  
-  
+
+
   def p obj
     NSLog obj.description
   end
-  
+
   def log str
     # NSLog str
     output_to_chat_window(str)
   end
-  
+
   def output_to_chat_window str
     #@mutex.synchronize do
     @chat_buffer += "#{str}"
