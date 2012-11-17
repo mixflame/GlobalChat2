@@ -53,7 +53,7 @@ class ServerListController
       @gcc.chat_buffer = ""
       
       unless @gcc.sign_on
-        @gcc.alert("Could not connect.")
+        @gcc.autoreconnect
       end
 
   end

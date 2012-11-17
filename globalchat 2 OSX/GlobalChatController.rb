@@ -34,8 +34,7 @@ class GlobalChatController
   :password,
   :ts,
   :msg_count,
-  :last_pong,
-  :ping_timer
+  :last_ping
 
   def initialize
     @mutex = Mutex.new
@@ -142,9 +141,11 @@ class GlobalChatController
     begin
       @ts = TCPSocket.open(@host, @port)
     rescue
-      #alert("Could not connect to GlobalChat server.")
+      log("Could not connect to the GlobalChat server. Will rety in 5 seconds.\n")
+      sleep 5
       return false
     end
+    @last_ping = Time.now # fake ping
     sign_on_array = @password == "" ? [@handle] : [@handle, @password]
     send_message("SIGNON", sign_on_array)
     begin_async_read_queue
@@ -167,10 +168,10 @@ class GlobalChatController
   def autoreconnect
     unless $autoreconnect == false
       @queue.async do
-        cleanup
-        while sign_on == false
-          output_to_chat_window "offline! autoreconnecting in 3 sec\n"
-          sleep 3
+        loop do
+          if sign_on
+            break
+          end
         end
       end
     end
@@ -198,6 +199,7 @@ class GlobalChatController
         data = ""
         begin
           while line = @ts.recv(1)
+            raise if @last_ping < Time.now - 30
             break if line == "\0"
             data += line
           end
@@ -231,7 +233,6 @@ class GlobalChatController
       $connected = true
 
     elsif command == "PONG"
-      @last_pong = Time.now
       @nicks = parr.last.split("\n")
       @nicks_table.reloadData
       ping
@@ -241,6 +242,7 @@ class GlobalChatController
     elsif command == "BUFFER"
       buffer = parr[1]
       unless buffer == "" || buffer == nil
+        @chat_window_text.setString(NSString.stringWithUTF8String(''))
         output_to_chat_window(buffer)
         sleep 0.1
         scroll_the_scroll_view_down
@@ -315,6 +317,7 @@ class GlobalChatController
   end
 
   def ping
+    @last_ping = Time.now
     send_message("PING", [@chat_token])
   end
 

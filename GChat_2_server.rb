@@ -57,7 +57,11 @@ class GlobalChatServer < GServer
     @handles.delete handle
     @handle_keys.delete ct
     @socket_keys.delete socket
-    broadcast_message(socket, "LEAVE", [handle])
+    begin
+      broadcast_message(socket, "LEAVE", [handle])
+    rescue
+      log "failed to broadcast LEAVE for clone handle #{handle}"
+    end
   end
 
   def check_token(chat_token)
