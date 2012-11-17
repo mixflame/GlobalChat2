@@ -90,10 +90,6 @@ class GlobalChatController
     @chat_window_text.setString(NSString.stringWithUTF8String(''))
   end
 
-  def invalidate_ping_timer
-    $should_ping = false
-  end
-
   def sendMessage(sender)
     begin
       @message = sender.stringValue
@@ -185,7 +181,6 @@ class GlobalChatController
       self.server_list_window.makeKeyAndOrderFront(nil)
       self.chat_window.orderOut(self)
       cleanup
-      invalidate_ping_timer
       @ts.close
       $connected = false
     end
@@ -216,23 +211,6 @@ class GlobalChatController
     end
   end
 
-  def start_ping_timer
-    # @ping_timer = NSTimer.scheduledTimerWithTimeInterval(5,
-    # target:$gcc,
-    # selector:"ping",
-    # userInfo:nil,
-    # repeats:true)
-    $should_ping = true
-    @queue.async do
-      loop do
-        sleep 3
-        ping
-        break if $should_ping == false
-      end
-    end
-  end
-
-
   def parse_line(line)
     parr = line.split("::!!::")
     command = parr.first
@@ -247,7 +225,6 @@ class GlobalChatController
         log "Connected to #{@server_name} \n"
         @chat_window.setTitle @server_name
       end
-      start_ping_timer
       get_handles
       get_log
       $connected = true
