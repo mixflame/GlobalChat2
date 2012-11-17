@@ -36,7 +36,7 @@
                                     <constraint firstAttribute="width" constant="105" id="iS8-oc-2Ig"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 <connections>
                                     <outlet property="delegate" destination="bLW-QQ-F16" id="sjf-aG-66c"/>
                                 </connections>
@@ -51,7 +51,7 @@
                             </label>
                             <textField autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eWJ-Qt-oRx">
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 <connections>
                                     <outlet property="delegate" destination="bLW-QQ-F16" id="JQE-BX-Ht8"/>
                                 </connections>
@@ -70,7 +70,7 @@
                                     <constraint firstAttribute="width" constant="74" id="RBZ-rP-5s7"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 <connections>
                                     <outlet property="delegate" destination="bLW-QQ-F16" id="W2R-lC-cbn"/>
                                 </connections>
@@ -88,7 +88,7 @@
                                     <constraint firstAttribute="width" constant="105" id="gPC-Eq-Pev"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="bLW-QQ-F16" id="85k-N9-hAw"/>
                                 </connections>
@@ -191,7 +191,7 @@
                             </tableView>
                             <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9rd-qq-zGS">
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
                                 <connections>
                                     <outlet property="delegate" destination="6Pa-eO-HLl" id="F9D-l3-eml"/>
                                 </connections>
@@ -246,18 +246,19 @@
         <class className="GlobalChatController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/GlobalChatController.h"/>
             <relationships>
+                <relationship kind="action" name="autoreconnect"/>
                 <relationship kind="action" name="get_handles"/>
                 <relationship kind="action" name="get_log"/>
                 <relationship kind="action" name="onSocketDidDisconnect:"/>
                 <relationship kind="action" name="output_to_chat_window:"/>
                 <relationship kind="action" name="parse_line:"/>
+                <relationship kind="action" name="ping"/>
                 <relationship kind="action" name="post_message:"/>
                 <relationship kind="action" name="read_line"/>
                 <relationship kind="action" name="return_to_server_list"/>
                 <relationship kind="action" name="scroll_the_scroll_view_down"/>
                 <relationship kind="action" name="send_the_chat_message"/>
                 <relationship kind="action" name="sign_on"/>
-                <relationship kind="action" name="sign_out"/>
                 <relationship kind="action" name="textFieldShouldReturn:"/>
                 <relationship kind="action" name="update_and_scroll"/>
                 <relationship kind="action" name="update_chat_views"/>

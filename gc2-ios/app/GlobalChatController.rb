@@ -8,6 +8,18 @@ class GlobalChatController < UIViewController
   outlet :scroll_view
   outlet :chat_message
 
+
+  def foghornMe(indexPath)
+    chat_message.setText("#{@nicks[indexPath.row]}: ")
+    select_chat_text
+  end
+
+  def select_chat_text
+    chat_message.becomeFirstResponder
+    chat_message.resignFirstResponder
+    #chat_message.currentEditor.setSelectedRange(NSRange.new(@chat_message.text.length,0))
+  end
+
   def run_on_main_thread &block
     block.performSelectorOnMainThread "call:", withObject:nil, waitUntilDone:false
   end
@@ -34,6 +46,10 @@ class GlobalChatController < UIViewController
     @nicks.nil? ? 0 : @nicks.size
   end
 
+  def tableView(tableView, didSelectRowAtIndexPath:indexPath)
+    foghornMe(indexPath)
+  end
+
   def send_the_chat_message
     message = @chat_message.text
     if message != ""
@@ -57,6 +73,9 @@ class GlobalChatController < UIViewController
   end
 
   def sign_on
+
+    return if (@host == "" || @port == "")
+
     @ts = AsyncSocket.alloc.initWithDelegate(self, delegateQueue:Dispatch::Queue.main)
     @ts.connectToHost(@host, onPort:@port, error:nil)
   end
@@ -105,9 +124,11 @@ class GlobalChatController < UIViewController
       handle = parr[1]
       output_to_chat_window("#{handle} has exited")
     elsif command == "ALERT"
+      $autoreconnect = false
       text = parr[1]
-      log("#{text}\n")
-      return_to_server_list
+      log("#{text}\n") do
+        return_to_server_list
+      end
     end
   end
 
@@ -139,7 +160,11 @@ class GlobalChatController < UIViewController
   end
 
   def return_to_server_list
+    #run_on_main_thread do
+    $autoreconnect = false
+    @ts.disconnect
     $app.switch_to_vc($slc)
+    #end
   end
 
   def send_message(opcode, args)
@@ -210,7 +235,7 @@ class GlobalChatController < UIViewController
   end
 
   def ping
-    sleep 3
+    # sleep 3
     @last_ping = Time.now
     send_message("PING", [@chat_token])
   end
