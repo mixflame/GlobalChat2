@@ -148,6 +148,7 @@ class GlobalChatController
     sign_on_array = @password == "" ? [@handle] : [@handle, @password]
     send_message("SIGNON", sign_on_array)
     begin_async_read_queue
+    $autoreconnect = true
     true
   end
 

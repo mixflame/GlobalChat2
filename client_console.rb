@@ -26,12 +26,14 @@ class GlobalChatController
     begin
       @ts = TCPSocket.open(@host, @port)
     rescue
-      log("Could not connect to GlobalChat server.")
+      log("Could not connect to GlobalChat server. Will retry in 5 seconds.")
+      sleep 5
       return false
     end
     sign_on_array = @password == "" ? [@handle] : [@handle, @password]
     send_message("SIGNON", sign_on_array)
     begin_async_read_queue
+    $autoreconnect = true
     true
   end
 
@@ -40,9 +42,6 @@ class GlobalChatController
       loop do
         if start_client
           break
-        else
-          sleep 10
-          output_to_chat_window "offline! autoreconnecting in 10 sec\n"
         end
       end
     end
@@ -189,7 +188,8 @@ def start_client
   gcc.password = ""
   gcc.nicks = []
   gcc.chat_buffer = ""
-  exit unless gcc.sign_on
+  gcc.autoreconnect if gcc.sign_on == false
+
 
   while message = gets
     message = message.chop

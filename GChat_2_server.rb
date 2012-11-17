@@ -57,7 +57,7 @@ class GlobalChatServer < GServer
     @handles.delete handle
     @handle_keys.delete ct
     @socket_keys.delete socket
-    #broadcast_message(socket, "LEAVE", [handle])
+    broadcast_message(socket, "LEAVE", [handle])
   end
 
   def check_token(chat_token)
