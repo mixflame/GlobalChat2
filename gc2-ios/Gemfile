@@ -9,7 +9,7 @@ source "https://rubygems.org"
 # gem 'motion-redgreen'
 
 group :RubyMotion do
-  gem 'sugarcube', :github => "rubymotion/sugarcube"
+  # gem 'sugarcube', :github => "rubymotion/sugarcube"
   gem 'ib', :github => "yury/ib"
   gem 'bubble-wrap', :github => "rubymotion/BubbleWrap"
   gem 'cocoapods' #, :github => "CocoaPods/CocoaPods"

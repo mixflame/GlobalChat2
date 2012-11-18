@@ -5,12 +5,6 @@ GIT
     bubble-wrap (1.1.4)
 
 GIT
-  remote: git://github.com/rubymotion/sugarcube.git
-  revision: 0073e852f46d903ac1375f619f3b130cef244b8d
-  specs:
-    sugarcube (0.11.3)
-
-GIT
   remote: git://github.com/yury/ib.git
   revision: 7ec2b15df70f2054e00d7495627d4ef9dad3623a
   specs:
@@ -68,4 +62,3 @@ DEPENDENCIES
   cocoapods
   ib!
   motion-cocoapods
-  sugarcube!

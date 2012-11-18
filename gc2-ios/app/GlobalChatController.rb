@@ -14,7 +14,7 @@ class GlobalChatController < UIViewController
 
 
   def supportedInterfaceOrientations
-    UIInterfaceOrientationMaskLandscapeRight # | UIInterfaceOrientationLandscapeRight
+    UIInterfaceOrientationMaskLandscapeRight | UIInterfaceOrientationMaskLandscapeLeft
   end
 
   def shouldAutorotate
@@ -27,7 +27,7 @@ class GlobalChatController < UIViewController
   end
 
   def shouldAutorotateToInterfaceOrientation(interfaceOrientation)
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight) || (interfaceOrientation == UIInterfaceOrientationLandscapeLeft)
   end
 
 

@@ -153,11 +153,11 @@
                                     <outlet property="delegate" destination="6Pa-eO-HLl" id="F9D-l3-eml"/>
                                 </connections>
                             </textField>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="eyw-YI-O7a">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" id="eyw-YI-O7a">
                                 <rect key="frame" x="177" y="0.0" width="391" height="270"/>
                                 <subviews>
-                                    <textView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" editable="NO" id="7EW-sa-a55">
-                                        <rect key="frame" x="0.0" y="0.0" width="391" height="270"/>
+                                    <textView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" editable="NO" id="7EW-sa-a55">
+                                        <rect key="frame" x="2" y="0.0" width="389" height="270"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
