@@ -247,14 +247,9 @@ class GlobalChatController < UIViewController
           run_on_main_thread do
             output_to_chat_window("Could not connect to GlobalChat. Will retry in 5 seconds..")
             NSLog "connected? #{$connected}"
-
             sign_on
           end
-
           sleep 5
-
-
-
         end
       end
     end
