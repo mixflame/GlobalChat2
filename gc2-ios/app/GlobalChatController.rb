@@ -15,10 +15,10 @@ class GlobalChatController < UIViewController
     UIView.setAnimationDelegate(self)
     UIView.setAnimationDuration(0.5)
     UIView.setAnimationBeginsFromCurrentState(true)
-    @old_frame = textfield.frame
-    offset = Device.ipad? ? 30 : 0
-    textfield.frame = CGRectMake(textfield.frame.origin.x, ((textfield.frame.origin.y / 2) - offset), textfield.frame.size.width, textfield.frame.size.height)
-    self.view.bringSubviewToFront textfield
+    @old_frame = chat_message.frame
+    offset = Device.ipad? ? 0 : 30
+    chat_message.frame = CGRectMake(chat_message.frame.origin.x, ((chat_message.frame.origin.y / 2) - offset), chat_message.frame.size.width, chat_message.frame.size.height)
+    self.view.bringSubviewToFront chat_message
     UIView.commitAnimations
   end
 
@@ -27,7 +27,7 @@ class GlobalChatController < UIViewController
     UIView.setAnimationDelegate(self)
     UIView.setAnimationDuration(0.5)
     UIView.setAnimationBeginsFromCurrentState(true)
-    textfield.frame = @old_frame
+    chat_message.frame = @old_frame
     UIView.commitAnimations
   end
 
