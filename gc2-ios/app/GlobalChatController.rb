@@ -32,7 +32,7 @@ class GlobalChatController < UIViewController
   end
 
   def touchesBegan(touches, withEvent:event)
-    textfield.resignFirstResponder
+    chat_message.resignFirstResponder
   end
 
   # orientation
