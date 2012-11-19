@@ -8,13 +8,16 @@ class GlobalChatController < UIViewController
   outlet :scroll_view
   outlet :chat_message
 
+  # message field moving
+
   def textFieldDidBeginEditing(textfield)
     UIView.beginAnimations(nil, context:nil)
     UIView.setAnimationDelegate(self)
     UIView.setAnimationDuration(0.5)
     UIView.setAnimationBeginsFromCurrentState(true)
     @old_frame = textfield.frame
-    textfield.frame = CGRectMake(textfield.frame.origin.x, ((textfield.frame.origin.y / 2) - 30), textfield.frame.size.width, textfield.frame.size.height)
+    offset = Device.ipad? ? 30 : 0
+    textfield.frame = CGRectMake(textfield.frame.origin.x, ((textfield.frame.origin.y / 2) - offset), textfield.frame.size.width, textfield.frame.size.height)
     self.view.bringSubviewToFront textfield
     UIView.commitAnimations
   end
@@ -265,7 +268,10 @@ class GlobalChatController < UIViewController
 
   def add_msg(handle, message)
     if @handle != handle && message.include?(@handle)
-      AudioServicesPlaySystemSound(KSystemSoundID_Vibrate)
+      local_file = NSURL.fileURLWithPath(File.join(NSBundle.mainBundle.resourcePath, 'ding.wav'))
+      BW::Media.play(local_file) do
+        #no-op.. just play sound
+      end
       @msg_count ||= 0
       @msg_count += 1
     end
