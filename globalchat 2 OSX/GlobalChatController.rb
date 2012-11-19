@@ -39,7 +39,7 @@ class GlobalChatController
   def initialize
     @mutex = Mutex.new
     @queue = Dispatch::Queue.new('com.jonsoft.globalchat')
-    @sent_messages = []
+    @sent_messages = [""]
     @sent_msg_index = 0
   end
 
@@ -52,11 +52,11 @@ class GlobalChatController
   end
 
   def tableView(view, objectValueForTableColumn:column, row:index)
-    @nicks[index]
+    @nicks.nil? ? nil : @nicks[index]
   end
 
   def numberOfRowsInTableView(view)
-    @nicks.size
+    @nicks.nil? ? 0 : @nicks.size
   end
 
   def cycle_chat_messages
@@ -113,20 +113,16 @@ class GlobalChatController
   end
 
   def scroll_the_scroll_view_down
-    #y = 0
-    #currentScrollPosition = NSPoint.new
-    frame_height = self.scroll_view.documentView.frame.size.height
-    content_size = self.scroll_view.contentSize.height
-    y = frame_height - content_size
-
-    self.scroll_view.setDrawsBackground false
-
-    #while currentScrollPosition.y < y #|| (self.chat_window_text.stringValue == "")
-    #currentScrollPosition = self.scroll_view.contentView.bounds.origin
-    #self.scroll_view.contentView.scrollToPoint(NSMakePoint(0, currentScrollPosition.y + 1))
-    self.chat_window_text.scrollRangeToVisible NSRange.new(@chat_window_text.string.length, 0)
-    self.scroll_view.reflectScrolledClipView(self.scroll_view.contentView)
-    #end
+    begin
+      frame_height = self.scroll_view.documentView.frame.size.height
+      content_size = self.scroll_view.contentSize.height
+      y = frame_height - content_size
+      self.scroll_view.setDrawsBackground false
+      self.chat_window_text.scrollRangeToVisible NSRange.new(@chat_window_text.string.length, 0)
+      self.scroll_view.reflectScrolledClipView(self.scroll_view.contentView)
+    rescue
+      NSLog("error scrolling down")
+    end
   end
 
   def update_chat_views
@@ -208,7 +204,8 @@ class GlobalChatController
           break
         end
 
-        p data
+        # everything must become unicode!
+        data = NSString.stringWithUTF8String(data)
         parse_line(data)
       end
     end
@@ -277,7 +274,9 @@ class GlobalChatController
 
   def sock_send io, msg
     begin
-      p msg
+      # trying to only convert
+      # once so that i can use native strings
+      msg = NSString.stringWithUTF8String(msg)
       msg = "#{msg}\0"
       io.send msg, 0
     rescue
@@ -299,7 +298,7 @@ class GlobalChatController
       @msg_count += 1
       NSApplication.sharedApplication.dockTile.setBadgeLabel(@msg_count.to_s)
     end
-    msg = NSString.stringWithUTF8String("#{handle}: #{message}\n")
+    msg = "#{handle}: #{message}\n"
     output_to_chat_window(msg)
   end
 

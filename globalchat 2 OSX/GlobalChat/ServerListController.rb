@@ -2,10 +2,10 @@ require 'net/http'
 
 class ServerListController
 
-    attr_accessor :server_list_hash, :names, :server_list_table, :server_list_window, :gcc, :chat_window, :host, :port, :password, :handle
+  attr_accessor :server_list_hash, :names, :server_list_table, :server_list_window, :gcc, :chat_window, :host, :port, :password, :handle
 
   def initialize
-  	get_servers
+    get_servers
   end
 
   def get_servers
@@ -17,44 +17,44 @@ class ServerListController
     end
 
     @names = @server_list_hash.map { |i| i[:name] }
-    
+
   end
 
   def tableView(view, objectValueForTableColumn:column, row:index)
-    self.names[index]
+    @names.nil? ? 0 : @names[index]
   end
 
   def numberOfRowsInTableView(view)
-    self.names.size
+    @names.nil? ? 0 : @names.size
   end
 
 
   def refresh(sender)
-  	get_servers
+    get_servers
     @server_list_table.reloadData
   end
-  
+
   def changeInfo(sender)
     @host.setStringValue @server_list_hash[sender.selectedRow][:host]
     @port.setStringValue @server_list_hash[sender.selectedRow][:port]
   end
 
   def connect(sender)
-      # save defaults
-      $prefs.setObject(@host.stringValue, :forKey => "host")
-      $prefs.setObject(@handle.stringValue, :forKey => "handle")
-      $prefs.setObject(@port.stringValue, :forKey => "port")
-    
-      @gcc.handle = @handle.stringValue
-      @gcc.host = @host.stringValue
-      @gcc.port = @port.stringValue
-      @gcc.password = @password.stringValue
-      @gcc.nicks = []
-      @gcc.chat_buffer = ""
-      
-      unless @gcc.sign_on
-        @gcc.autoreconnect
-      end
+    # save defaults
+    $prefs.setObject(@host.stringValue, :forKey => "host")
+    $prefs.setObject(@handle.stringValue, :forKey => "handle")
+    $prefs.setObject(@port.stringValue, :forKey => "port")
+
+    @gcc.handle = @handle.stringValue
+    @gcc.host = @host.stringValue
+    @gcc.port = @port.stringValue
+    @gcc.password = @password.stringValue
+    @gcc.nicks = []
+    @gcc.chat_buffer = ""
+
+    unless @gcc.sign_on
+      @gcc.autoreconnect
+    end
 
   end
 
