@@ -14,6 +14,8 @@
 
 
 
+-(IBAction) textFieldDidBeginEditing:(id) textfield;
+-(IBAction) textFieldDidEndEditing:(id) textfield;
 -(IBAction) preferredInterfaceOrientationForPresentation;
 -(IBAction) supportedInterfaceOrientations;
 -(IBAction) shouldAutorotate;

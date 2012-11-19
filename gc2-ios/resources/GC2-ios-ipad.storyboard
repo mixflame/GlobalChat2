@@ -205,6 +205,8 @@
                 <relationship kind="action" name="shouldAutorotateToInterfaceOrientation:"/>
                 <relationship kind="action" name="sign_on"/>
                 <relationship kind="action" name="supportedInterfaceOrientations"/>
+                <relationship kind="action" name="textFieldDidBeginEditing:"/>
+                <relationship kind="action" name="textFieldDidEndEditing:"/>
                 <relationship kind="action" name="textFieldShouldReturn:"/>
                 <relationship kind="action" name="update_and_scroll"/>
                 <relationship kind="action" name="update_chat_views"/>

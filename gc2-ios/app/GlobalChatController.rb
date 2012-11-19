@@ -1,12 +1,38 @@
 class GlobalChatController < UIViewController
   extend IB
 
-  attr_accessor :chat_token, :chat_buffer, :nicks, :handle, :last_scroll_view_height, :host, :port, :password, :ts, :times, :disconnect_timer, :scroll_timer
+  attr_accessor :chat_token, :chat_buffer, :nicks, :handle, :last_scroll_view_height, :host, :port, :password, :ts, :times, :disconnect_timer, :scroll_timer, :old_frame
 
   outlet :chat_window_text
   outlet :nicks_table
   outlet :scroll_view
   outlet :chat_message
+
+  def textFieldDidBeginEditing(textfield)
+    UIView.beginAnimations(nil, context:nil)
+    UIView.setAnimationDelegate(self)
+    UIView.setAnimationDuration(0.5)
+    UIView.setAnimationBeginsFromCurrentState(true)
+    @old_frame = textfield.frame
+    textfield.frame = CGRectMake(textfield.frame.origin.x, ((textfield.frame.origin.y / 2) - 30), textfield.frame.size.width, textfield.frame.size.height)
+    self.view.bringSubviewToFront textfield
+    UIView.commitAnimations
+  end
+
+  def textFieldDidEndEditing(textfield)
+    UIView.beginAnimations(nil, context:nil)
+    UIView.setAnimationDelegate(self)
+    UIView.setAnimationDuration(0.5)
+    UIView.setAnimationBeginsFromCurrentState(true)
+    textfield.frame = @old_frame
+    UIView.commitAnimations
+  end
+
+  def touchesBegan(touches, withEvent:event)
+    textfield.resignFirstResponder
+  end
+
+  # orientation
 
   def preferredInterfaceOrientationForPresentation
     UIDeviceOrientationLandscapeRight
