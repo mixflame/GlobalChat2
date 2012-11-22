@@ -298,7 +298,7 @@
 			buildSettings = {
 				ARCHS = x86_64;
 				CODE_SIGN_ENTITLEMENTS = GlobalChat/GlobalChat.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application: Jonathan Silverman";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -310,6 +310,7 @@
 				GCC_PREFIX_HEADER = "GlobalChat/GlobalChat-Prefix.pch";
 				INFOPLIST_FILE = "GlobalChat/GlobalChat-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "62C701A3-08D6-464F-B5EC-8908A302880E";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -319,7 +320,7 @@
 			buildSettings = {
 				ARCHS = x86_64;
 				CODE_SIGN_ENTITLEMENTS = GlobalChat/GlobalChat.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application: Jonathan Silverman";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -331,6 +332,7 @@
 				GCC_PREFIX_HEADER = "GlobalChat/GlobalChat-Prefix.pch";
 				INFOPLIST_FILE = "GlobalChat/GlobalChat-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "62C701A3-08D6-464F-B5EC-8908A302880E";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

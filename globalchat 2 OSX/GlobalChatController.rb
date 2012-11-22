@@ -37,7 +37,6 @@ class GlobalChatController
   :last_ping
 
   def initialize
-    @mutex = Mutex.new
     @queue = Dispatch::Queue.new('com.jonsoft.globalchat')
     @sent_messages = [""]
     @sent_msg_index = 0
@@ -112,28 +111,19 @@ class GlobalChatController
     @chat_message.currentEditor.setSelectedRange(NSRange.new(@chat_message.stringValue.length,0))
   end
 
-  def scroll_the_scroll_view_down
-    begin
-      frame_height = self.scroll_view.documentView.frame.size.height
-      content_size = self.scroll_view.contentSize.height
-      y = frame_height - content_size
-      self.scroll_view.setDrawsBackground false
-      self.chat_window_text.scrollRangeToVisible NSRange.new(@chat_window_text.string.length, 0)
-      self.scroll_view.reflectScrolledClipView(self.scroll_view.contentView)
-    rescue
-      NSLog("error scrolling down")
-    end
-  end
-
   def update_chat_views
     run_on_main_thread do
       @chat_window_text.setString(NSString.stringWithUTF8String(self.chat_buffer))
+      frame_height = self.scroll_view.documentView.frame.size.height
+      content_size = self.scroll_view.contentSize.height
+      y = @chat_window_text.string.length
+      self.scroll_view.setDrawsBackground false
+      self.chat_window_text.scrollRangeToVisible NSRange.new(y, 0)
+      self.scroll_view.reflectScrolledClipView(self.scroll_view.contentView)
     end
   end
 
   def sign_on
-    #cleanup
-    #log "Connecting to: #{@host} #{@port}"
     begin
       @ts = TCPSocket.open(@host, @port)
     rescue
@@ -174,7 +164,7 @@ class GlobalChatController
   end
 
   def return_to_server_list
-    @mutex.synchronize do
+    run_on_main_thread do
       $autoreconnect = false
       self.server_list_window.makeKeyAndOrderFront(nil)
       self.chat_window.orderOut(self)
@@ -186,12 +176,12 @@ class GlobalChatController
 
   def update_and_scroll
     update_chat_views
-    scroll_the_scroll_view_down
   end
 
   def begin_async_read_queue
     @queue.async do
       loop do
+        sleep 0.1
         data = ""
         begin
           while line = @ts.recv(1)
@@ -233,16 +223,11 @@ class GlobalChatController
       @nicks = parr.last.split("\n")
       @nicks_table.reloadData
       ping
-    elsif command == "HANDLES"
-      @nicks = parr.last.split("\n")
-      @nicks_table.reloadData
     elsif command == "BUFFER"
       buffer = parr[1]
       unless buffer == "" || buffer == nil
-        @chat_window_text.setString(NSString.stringWithUTF8String(''))
-        output_to_chat_window(buffer)
-        sleep 0.1
-        scroll_the_scroll_view_down
+        @chat_buffer = buffer
+        update_and_scroll
       end
     elsif command == "SAY"
       handle = parr[1]
@@ -255,14 +240,9 @@ class GlobalChatController
       handle = parr[1]
       output_to_chat_window("#{handle} has exited\n")
     elsif command == "ALERT"
-      # if you get an alert
-      # you logged in wrong
-      # native alerts
-      # are not part of
-      # chat experience
       text = parr[1]
       alert(text)
-
+      # i looze
       return_to_server_list
     end
   end
@@ -274,8 +254,7 @@ class GlobalChatController
 
   def sock_send io, msg
     begin
-      # trying to only convert
-      # once so that i can use native strings
+      # send unicode only !
       msg = NSString.stringWithUTF8String(msg)
       msg = "#{msg}\0"
       io.send msg, 0
@@ -316,25 +295,24 @@ class GlobalChatController
   end
 
   def ping
-    @last_ping = Time.now
-    send_message("PING", [@chat_token])
+    @queue.async do
+      @last_ping = Time.now
+      send_message("PING", [@chat_token])
+    end
   end
-
 
   def p obj
     NSLog obj.description
   end
 
   def log str
-    # NSLog str
+    #NSLog str
     output_to_chat_window(str)
   end
 
   def output_to_chat_window str
-    #@mutex.synchronize do
     @chat_buffer += "#{str}"
     update_and_scroll
-    #end
   end
 
 end
