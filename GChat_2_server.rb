@@ -181,6 +181,8 @@ class GlobalChatServer < GServer
           @handles << handle
         end
         @handle_last_pinged[handle] = Time.now
+      elsif command == "SIGNOFF"
+        broadcast_message(nil, "LEAVE", [handle])
       end
     end
   end

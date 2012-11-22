@@ -128,7 +128,7 @@ class GlobalChatController
       @ts = TCPSocket.open(@host, @port)
     rescue
       log("Could not connect to the GlobalChat server. Will rety in 5 seconds.\n")
-      sleep 5
+      #sleep 5
       return false
     end
     @last_ping = Time.now # fake ping
@@ -155,6 +155,7 @@ class GlobalChatController
     unless $autoreconnect == false
       @queue.async do
         loop do
+          sleep 5
           if sign_on
             break
           end
@@ -164,12 +165,12 @@ class GlobalChatController
   end
 
   def return_to_server_list
+    $autoreconnect = false
+    sign_out
     run_on_main_thread do
-      $autoreconnect = false
       self.server_list_window.makeKeyAndOrderFront(nil)
       self.chat_window.orderOut(self)
       cleanup
-      sign_out
       $connected = false
     end
   end
