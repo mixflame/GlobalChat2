@@ -169,7 +169,7 @@ class GlobalChatController
       self.server_list_window.makeKeyAndOrderFront(nil)
       self.chat_window.orderOut(self)
       cleanup
-      @ts.close
+      sign_out
       $connected = false
     end
   end
@@ -218,7 +218,9 @@ class GlobalChatController
       get_handles
       get_log
       $connected = true
-
+    elsif command == "HANDLES"
+      @nicks = parr.last.split("\n")
+      nicks_table.reloadData
     elsif command == "PONG"
       @nicks = parr.last.split("\n")
       @nicks_table.reloadData
@@ -236,9 +238,14 @@ class GlobalChatController
     elsif command == "JOIN"
       handle = parr[1]
       output_to_chat_window("#{handle} has entered\n")
+      @nicks << handle
+      @nicks.uniq!
+      @nicks_table.reloadData
     elsif command == "LEAVE"
       handle = parr[1]
       output_to_chat_window("#{handle} has exited\n")
+      @nicks.delete(handle)
+      @nicks_table.reloadData
     elsif command == "ALERT"
       text = parr[1]
       alert(text)
@@ -295,10 +302,10 @@ class GlobalChatController
   end
 
   def ping
-    @queue.async do
+    #@queue.async do
       @last_ping = Time.now
       send_message("PING", [@chat_token])
-    end
+    #end
   end
 
   def p obj
