@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require 'gserver'
 require 'net/http'
 require 'uri'
@@ -188,10 +189,10 @@ class GlobalChatServer < GServer
 
   def pong_everyone
     #log "trying to pong"
-    unless @sockets.length == 0 && !self.stopped?
+    if @sockets.length > 0 && !self.stopped?
       #log "ponging"
       broadcast_message(nil, "PONG", [build_handle_list])
-      sleep 5
+      #sleep 5
       clean_handles
     end
   end
@@ -269,3 +270,5 @@ class GlobalChatServer < GServer
   end
 
 end
+
+

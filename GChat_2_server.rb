@@ -189,10 +189,10 @@ class GlobalChatServer < GServer
 
   def pong_everyone
     #log "trying to pong"
-    unless @sockets.length == 0 && !self.stopped?
+    if @sockets.length > 0 && !self.stopped?
       #log "ponging"
       broadcast_message(nil, "PONG", [build_handle_list])
-      sleep 5
+      #sleep 5
       clean_handles
     end
   end
@@ -297,7 +297,7 @@ $gc.scrollback = true
 $gc.start
 
 if ENV["RUBY_VERSION"] && ENV["RUBY_VERSION"].include?("1.9")
-  ping_nexus("GlobalChatNet2", "localhost", $gc.port)
+  ping_nexus("GlobalChatNet2", "globalchat2.net", $gc.port)
 end
 
 $gc.status

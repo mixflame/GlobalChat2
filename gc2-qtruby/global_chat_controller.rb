@@ -88,7 +88,7 @@ class GlobalChatController < Qt::Object
         data = ""
         # begin
         while line = @ts.recv(1)
-          # raise if @last_ping < Time.now - 30
+          raise if @last_ping < Time.now - 30
           break if line == "\0"
           data += line
         end
@@ -113,9 +113,7 @@ class GlobalChatController < Qt::Object
       #ping
       get_handles
       $connected = true
-      at_exit do
-        sign_out
-      end
+
     elsif command == "PONG"
       @nicks = parr.last.split("\n")
       @handles_list.clear
@@ -190,9 +188,9 @@ class GlobalChatController < Qt::Object
   end
 
   def add_msg(handle, message)
-    if @handle != handle && message.include?(@handle)
-      QApplication::beep
-    end
+    # if @handle != handle && message.include?(@handle)
+    #   QApplication::beep
+    # end
     msg = "#{handle}: #{message}\n"
     output_to_chat_window(msg)
   end
