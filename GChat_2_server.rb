@@ -105,7 +105,7 @@ class GlobalChatServer < GServer
 
   def clean_handles
     @handle_keys.each do |k, v|
-      if @handle_last_pinged[v] && @handle_last_pinged[v] < Time.now - 10
+      if @handle_last_pinged[v] && @handle_last_pinged[v] < Time.now - 30
         log "removed clone handle: #{v}"
         remove_user_by_handle(v)
       end
