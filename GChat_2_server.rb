@@ -202,16 +202,10 @@ class GlobalChatServer < GServer
     Thread.new do
       loop do
         sleep 5
+        # log "pong all"
         pong_everyone
-      end
-    end
-  end
-
-  def start_server_save_loop
-    Thread.new do
-      loop do
-        sleep 30
-        save_log
+        # log "pong logsave"
+        save_chat_log
       end
     end
   end
@@ -229,7 +223,6 @@ class GlobalChatServer < GServer
   def starting
     log("GlobalChat2 Server Running")
     start_pong_loop
-    start_server_save_loop
   end
 
   def serve(io)
@@ -264,7 +257,7 @@ class GlobalChatServer < GServer
 
 
   def save_chat_log
-    log "saving chatlog"
+    # log "saving chatlog"
     @pstore.transaction do
       @pstore[:log] = @buffer
       #p @pstore[:log]
@@ -273,7 +266,7 @@ class GlobalChatServer < GServer
   end
 
   def load_chat_log
-    log "loading chatlog"
+    # log "loading chatlog"
     @pstore.transaction(true) do
       @buffer = @pstore[:log] || []
       #p @buffer
