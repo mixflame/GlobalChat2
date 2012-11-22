@@ -5,9 +5,9 @@ require 'securerandom'
 require 'pstore'
 
 class GlobalChatServer < GServer
-  
+
   attr_accessor :handles, :buffer, :handle_keys, :sockets, :password, :socket_keys, :scrollback, :server_name
-  
+
   def initialize(port=9994, *args)
     super(port, *args)
     self.audit = true
@@ -20,11 +20,11 @@ class GlobalChatServer < GServer
     @handles = []
     @sockets = []
     @buffer = []
-    @server_name = ""
+    @server_name = "GlobalChatNet"
     load_chat_log
     @mutex = Mutex.new
   end
-  
+
   def broadcast(message, sender=nil)
     @mutex.synchronize do
       @sockets.each do |socket|
@@ -46,13 +46,13 @@ class GlobalChatServer < GServer
     @handle_keys.delete ct
     @socket_keys.delete socket
   end
-  
+
   def remove_user_by_handle(handle)
     ct = @handle_keys.key(handle)
     handle = @handle_keys[ct]
     socket = @socket_keys.key(ct)
     @sockets.delete socket
-    
+
     @handles.delete handle
     @handle_keys.delete ct
     @socket_keys.delete socket
@@ -62,36 +62,36 @@ class GlobalChatServer < GServer
       log "failed to broadcast LEAVE for clone handle #{handle}"
     end
   end
-  
+
   def check_token(chat_token)
     sender = @handle_keys[chat_token]
     return !sender.nil?
   end
-  
+
   def get_handle(chat_token)
     sender = @handle_keys[chat_token]
     return sender
   end
-  
+
   # server tell a single socket
   def send_message(io, opcode, args)
     msg = opcode + "::!!::" + args.join("::!!::")
     sock_send io, msg
   end
-  
+
   def sock_send io, msg
     msg = "#{msg}\0"
     log msg
     io.send msg, 0
   end
-  
+
   # server tell all sockets except
   # if sender is nil then everyone
   def broadcast_message(sender, opcode, args)
     msg = opcode + "::!!::" + args.join("::!!::")
     broadcast msg, sender
   end
-  
+
   def build_chat_log
     return "" unless @scrollback
     out = ""
@@ -100,26 +100,21 @@ class GlobalChatServer < GServer
     end
     out
   end
-  
+
 
   def clean_handles
     @handle_keys.each do |k, v|
-        # try to remove if hasnt pinged in a while
-        # i pong every 5 seconds
-        if @handle_last_pinged[v] && @handle_last_pinged[v] < Time.now - 30 #@socket_keys.key(k).closed?
-          log "removed clone handle: #{v}"
-          #@handles.delete(v)
-          #broadcast_message(io, "LEAVE", [v])
-          remove_user_by_handle(v)
-        end
+      if @handle_last_pinged[v] && @handle_last_pinged[v] < Time.now - 30
+        log "removed clone handle: #{v}"
+        remove_user_by_handle(v)
+      end
     end
   end
 
   def build_handle_list
-    $app.gcsc.handles_list.reloadData
     return @handles.join("\n")
   end
-  
+
   # react to allowed commands
   def parse_line(line, io)
     parr = line.split("::!!::")
@@ -128,22 +123,22 @@ class GlobalChatServer < GServer
       handle = parr[1]
       password = parr[2]
 
-      if @handles.include?(handle)
+      if !@handles.length == 0 && @handles.include?(handle)
         send_message(io, "ALERT", ["Your handle is in use."])
         io.close
         return
       end
-      
+
       if handle == nil || handle == ""
         send_message(io, "ALERT", ["You cannot have a blank name."])
         #remove_dead_socket io
         io.close
         return
       end
-      
+
       if ((@password == password) || ((password === nil) && (@password == "")))
         # uuid are guaranteed unique
-        chat_token = SecureRandom.uuid #rand(36**8).to_s(36)
+        chat_token = rand(36**8).to_s(36)
         @mutex.synchronize do
           @handle_keys[chat_token] = handle
           @socket_keys[io] = chat_token
@@ -155,19 +150,19 @@ class GlobalChatServer < GServer
         send_message(io, "TOKEN", [chat_token, handle, @server_name])
         broadcast_message(io, "JOIN", [handle])
       else
-      
+
         send_message(io, "ALERT", ["Password is incorrect."])
         io.close
-        
+
       end
-      
+
       return
-      
+
     end
-    
+
     # auth
     chat_token = parr.last
-      
+
     if check_token(chat_token)
       handle = get_handle(chat_token)
       if command == "GETHANDLES"
@@ -185,44 +180,58 @@ class GlobalChatServer < GServer
           @handles << handle
         end
         @handle_last_pinged[handle] = Time.now
+      elsif command == "SIGNOFF"
+        broadcast_message(nil, "LEAVE", [handle])
       end
     end
   end
-  
+
   def pong_everyone
-    unless @sockets.length == 0
+    #log "trying to pong"
+    unless @sockets.length == 0 && !self.stopped?
+      #log "ponging"
       broadcast_message(nil, "PONG", [build_handle_list])
       sleep 5
       clean_handles
     end
   end
-  
-#  def disconnecting(clientPort)
-#    log "disconnect event"
-#    ct = @port_keys[clientPort]
-#    handle = @handle_keys[ct]
-#    if handle
-#      log "disconnect removal event"
-#      remove_dead_socket ct
-#    end
-#    super(clientPort)
-#  end
+
+  def start_pong_loop
+    Thread.new do
+      loop do
+        sleep 5
+        pong_everyone
+      end
+    end
+  end
+
+  #  def disconnecting(clientPort)
+  #    log "disconnect event"
+  #    ct = @port_keys[clientPort]
+  #    handle = @handle_keys[ct]
+  #    if handle
+  #      log "disconnect removal event"
+  #      remove_dead_socket ct
+  #    end
+  #    super(clientPort)
+  #  end
   def starting
     log("GlobalChat2 Server Running")
+    start_pong_loop
   end
-  
+
   def serve(io)
     loop do
       data = ""
       begin
         while line = io.recv(1)
-          break if line == "\0" 
+          break if line == "\0"
           data += line
         end
       rescue
-          log "recv break removal event"
-          remove_dead_socket io #, true
-          break
+        log "recv break removal event"
+        remove_dead_socket io #, true
+        break
       end
       unless data == ""
         log "#{data}"
@@ -230,7 +239,13 @@ class GlobalChatServer < GServer
       end
     end
   end
-  
+
+  def status
+    passworded = (self.password != "")
+    scrollback = self.scrollback
+    log "#{@server_name} running on GlobalChat2 3.0 platform Replay:#{scrollback} Passworded:#{passworded}"
+  end
+
   def log(msg)
     puts msg
   end
@@ -240,7 +255,7 @@ class GlobalChatServer < GServer
     log "saving chatlog"
     @pstore.transaction do
       @pstore[:log] = @buffer
-      #p @pstore[:log] 
+      #p @pstore[:log]
     end
 
   end

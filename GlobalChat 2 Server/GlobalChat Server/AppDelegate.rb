@@ -21,13 +21,6 @@ class AppDelegate
         userInfo:nil,
         repeats:true)
       
-      NSTimer.scheduledTimerWithTimeInterval(5,
-        target:@gcsc,
-        selector:"pongAll",
-        userInfo:nil,
-        repeats:true)
-      
-      
     end
 end
 

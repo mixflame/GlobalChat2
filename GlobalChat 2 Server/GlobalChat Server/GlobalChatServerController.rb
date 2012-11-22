@@ -19,11 +19,11 @@ class GlobalChatServerController
     @gchatserv.handles.size rescue 0
   end
 
-  def pongAll
-    if !@gchatserv.stopped?
-      @gchatserv.pong_everyone
-    end
-  end
+  #def pongAll
+  #  if !@gchatserv.stopped?
+  #    @gchatserv.pong_everyone
+  #  end
+  #end
 
   def checkStatus # change server setting
     if @gchatserv.stopped?
