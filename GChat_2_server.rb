@@ -207,6 +207,15 @@ class GlobalChatServer < GServer
     end
   end
 
+  def start_server_save_loop
+    Thread.new do
+      loop do
+        sleep 30
+        save_log
+      end
+    end
+  end
+
   #  def disconnecting(clientPort)
   #    log "disconnect event"
   #    ct = @port_keys[clientPort]
@@ -220,6 +229,7 @@ class GlobalChatServer < GServer
   def starting
     log("GlobalChat2 Server Running")
     start_pong_loop
+    start_server_save_loop
   end
 
   def serve(io)

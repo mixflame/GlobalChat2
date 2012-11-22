@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 require 'gserver'
 require 'net/http'
 require 'uri'
@@ -96,7 +95,8 @@ class GlobalChatServer < GServer
   def build_chat_log
     return "" unless @scrollback
     out = ""
-    @buffer.each do |msg|
+    displayed_buffer = @buffer[@buffer.length-30..-1]
+    displayed_buffer.each do |msg|
       out += "#{msg[0]}: #{msg[1]}\n"
     end
     out
@@ -113,7 +113,7 @@ class GlobalChatServer < GServer
   end
 
   def build_handle_list
-    return @handles.join("\n")
+    return @handles.uniq.join("\n")
   end
 
   # react to allowed commands
@@ -270,5 +270,3 @@ class GlobalChatServer < GServer
   end
 
 end
-
-
