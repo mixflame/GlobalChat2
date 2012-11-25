@@ -95,7 +95,7 @@ class GlobalChatServer < GServer
   def build_chat_log
     return "" unless @scrollback
     out = ""
-    displayed_buffer = @buffer[@buffer.length-30..-1]
+    displayed_buffer = @buffer.length > 30 ? @buffer[@buffer.length-30..-1] : @buffer
     displayed_buffer.each do |msg|
       out += "#{msg[0]}: #{msg[1]}\n"
     end
