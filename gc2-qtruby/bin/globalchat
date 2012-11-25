@@ -10,7 +10,6 @@ require 'socket'
 require 'thread'
 require 'pstore'
 
-
 class GlobalChatController < Qt::Object
 
   attr_accessor :chat_token,
@@ -247,7 +246,7 @@ class ServerList < Qt::Widget
   def initialize(parent=nil)
     super parent
     loader = Qt::UiLoader.new
-    file = Qt::File.new 'ServerList.ui' do
+    file = Qt::File.new "#{File.expand_path(File.dirname(__FILE__))}/ServerList.ui" do
       open Qt::File::ReadOnly
     end
     window = loader.load file
@@ -363,7 +362,7 @@ class GlobalChat < Qt::Widget
     timer.start(1)
 
     loader = Qt::UiLoader.new
-    file = Qt::File.new 'GlobalChat.ui' do
+    file = Qt::File.new "#{File.expand_path(File.dirname(__FILE__))}/GlobalChat.ui" do
       open Qt::File::ReadOnly
     end
     window = loader.load file
