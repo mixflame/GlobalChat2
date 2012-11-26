@@ -1,6 +1,6 @@
 GlobalChat 2
 
-modern chat experiment
+how jsilver thinks Chat should work
 
 goal: create a non-technical feeling IRC-clone for private teams with useful features to help productivity
 
