@@ -1,5 +1,13 @@
 #!/usr/bin/env ruby
 
+# A chat client with a specialized protocol
+#
+# Author::    Jonathan Silverman  (mailto:jsilverman2@gmail.com)
+# Copyright:: Copyright (c) 2012 Jonathan Silverman
+# License::   GPLv3
+
+# GlobalChatController is main client class
+
 require 'uri'
 require 'socket'
 
@@ -12,6 +20,9 @@ class GlobalChatController
     @sent_msg_index = 0
   end
 
+  # Send message to server
+  # Params:
+  # +message+:: what to say
   def sendMessage(message)
     begin
       if message != ""
@@ -22,6 +33,8 @@ class GlobalChatController
     end
   end
 
+  # Signs you on to GC2! Make sure @host, @port, and @handle are set
+  # @password is optional
   def sign_on
     begin
       @ts = TCPSocket.open(@host, @port)
@@ -38,6 +51,7 @@ class GlobalChatController
     true
   end
 
+  # Attempts to autoreconnect until succeeding.
   def autoreconnect
     unless $autoreconnect == false
       loop do
@@ -48,6 +62,9 @@ class GlobalChatController
     end
   end
 
+  # Read and create commands out of null-terminated strings
+  # formerly used lines.. can also detect it's own disconnection
+  # via the ping timeout raise
   def begin_async_read_queue
     Thread.new do
       loop do
@@ -68,6 +85,9 @@ class GlobalChatController
     end
   end
 
+  # Parse an incoming "line", an entire unchopped command
+  # Params:
+  # +line+:: command string to be parsed by parse_line
   def parse_line(line)
     parr = line.split("::!!::")
     command = parr.first
@@ -115,11 +135,19 @@ class GlobalChatController
     end
   end
 
+  # Send any opcode (command) to the server with any args
+  # Params:
+  # +opcode+:: the opcode to send the server, such as "MESSAGE"
+  # +args+:: the args array, such as ["hello globalchat!", @chat_token]
   def send_message(opcode, args)
     msg = opcode + "::!!::" + args.join("::!!::")
     sock_send @ts, msg
   end
 
+  # Send any command with the socket, using null termination
+  # Params:
+  # +io+:: the socket to use to send
+  # +msg+:: the command string to be packed and sent
   def sock_send io, msg
     begin
       #p msg
@@ -130,11 +158,18 @@ class GlobalChatController
     end
   end
 
+  # Actually post a message to the chat
+  # Params:
+  # +message+:: what message you want to send
   def post_message(message)
     send_message "MESSAGE", [message, @chat_token]
     #add_msg(self.handle, message)
   end
 
+  # Add a message (any message) to the chat window
+  # Params:
+  # +handle+:: who said it
+  # +message+:: what they said
   def add_msg(handle, message)
     if @handle != handle && message.include?(@handle)
       print "\a"
@@ -145,25 +180,32 @@ class GlobalChatController
     output_to_chat_window(msg)
   end
 
+  # Get the buffer replay from the server (on signin)
   def get_log
     send_message "GETBUFFER", [@chat_token]
   end
 
+  # Get the handles list from the server (on signin)
   def get_handles
     send_message "GETHANDLES", [@chat_token]
   end
 
+  # Tell the server I am leaving and close the socket
   def sign_out
     send_message "SIGNOFF", [@chat_token]
     @ts.close
   end
 
+  # Ping the server that I have not gone offline
   def ping
     sleep 3
     @last_ping = Time.now
     send_message("PING", [@chat_token])
   end
 
+  # Logging method, used however
+  # Params:
+  # +str+:: what to log
   def log str
     output_to_chat_window(str)
   end
@@ -171,7 +213,6 @@ class GlobalChatController
   def output_to_chat_window str
     puts str
   end
-
 
 end
 
@@ -181,6 +222,7 @@ $name = gets
 puts 'enter server'
 $server = gets
 
+# Clean up and easily recreate the console client
 def start_client
   `clear`
   gcc = GlobalChatController.new

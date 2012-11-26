@@ -1,4 +1,13 @@
 #!/usr/bin/env ruby
+
+# A chat server with a custom protocol and roomless design
+#
+# Author::    Jonathan Silverman  (mailto:jsilverman2@gmail.com)
+# Copyright:: Copyright (c) 2012 Jonathan Silverman
+# License::   GPLv3
+
+# GlobalChatServer is the GServer class
+
 require 'gserver'
 require 'net/http'
 require 'uri'
@@ -9,6 +18,10 @@ class GlobalChatServer < GServer
 
   attr_accessor :handles, :buffer, :handle_keys, :sockets, :password, :socket_keys, :scrollback, :server_name
 
+  # Boot the server
+  # Params:
+  # +port+:: listening port
+  # +args+:: GServer args
   def initialize(port=9994, *args)
     super(port, *args)
     self.audit = true
@@ -26,6 +39,10 @@ class GlobalChatServer < GServer
     @mutex = Mutex.new
   end
 
+  # Broadcast a command to every connected client
+  # Params:
+  # +message+:: the command to send
+  # +sender+:: the sending socket, used to not self-broadcast
   def broadcast(message, sender=nil)
     @mutex.synchronize do
       @sockets.each do |socket|
@@ -39,6 +56,9 @@ class GlobalChatServer < GServer
     end
   end
 
+  # Remove an inactive user by their socket
+  # Params:
+  # +socket+:: The "dead" socket
   def remove_dead_socket(socket)
     @sockets.delete socket
     ct = @socket_keys[socket]
@@ -48,6 +68,9 @@ class GlobalChatServer < GServer
     @socket_keys.delete socket
   end
 
+  # Used to remove an inactive user by their handle
+  # Params:
+  # +handle+:: inactive user's handle
   def remove_user_by_handle(handle)
     ct = @handle_keys.key(handle)
     handle = @handle_keys[ct]
@@ -64,35 +87,53 @@ class GlobalChatServer < GServer
     end
   end
 
+  # Checks if a token even exists
+  # Params:
+  # +chat_token+:: User's chat token, given on TOKEN command
   def check_token(chat_token)
     sender = @handle_keys[chat_token]
     return !sender.nil?
   end
 
+  # Returns the user's true handle from a token, security measure
+  # Params:
+  # +chat_token+:: User's chat token, given on TOKEN command
   def get_handle(chat_token)
     sender = @handle_keys[chat_token]
     return sender
   end
 
-  # server tell a single socket
+  # Send to a single socket a "message"
+  # Params:
+  # +io+:: Sending socket
+  # +opcode+:: The command opcode
+  # +args+:: The command arguments i.e. [argument, @chat_token]
   def send_message(io, opcode, args)
     msg = opcode + "::!!::" + args.join("::!!::")
     sock_send io, msg
   end
 
+  # Send to a single socket
+  # Params:
+  # +io+:: Sending socket
+  # +msg+:: Entirety of command sans the null terminator
   def sock_send io, msg
     msg = "#{msg}\0"
     log msg
     io.send msg, 0
   end
 
-  # server tell all sockets except
-  # if sender is nil then everyone
+  # Send to all connected sockets a "message"
+  # Params:
+  # +sender+:: Don't broadcast me. Nil means do it for everyone.
+  # +opcode+:: The command opcode
+  # +args+:: The command arguments i.e. [argument, @chat_token]
   def broadcast_message(sender, opcode, args)
     msg = opcode + "::!!::" + args.join("::!!::")
     broadcast msg, sender
   end
 
+  # Respond to GETBUFFER. Create the log for BUFFER message.
   def build_chat_log
     return "" unless @scrollback
     out = ""
@@ -103,7 +144,7 @@ class GlobalChatServer < GServer
     return out
   end
 
-
+  # Clean out any handles who have pinged, but not in 30 seconds (pretty fail-proof)
   def clean_handles
     @handle_keys.each do |k, v|
       if @handle_last_pinged[v] && @handle_last_pinged[v] < Time.now - 30
@@ -113,11 +154,15 @@ class GlobalChatServer < GServer
     end
   end
 
+  # Build handles list for GETHANDLES command
   def build_handle_list
     return @handles.uniq.join("\n")
   end
 
-  # react to allowed commands
+  # Called automatically, parses incoming commands for the server
+  # Params:
+  # +line+:: The command that was just sent
+  # +io+:: The sending io
   def parse_line(line, io)
     parr = line.split("::!!::")
     command = parr[0]
@@ -188,6 +233,7 @@ class GlobalChatServer < GServer
     end
   end
 
+  # Send everyone "PONG" command so they can register for clone-cleaning
   def pong_everyone
     #log "trying to pong"
     if @sockets.length > 0 && !self.stopped?
@@ -198,6 +244,7 @@ class GlobalChatServer < GServer
     end
   end
 
+  # Start PONGing all connected clients, and saving my log, every 5s
   def start_pong_loop
     Thread.new do
       loop do
@@ -220,11 +267,14 @@ class GlobalChatServer < GServer
   #    end
   #    super(clientPort)
   #  end
+
+  # Hook GServer's starting method to start the PONGer
   def starting
     log("GlobalChat2 Server Running")
     start_pong_loop
   end
 
+  # Hook GServer's serve method to process and serve commands
   def serve(io)
     loop do
       data = ""
@@ -245,17 +295,21 @@ class GlobalChatServer < GServer
     end
   end
 
+  # Get the server status. Informational.
   def status
     passworded = (self.password != "")
     scrollback = self.scrollback
     log "#{@server_name} running on GlobalChat2 3.0 platform Replay:#{scrollback} Passworded:#{passworded}"
   end
 
+  # Logging method, used however
+  # Params:
+  # +msg+:: what to log
   def log(msg)
     puts msg
   end
 
-
+  # Persist my chat buffer to disk
   def save_chat_log
     # log "saving chatlog"
     @pstore.transaction do
@@ -265,6 +319,7 @@ class GlobalChatServer < GServer
 
   end
 
+  # Load my saved chat buffer
   def load_chat_log
     # log "loading chatlog"
     @pstore.transaction(true) do
@@ -275,7 +330,11 @@ class GlobalChatServer < GServer
 
 end
 
-
+# Tell the Nexus I am online
+# Params:
+# +chatnet_name+:: The name of my chat server
+# +host+:: Hostname of chat server
+# +port+:: The listening port
 def ping_nexus(chatnet_name, host, port)
   puts "Pinging NexusNet that I'm Online!!"
   uri = URI.parse("http://nexusnet.herokuapp.com/online")
@@ -285,6 +344,7 @@ def ping_nexus(chatnet_name, host, port)
   $published = true
 end
 
+# Tell Nexus I am no longer online
 def nexus_offline
   puts "Informing NexusNet that I have exited!!!"
   Net::HTTP.get_print("nexusnet.herokuapp.com", "/offline")
