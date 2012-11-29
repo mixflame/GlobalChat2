@@ -1,23 +1,27 @@
 GlobalChat 2
 
-modern chat experiment
+how jsilver thinks Chat should work
 
-goal: build a better (than IRC!) chat for enterprise and coders in 100% ruby
+goal: create a non-technical feeling IRC-clone for private teams with useful features to help productivity
 
-see: design ideals document on wiki
-
-simplistic protocol, only 12 commands
+simple protocol
 
 "It actually looks like there has not been that radical development on the chat systems during the last decade. I find that surprising given all the areas where improvements could be made." - Jarkko Oikarinen, Inventor Of IRC
 
-This codebase is the result of applying the principle of Monozukuri to this ancient technology.
+Try to do what IRC founder said and improve chat. Really improve.
 
-easy wins so far not present in traditional IRC:
+New features not found in IRC Protocol:
 
-* autoscrollback+logsaving
+* persistent log with buffer replay
 
-* multiline pasting in a single line
+* send multiple lines in a message, no need for Pastie/Gist/PasteBin/etc
 
-* tons (millions) of useless "features" removed from IRC not useful to everday productivity
+* roomless, single server design
+
+* lack of slash commands
+
+* send anything, handle can be anything too
+
+* written entirely in Ruby
 
 <a href='http://www.pledgie.com/campaigns/18682'><img alt='Click here to lend your support to: GlobalChat: Beat IRC in Pure Ruby and make a donation at www.pledgie.com !' src='http://www.pledgie.com/campaigns/18682.png?skin_name=chrome' border='0' /></a>
