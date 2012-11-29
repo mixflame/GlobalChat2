@@ -219,7 +219,6 @@ class GlobalChatServer < GServer
         send_message(io, "BUFFER", [buffer])
       elsif command == "MESSAGE"
         msg = parr[1]
-        message = "#{handle}: #{msg}\n"
         @buffer << [handle, msg]
         broadcast_message(io, "SAY", [handle, msg])
       elsif command == "PING"
@@ -337,9 +336,9 @@ end
 # +port+:: The listening port
 def ping_nexus(chatnet_name, host, port)
   puts "Pinging NexusNet that I'm Online!!"
-  uri = URI.parse("http://nexusnet.herokuapp.com/online")
-  query = {:name => chatnet_name, :port => port, :host => host}
-  uri.query = URI.encode_www_form( query )
+  uri = URI.parse("http://nexusnet.herokuapp.com/online?name=#{chatnet_name}&host=#{host}&port=#{port}")
+  #query = {:name => chatnet_name, :port => port, :host => host}
+  #uri.query = URI.encode_www_form( query )
   Net::HTTP.get(uri)
   $published = true
 end
@@ -360,9 +359,7 @@ $gc.password = "" # set a password here
 $gc.scrollback = true
 $gc.start
 
-if ENV["RUBY_VERSION"] && ENV["RUBY_VERSION"].include?("1.9")
-  ping_nexus("GlobalChatNet2", "globalchat2.net", $gc.port)
-end
+ping_nexus("GlobalChatNet2", "globalchat2.net", $gc.port)
 
 $gc.status
 
