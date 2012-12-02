@@ -5,19 +5,31 @@ class ServerListController
   attr_accessor :server_list_hash, :names, :server_list_table, :server_list_window, :gcc, :chat_window, :host, :port, :password, :handle
 
   def initialize
-    get_servers
+    Thread.new do
+      sleep 2
+      refresh(self)
+    end
+  end
+  
+  def run_on_main_thread &block
+    block.performSelectorOnMainThread "call:", withObject:nil, waitUntilDone:false
   end
 
   def get_servers
-    @server_list_hash = Net::HTTP.get('nexusnet.herokuapp.com', '/msl').
-    split("\n").
-    collect do |s|
-      par = s.split("-!!!-")
-      {:host => par[1], :name => par[0], :port => par[2]}
+    Thread.new do
+      @server_list_hash = Net::HTTP.get('nexusnet.herokuapp.com', '/msl').
+      split("\n").
+      collect do |s|
+        par = s.split("-!!!-")
+        {:host => par[1], :name => par[0], :port => par[2]}
+      end
+
+      @names = @server_list_hash.map { |i| i[:name] }
+      
+      run_on_main_thread do
+        @server_list_table.reloadData
+      end
     end
-
-    @names = @server_list_hash.map { |i| i[:name] }
-
   end
 
   def tableView(view, objectValueForTableColumn:column, row:index)
@@ -31,7 +43,6 @@ class ServerListController
 
   def refresh(sender)
     get_servers
-    @server_list_table.reloadData
   end
 
   def changeInfo(sender)

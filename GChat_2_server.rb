@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+require 'rubygems'
+require 'ruby_to_ansi_c'
 
 # A chat server with a custom protocol and roomless design
 #
@@ -329,41 +331,42 @@ class GlobalChatServer < GServer
 
 end
 
-# Tell the Nexus I am online
-# Params:
-# +chatnet_name+:: The name of my chat server
-# +host+:: Hostname of chat server
-# +port+:: The listening port
-def ping_nexus(chatnet_name, host, port)
-  puts "Pinging NexusNet that I'm Online!!"
-  uri = URI.parse("http://nexusnet.herokuapp.com/online?name=#{chatnet_name}&host=#{host}&port=#{port}")
-  #query = {:name => chatnet_name, :port => port, :host => host}
-  #uri.query = URI.encode_www_form( query )
-  Net::HTTP.get(uri)
-  $published = true
-end
+# # Tell the Nexus I am online
+# # Params:
+# # +chatnet_name+:: The name of my chat server
+# # +host+:: Hostname of chat server
+# # +port+:: The listening port
+# def ping_nexus(chatnet_name, host, port)
+#   puts "Pinging NexusNet that I'm Online!!"
+#   uri = URI.parse("http://nexusnet.herokuapp.com/online?name=#{chatnet_name}&host=#{host}&port=#{port}")
+#   #query = {:name => chatnet_name, :port => port, :host => host}
+#   #uri.query = URI.encode_www_form( query )
+#   Net::HTTP.get(uri)
+#   $published = true
+# end
 
-# Tell Nexus I am no longer online
-def nexus_offline
-  puts "Informing NexusNet that I have exited!!!"
-  Net::HTTP.get_print("nexusnet.herokuapp.com", "/offline")
-end
+# # Tell Nexus I am no longer online
+# def nexus_offline
+#   puts "Informing NexusNet that I have exited!!!"
+#   Net::HTTP.get_print("nexusnet.herokuapp.com", "/offline")
+# end
 
-at_exit do
-  nexus_offline
-  $gc.save_chat_log
-end
+# at_exit do
+#   nexus_offline
+#   $gc.save_chat_log
+# end
 
-$gc = GlobalChatServer.new(9994, '0.0.0.0', 1000, $stderr, true)
-$gc.password = "" # set a password here
-$gc.scrollback = true
-$gc.start
+# $gc = GlobalChatServer.new(9994, '0.0.0.0', 1000, $stderr, true)
+# $gc.password = "" # set a password here
+# $gc.scrollback = true
+# $gc.start
 
-ping_nexus("GlobalChatNet2", "globalchat2.net", $gc.port)
+# ping_nexus("GlobalChatNet2", "globalchat2.net", $gc.port)
 
-$gc.status
+# $gc.status
 
-$gc.join
+# $gc.join
 
 
-
+result = RubyToAnsiC.translate_all_of GlobalChatServer
+puts result
