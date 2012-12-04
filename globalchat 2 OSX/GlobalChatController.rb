@@ -216,8 +216,8 @@ class GlobalChatController
         log "Connected to #{@server_name} \n"
         @chat_window.setTitle @server_name
       end
-      get_handles
       get_log
+      get_handles
       $connected = true
     elsif command == "HANDLES"
       @nicks = parr.last.split("\n")

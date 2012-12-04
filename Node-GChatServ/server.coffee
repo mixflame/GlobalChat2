@@ -28,15 +28,10 @@ GUID = ->
 
 log = (msg) ->
   #unless msg.indexOf('PING') > 0 || msg.indexOf('PONG') > 0
-  console.log "#{msg}\n"
+  util.log "#{msg}\n"
 
 p = (obj) ->
   log util.inspect(obj)
-
-class Client
-  constructor: (stream) ->
-    @stream = stream
-    @name = null
 
 buffer = []
 sockets = []
@@ -80,17 +75,19 @@ save_chat_log = ->
 
 load_chat_log = ->
   fs.exists "tmp/#{server_name}.log", (exists) ->
-  if exists?
-    fs.readFile "tmp/#{server_name}.log", (err, data) ->
-      throw err if err
-      for msgstr in data.toString().split("\n")
-        break if msgstr == ''
-        msg = msgstr.split(": ")
-        buffer.push [msg[0], msg[1]]
+    if exists == true
+      fs.readFile "tmp/#{server_name}.log", (err, data) ->
+        throw err if err
+        for msgstr in data.toString().split("\n")
+          break if msgstr == ''
+          msg = msgstr.split(": ")
+          buffer.push [msg[0], msg[1]]
+
+load_chat_log()
 
 broadcast = (message, sender) ->
-  for c in sockets when c.stream isnt sender
-    sock_send c.stream, message
+  for s in sockets when s isnt sender
+    sock_send s, message
   p message
 remove_user_by_handle = (handle) ->
   ct = ct for ct, nick of handle_keys when nick is handle
@@ -162,7 +159,6 @@ parse_line = (line, io) ->
       handle_keys[chat_token] = handle
       socket_keys[io] = chat_token
       handles.push handle
-      sockets.push io
       send_message(io, "TOKEN", [chat_token, handle, server_name])
       broadcast_message(io, "JOIN", [handle])
     else
@@ -193,7 +189,7 @@ parse_line = (line, io) ->
       broadcast_message(null, "LEAVE", [handle])
       io.end
 pong_everyone = ->
-  if sockets.length > 0
+  if sockets.length > 0 && handles.length > 0
     broadcast_message(null, "PONG", [build_handle_list()])
     clean_handles
 
@@ -204,9 +200,7 @@ server = net.createServer((socket) ->
   socket.setEncoding "utf8"
   socket.setKeepAlive true
   socket.setNoDelay false
-  client = new Client(socket)
-  client.name = socket.remoteAddress + ":" + socket.remotePort
-  sockets.push client
+  sockets.push socket
 
   socket.on "data", (data) ->
     line = data.match(/[^\0]+/).toString() #magic part
@@ -221,8 +215,6 @@ server = net.createServer((socket) ->
 ).listen port
 
 log "#{server_name} running on GC2-Node at #{host}:#{port} Replay:#{scrollback} Passworded:#{password != ''} Private:#{is_private}"
-
-load_chat_log()
 
 ping_nexus()
 
