@@ -71,7 +71,7 @@ class GlobalChatController
         data = ""
         begin
           while line = @ts.recv(1)
-            raise if @last_ping < Time.now - 30
+            #raise if @last_ping && @last_ping < Time.now - 30
             break if line == "\0"
             data += line
           end
@@ -79,7 +79,7 @@ class GlobalChatController
           autoreconnect
           break
         end
-        #p data
+        #log data
         parse_line(data)
       end
     end
@@ -98,7 +98,7 @@ class GlobalChatController
       log "Connected to #{@server_name} \n"
       ping
       get_handles
-      get_log
+      # get_log
       $connected = true
     elsif command == "PONG"
       @nicks = parr.last.split("\n")
@@ -106,6 +106,7 @@ class GlobalChatController
     elsif command == "HANDLES"
       @nicks = parr.last.split("\n")
       output_to_chat_window @nicks.inspect
+      get_log
     elsif command == "BUFFER"
       buffer = parr[1]
       unless buffer == "" || buffer == nil
@@ -150,7 +151,7 @@ class GlobalChatController
   # +msg+:: the command string to be packed and sent
   def sock_send io, msg
     begin
-      #p msg
+      #log msg
       msg = "#{msg}\0"
       io.send msg, 0
     rescue
@@ -218,9 +219,9 @@ end
 
 
 puts 'enter handle'
-$name = gets
+$name = 'jsilver' #gets
 puts 'enter server'
-$server = gets
+$server = 'localhost' #gets
 
 # Clean up and easily recreate the console client
 def start_client
