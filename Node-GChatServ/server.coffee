@@ -1,12 +1,15 @@
+#!/usr/bin/env coffee
+
+# GC2-Node
 # Ugly mess of a program, I'll admit it
 # But it works.
-# Node GC2 Server in Coffee
 # Full support for GC2 Protocol v3
-# Support: Scrollback
-# Coming soon: Logsaving. Nexus Pinging.
+# Support: Scrollback. Logsaving. Nexus Pinging. Arguments.
+# Coming soon: Nothing.
 
 net = require("net")
 util = require("util")
+http = require("http")
 
 Array::unique = ->
   output = {}
@@ -36,16 +39,35 @@ class Client
 
 buffer = []
 sockets = []
-server_name = "GlobalChatNode"
-password = ""
-port = 9994
-scrollback = true
+host = process.argv[2] # 'localhost'
+port = parseInt(process.argv[3]) # 9994
+server_name = process.argv[4]
+password = process.argv[5] || ""
+is_private = process.argv[6] == "true"
+scrollback = process.argv[7] == "true"
+
 handle_keys = {}
 socket_keys = {}
 handle_last_pinged = {}
 handles = []
 sockets = []
 
+# p is_private
+
+
+ping_nexus = ->
+  if is_private == false
+    log "Pinging NexusNet that I'm Online!!"
+    req = http.get("http://nexusnet.herokuapp.com/online?name=#{server_name}&host=#{host}&port=#{port}", (res) ->
+      log "Nexus Pinged."
+    )
+
+nexus_offline = ->
+  if is_private == false
+    log "Informing NexusNet that I have exited!!!"
+    req = http.get("nexusnet.herokuapp.com", "/offline_by_name?name=#{server_name}", (res) ->
+      log "Nexus informed."
+    )
 
 save_chat_log = ->
   fs = require("fs")
@@ -55,17 +77,16 @@ save_chat_log = ->
     else
       log "saved chatlog"
 
-
 load_chat_log = ->
   fs = require("fs")
-  fs.readFile "#{server_name}.log", (err, data) ->
-    throw err if err
-    for msgstr in data.toString().split("\n")
-      break if msgstr == ''
-      msg = msgstr.split(": ")
-      buffer.push [msg[0], msg[1]]
-
-load_chat_log()
+  fs.exists "#{server_name}.log", (exists) ->
+  if exists?
+    fs.readFile "#{server_name}.log", (err, data) ->
+      throw err if err
+      for msgstr in data.toString().split("\n")
+        break if msgstr == ''
+        msg = msgstr.split(": ")
+        buffer.push [msg[0], msg[1]]
 
 broadcast = (message, sender) ->
   for c in sockets when c.stream isnt sender
@@ -172,8 +193,11 @@ parse_line = (line, io) ->
       broadcast_message(null, "LEAVE", [handle])
       io.end
 pong_everyone = ->
-  broadcast_message(null, "PONG", [build_handle_list()])
-  clean_handles
+  if sockets.length > 0
+    broadcast_message(null, "PONG", [build_handle_list()])
+    clean_handles
+
+# start the server
 
 server = net.createServer((socket) ->
   socket.setTimeout 0
@@ -196,8 +220,35 @@ server = net.createServer((socket) ->
 
 ).listen port
 
-log "#{server_name} running on GlobalChat2 3.0 platform Replay:#{scrollback} Passworded:#{password != ''}"
+log "#{server_name} running on GC2-Node at #{host}:#{port} Replay:#{scrollback} Passworded:#{password != ''} Private:#{is_private}"
+
+load_chat_log()
+
+ping_nexus()
+
+# timers
 
 setInterval(pong_everyone, 5000)
-
 setInterval(save_chat_log, 30000)
+
+# crash/exit
+
+# process.on('uncaughtException', (e) ->
+#   log "Uncaught #{e}.. Crashing"
+#   # unless is_private?
+#   nexus_offline()
+#   save_chat_log()
+# )
+
+# process.on('SIGTERM', ->
+#   log "Terminated."
+#   # unless is_private?
+#   nexus_offline()
+#   save_chat_log()
+# )
+
+process.on('exit', ->
+  log "Terminated."
+  nexus_offline()
+  save_chat_log()
+)

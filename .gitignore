@@ -1,4 +1,4 @@
 gchat2pro.pstore
 gchat.pstore
 *.dat*
-GlobalChatNode.log
+Node-GChatServ/**.log
