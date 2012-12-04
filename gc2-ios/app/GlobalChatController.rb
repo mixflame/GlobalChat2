@@ -147,6 +147,7 @@ class GlobalChatController < UIViewController
       @handle = parr[2]
       @server_name = parr[3]
       output_to_chat_window "Connected to #{@server_name} \n"
+      ping
       get_log
       $connected = true
     elsif command == "PONG"

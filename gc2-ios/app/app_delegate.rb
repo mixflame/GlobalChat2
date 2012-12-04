@@ -9,6 +9,8 @@ class AppDelegate
     $queue = Dispatch::Queue.new('com.jonsoft.globalchat')
     $mutex = Mutex.new
 
+    UIApplication.sharedApplication.setStatusBarHidden(true, animated:false)
+
     @window = UIWindow.alloc.initWithFrame(UIScreen.mainScreen.bounds)
 
     switch_to_vc(load_vc("ServerList"))
