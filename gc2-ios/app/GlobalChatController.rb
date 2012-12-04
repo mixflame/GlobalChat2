@@ -147,8 +147,6 @@ class GlobalChatController < UIViewController
       @handle = parr[2]
       @server_name = parr[3]
       output_to_chat_window "Connected to #{@server_name} \n"
-      ping
-      get_handles
       get_log
       $connected = true
     elsif command == "PONG"
@@ -164,6 +162,7 @@ class GlobalChatController < UIViewController
         @chat_buffer = buffer
         update_and_scroll
       end
+      get_handles
     elsif command == "SAY"
       handle = parr[1]
       msg = parr[2]
