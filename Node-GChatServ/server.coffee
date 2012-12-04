@@ -10,6 +10,7 @@
 net = require("net")
 util = require("util")
 http = require("http")
+fs = require("fs")
 
 Array::unique = ->
   output = {}
@@ -70,18 +71,17 @@ nexus_offline = ->
     )
 
 save_chat_log = ->
-  fs = require("fs")
-  fs.writeFile "#{server_name}.log", build_chat_log(), (err) ->
-    if err
-      log err
-    else
-      log "saved chatlog"
+  fs.mkdir "tmp", ->
+    fs.writeFile "tmp/#{server_name}.log", build_chat_log(), (err) ->
+      if err
+        log err
+      else
+        log "saved chatlog"
 
 load_chat_log = ->
-  fs = require("fs")
-  fs.exists "#{server_name}.log", (exists) ->
+  fs.exists "tmp/#{server_name}.log", (exists) ->
   if exists?
-    fs.readFile "#{server_name}.log", (err, data) ->
+    fs.readFile "tmp/#{server_name}.log", (err, data) ->
       throw err if err
       for msgstr in data.toString().split("\n")
         break if msgstr == ''
