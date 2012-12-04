@@ -12,7 +12,20 @@ Motion::Project::App.setup do |app|
   app.identifier = 'gc2-ios'
 
   app.deployment_target = "5.0"
-  app.version = "2.0"
+
+  app.info_plist['CFBundleShortVersionString'] = "2.0.0"
+  app.short_version = "2.0"
+  app.version       = "2.0"
+  {
+    'DTSDKName'         => 'iphoneos6.0',
+    'DTPlatformVersion' => '6.0',
+    'DTXcode'           => '0450',
+    'DTSDKBuild'        => '10A403',
+    'DTXcodeBuild'      => '4G182',
+    'DTPlatformBuild'   => '10A403'
+  }.each do |k, v|
+    app.info_plist[k] = v
+  end
 
   # app.provisioning_profile = "/Users/jsilverman2/Library/MobileDevice/Provisioning Profiles/60F7EEB6-6E11-4713-9039-839CDBB930D4.mobileprovision"
   # app.codesign_certificate = "iPhone Distribution: Jonathan Silverman"
