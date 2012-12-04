@@ -1,3 +1,10 @@
+# Ugly mess of a program, I'll admit it
+# But it works.
+# Node GC2 Server in Coffee
+# Full support for GC2 Protocol v3
+# Support: Scrollback
+# Coming soon: Logsaving. Nexus Pinging.
+
 net = require("net")
 util = require("util")
 
