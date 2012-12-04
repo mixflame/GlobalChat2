@@ -27,12 +27,12 @@ class Client
     @stream = stream
     @name = null
 
-global.buffer = []
+buffer = []
 sockets = []
 server_name = "GlobalChatNode"
 password = ""
 port = 9994
-scrollback = false
+scrollback = true
 handle_keys = {}
 socket_keys = {}
 handle_last_pinged = {}
@@ -81,10 +81,10 @@ broadcast_message = (sender, opcode, args) ->
 build_chat_log = ->
   return "" if scrollback == false
   out = ""
-  if global.buffer.length > 30
-    displayed_buffer = global.buffer.slice(global.buffer.length-30, global.buffer.length)
+  if buffer.length > 30
+    displayed_buffer = buffer.slice(buffer.length-30, buffer.length)
   else
-    displayed_buffer = global.buffer
+    displayed_buffer = buffer
   displayed_buffer.forEach (msg) ->
     out += "#{msg[0]}: #{msg[1]}\n"
   out
@@ -129,12 +129,11 @@ parse_line = (line, io) ->
     if command == "GETHANDLES"
       send_message(io, "HANDLES", [build_handle_list()])
     else if command == "GETBUFFER"
-      global.buffer = build_chat_log()
-      send_message(io, "BUFFER", [global.buffer])
+      out = build_chat_log()
+      send_message(io, "BUFFER", [out])
     else if command == "MESSAGE"
       msg = parr[1]
-      #global.buffer = global.buffer || []
-      #global.buffer.push [handle, msg]
+      buffer.push [handle, msg]
       broadcast_message(io, "SAY", [handle, msg])
     else if command == "PING"
       unless handles.indexOf(handle) > 0
