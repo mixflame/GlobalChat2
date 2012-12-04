@@ -46,6 +46,27 @@ handle_last_pinged = {}
 handles = []
 sockets = []
 
+
+save_chat_log = ->
+  fs = require("fs")
+  fs.writeFile "#{server_name}.log", build_chat_log(), (err) ->
+    if err
+      log err
+    else
+      log "saved chatlog"
+
+
+load_chat_log = ->
+  fs = require("fs")
+  fs.readFile "#{server_name}.log", (err, data) ->
+    throw err if err
+    for msgstr in data.toString().split("\n")
+      break if msgstr == ''
+      msg = msgstr.split(": ")
+      buffer.push [msg[0], msg[1]]
+
+load_chat_log()
+
 broadcast = (message, sender) ->
   for c in sockets when c.stream isnt sender
     sock_send c.stream, message
@@ -178,3 +199,5 @@ server = net.createServer((socket) ->
 log "#{server_name} running on GlobalChat2 3.0 platform Replay:#{scrollback} Passworded:#{password != ''}"
 
 setInterval(pong_everyone, 5000)
+
+setInterval(save_chat_log, 30000)
