@@ -34,12 +34,14 @@ class GlobalChatController
   :password,
   :ts,
   :msg_count,
-  :last_ping
+  :last_ping,
+  :away_nicks
 
   def initialize
     @queue = Dispatch::Queue.new('com.jonsoft.globalchat')
     @sent_messages = [""]
     @sent_msg_index = 0
+    @away_nicks = []
   end
 
   def quit(sender)
@@ -47,6 +49,14 @@ class GlobalChatController
       @application.terminate(self)
     else
       return_to_server_list
+    end
+  end
+
+  def tableView(tv, willDisplayCell:cell, forTableColumn:col, row:the_row)
+    if @away_nicks.include?(cell.stringValue)
+      cell.setTextColor NSColor.grayColor
+    else
+      cell.setTextColor NSColor.blackColor
     end
   end
 
@@ -76,6 +86,7 @@ class GlobalChatController
       select_chat_text
       return true
     elsif commandSelector.description == NSString.stringWithUTF8String("insertTab:")
+      #tabby
       message = @chat_message.stringValue
       last_letters_before_tab = message.split(" ").last
       matches = @nicks.grep /^#{last_letters_before_tab}/
@@ -88,9 +99,7 @@ class GlobalChatController
       end
       return true
     end
-
     return false
-
   end
 
   def cleanup
@@ -283,7 +292,7 @@ class GlobalChatController
     add_msg(self.handle, message)
   end
 
-  def add_msg(handle, message)
+  def check_if_pinged(handle, message)
     if @handle != handle && message.include?(@handle)
       NSBeep()
       Notification.send(handle, message)
@@ -292,6 +301,19 @@ class GlobalChatController
       @msg_count += 1
       NSApplication.sharedApplication.dockTile.setBadgeLabel(@msg_count.to_s)
     end
+  end
+
+  def check_if_away_or_back(handle, message)
+    if message.include?("brb")
+      @away_nicks << handle
+    elsif message.include?("back")
+      @away_nicks.delete(handle)
+    end
+  end
+
+  def add_msg(handle, message)
+    check_if_pinged(handle, message)
+    check_if_away_or_back(handle, message)
     msg = "#{handle}: #{message}\n"
     output_to_chat_window(msg)
   end
