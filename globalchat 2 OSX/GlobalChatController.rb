@@ -35,13 +35,15 @@ class GlobalChatController
   :ts,
   :msg_count,
   :last_ping,
-  :away_nicks
+  :away_nicks,
+  :match_index
 
   def initialize
     @queue = Dispatch::Queue.new('com.jonsoft.globalchat')
     @sent_messages = [""]
     @sent_msg_index = 0
     @away_nicks = []
+    @match_index = 0
   end
 
   def quit(sender)
@@ -89,14 +91,18 @@ class GlobalChatController
       #tabby
       message = @chat_message.stringValue
       last_letters_before_tab = message.split(" ").last
-      matches = @nicks.grep /^#{last_letters_before_tab}/
-      match_index = 0
-      match_index += 1
+      if !@last_match
+        matches = @nicks.grep /^#{last_letters_before_tab}/
+      else
+        matches = @nicks.grep /^#{@last_match}/
+      end
+      @match_index += 1
       if matches.length > 0
-        match_index = match_index % matches.length
-        match = matches[match_index]
+        @match_index = @match_index % matches.length
+        match = matches[@match_index]
         @chat_message.setStringValue message.reverse.sub(last_letters_before_tab.reverse, match.reverse).reverse
       end
+      @last_match = last_letters_before_tab
       return true
     end
     return false
