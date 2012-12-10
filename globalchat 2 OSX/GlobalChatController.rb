@@ -75,6 +75,18 @@ class GlobalChatController
       cycle_chat_messages
       select_chat_text
       return true
+    elsif commandSelector.description == NSString.stringWithUTF8String("insertTab:")
+      message = @chat_message.stringValue
+      last_letters_before_tab = message.split(" ").last
+      matches = @nicks.grep /^#{last_letters_before_tab}/
+      match_index = 0
+      match_index += 1
+      if matches.length > 0
+        match_index = match_index % matches.length
+        match = matches[match_index]
+        @chat_message.setStringValue message.reverse.sub(last_letters_before_tab.reverse, match.reverse).reverse
+      end
+      return true
     end
 
     return false
@@ -99,11 +111,6 @@ class GlobalChatController
     rescue
       autoreconnect
     end
-  end
-
-  def foghornMe(sender)
-    @chat_message.setStringValue("#{@nicks[sender.selectedRow]}: ")
-    select_chat_text
   end
 
   def select_chat_text
@@ -304,8 +311,8 @@ class GlobalChatController
 
   def ping
     #@queue.async do
-      @last_ping = Time.now
-      send_message("PING", [@chat_token])
+    @last_ping = Time.now
+    send_message("PING", [@chat_token])
     #end
   end
 

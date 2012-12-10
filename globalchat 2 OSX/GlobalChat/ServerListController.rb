@@ -6,11 +6,11 @@ class ServerListController
 
   def initialize
     Thread.new do
-      sleep 2
+      sleep 0.5
       refresh(self)
     end
   end
-  
+
   def run_on_main_thread &block
     block.performSelectorOnMainThread "call:", withObject:nil, waitUntilDone:false
   end
@@ -25,7 +25,7 @@ class ServerListController
       end
 
       @names = @server_list_hash.map { |i| i[:name] }
-      
+
       run_on_main_thread do
         @server_list_table.reloadData
       end
