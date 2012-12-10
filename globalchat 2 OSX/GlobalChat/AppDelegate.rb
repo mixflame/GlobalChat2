@@ -1,6 +1,6 @@
 class AppDelegate
 
-  attr_accessor :window, :slc, :gcc
+  attr_accessor :window, :slc, :gcc, :ver_menu_item
 
   def applicationDidFinishLaunching(a_notification)
 
@@ -8,6 +8,12 @@ class AppDelegate
     @slc.handle.setStringValue($prefs.stringForKey("handle") || "")
     @slc.host.setStringValue($prefs.stringForKey("host") || "")
     @slc.port.setStringValue($prefs.stringForKey("port") || "")
+
+    infoDict = NSBundle.mainBundle.infoDictionary
+    versionNum = infoDict.objectForKey "CFBundleShortVersionString"
+    build = infoDict.objectForKey "CFBundleVersion"
+
+    ver_menu_item.setTitle "v#{versionNum} build #{build}"
 
     $connected = false
 
