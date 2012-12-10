@@ -73,6 +73,15 @@
 							<string key="NSTitle">GlobalChat</string>
 							<object class="NSMutableArray" key="NSMenuItems">
 								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSMenuItem" id="246221199">
+									<reference key="NSMenu" ref="110575045"/>
+									<string key="NSTitle">Hide</string>
+									<string key="NSKeyEquiv">h</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="35465992"/>
+									<reference key="NSMixedImage" ref="502551668"/>
+								</object>
 								<object class="NSMenuItem" id="696874131">
 									<reference key="NSMenu" ref="110575045"/>
 									<string key="NSTitle">Cut</string>
@@ -656,6 +665,7 @@ wGw</bytes>
 							<string key="NSFrameSize">{732, 24}</string>
 							<reference key="NSSuperview" ref="439893737"/>
 							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="565092621">
@@ -853,6 +863,7 @@ wGw</bytes>
 							<string key="NSFrame">{{199, 5}, {82, 32}}</string>
 							<reference key="NSSuperview" ref="102754749"/>
 							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="119405358">
@@ -1136,6 +1147,14 @@ wGw</bytes>
 					<int key="connectionID">693</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">hide:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="246221199"/>
+					</object>
+					<int key="connectionID">705</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">window</string>
 						<reference key="source" ref="976324537"/>
@@ -1417,6 +1436,7 @@ wGw</bytes>
 							<reference ref="22661019"/>
 							<reference ref="458603689"/>
 							<reference ref="696874131"/>
+							<reference ref="246221199"/>
 						</object>
 						<reference key="parent" ref="694149608"/>
 					</object>
@@ -1808,6 +1828,11 @@ wGw</bytes>
 						<reference key="object" ref="696874131"/>
 						<reference key="parent" ref="110575045"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">704</int>
+						<reference key="object" ref="246221199"/>
+						<reference key="parent" ref="110575045"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -1877,6 +1902,7 @@ wGw</bytes>
 					<string>687.IBPluginDependency</string>
 					<string>690.IBPluginDependency</string>
 					<string>692.IBPluginDependency</string>
+					<string>704.IBPluginDependency</string>
 				</object>
 				<object class="NSArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1943,6 +1969,7 @@ wGw</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -1957,7 +1984,7 @@ wGw</bytes>
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">703</int>
+			<int key="maxID">705</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
