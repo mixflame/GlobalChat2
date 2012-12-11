@@ -207,6 +207,17 @@ class GlobalChatController
     end
   end
 
+  def show_chat
+    run_on_main_thread do
+      @server_list_window.orderOut(self)
+      @chat_window.makeKeyAndOrderFront(nil)
+      if @server_name
+        log "Connected to #{@server_name} \n"
+        @chat_window.setTitle @server_name
+      end
+    end
+  end
+
   def update_and_scroll
     parse_links
     update_chat_views
@@ -243,14 +254,7 @@ class GlobalChatController
       @handle = parr[2]
       @server_name = parr[3]
       ping
-      run_on_main_thread do
-        @server_list_window.orderOut(self)
-        @chat_window.makeKeyAndOrderFront(nil)
-        if @server_name
-          log "Connected to #{@server_name} \n"
-          @chat_window.setTitle @server_name
-        end
-      end
+      show_chat
       get_log
       get_handles
       $connected = true
