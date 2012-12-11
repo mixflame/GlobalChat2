@@ -9,6 +9,9 @@ class AppDelegate
     @slc.host.setStringValue($prefs.stringForKey("host") || "")
     @slc.port.setStringValue($prefs.stringForKey("port") || "")
 
+    @slc.server_list_table.target = @slc
+    @slc.server_list_table.doubleAction = 'connect:'
+
     infoDict = NSBundle.mainBundle.infoDictionary
     versionNum = infoDict.objectForKey "CFBundleShortVersionString"
     build = infoDict.objectForKey "CFBundleVersion"

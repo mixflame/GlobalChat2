@@ -362,7 +362,7 @@
 															<string key="NSFrameSize">{583, 360}</string>
 															<reference key="NSSuperview" ref="487013449"/>
 															<reference key="NSWindow"/>
-															<reference key="NSNextKeyView" ref="273003454"/>
+															<reference key="NSNextKeyView" ref="683953487"/>
 															<string key="NSReuseIdentifierKey">_NS:13</string>
 															<object class="NSTextContainer" key="NSTextContainer" id="48100807">
 																<object class="NSLayoutManager" key="NSLayoutManager">
@@ -640,7 +640,7 @@ wGw</bytes>
 											<string key="NSFrameSize">{600, 362}</string>
 											<reference key="NSSuperview" ref="756812729"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="683953487"/>
+											<reference key="NSNextKeyView" ref="487013449"/>
 											<string key="NSReuseIdentifierKey">_NS:9</string>
 											<int key="NSsFlags">133138</int>
 											<reference key="NSVScroller" ref="273003454"/>
@@ -673,7 +673,6 @@ wGw</bytes>
 							<string key="NSFrameSize">{732, 24}</string>
 							<reference key="NSSuperview" ref="439893737"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="565092621">
@@ -794,7 +793,6 @@ wGw</bytes>
 													</object>
 													<int key="NSResizingMask">3</int>
 													<bool key="NSIsResizeable">YES</bool>
-													<bool key="NSIsEditable">YES</bool>
 													<reference key="NSTableView" ref="708247185"/>
 												</object>
 											</object>
@@ -871,7 +869,6 @@ wGw</bytes>
 							<string key="NSFrame">{{199, 5}, {82, 32}}</string>
 							<reference key="NSSuperview" ref="102754749"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="119405358">
