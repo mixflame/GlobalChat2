@@ -228,7 +228,7 @@ def start_client
   `clear`
   gcc = GlobalChatController.new
   gcc.handle = $name.strip || "jsilver-console"
-  gcc.host = $server.strip || "localhost"
+  gcc.host = $server.strip || "globalchat2.net"
   gcc.port = 38139
   gcc.password = ""
   gcc.nicks = []
