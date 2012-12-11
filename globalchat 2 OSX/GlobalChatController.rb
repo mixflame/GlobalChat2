@@ -135,13 +135,23 @@ class GlobalChatController
 
   def update_chat_views
     run_on_main_thread do
-      @chat_window_text.setString(NSString.stringWithUTF8String(self.chat_buffer))
+      # @chat_window_text.setString(NSString.stringWithUTF8String(self.chat_buffer))
       frame_height = self.scroll_view.documentView.frame.size.height
       content_size = self.scroll_view.contentSize.height
       y = @chat_window_text.string.length
       self.scroll_view.setDrawsBackground false
       self.chat_window_text.scrollRangeToVisible NSRange.new(y, 0)
       self.scroll_view.reflectScrolledClipView(self.scroll_view.contentView)
+    end
+  end
+
+  def parse_links
+    run_on_main_thread do
+      @chat_window_text.setEditable(true)
+      @chat_window_text.setAutomaticLinkDetectionEnabled(true)
+      @chat_window_text.textStorage.setAttributedString(NSAttributedString.new.initWithString(NSString.stringWithUTF8String(self.chat_buffer)))
+      @chat_window_text.checkTextInDocument nil
+      @chat_window_text.setEditable false
     end
   end
 
@@ -198,6 +208,7 @@ class GlobalChatController
   end
 
   def update_and_scroll
+    parse_links
     update_chat_views
   end
 
