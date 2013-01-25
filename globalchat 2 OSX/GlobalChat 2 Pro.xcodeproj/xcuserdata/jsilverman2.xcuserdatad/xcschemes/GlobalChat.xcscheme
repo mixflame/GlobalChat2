@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EF0D4E2A1579F7EA006FE21B"
-               BuildableName = "Production"
-               BlueprintName = "Production"
-               ReferencedContainer = "container:GlobalChat.xcodeproj">
+               BlueprintIdentifier = "EF0D4E211579F7EA006FE21B"
+               BuildableName = "GlobalChat 2 Pro.app"
+               BlueprintName = "GlobalChat 2 Pro"
+               ReferencedContainer = "container:GlobalChat 2 Pro.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -29,6 +29,15 @@
       buildConfiguration = "Debug">
       <Testables>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "EF0D4E211579F7EA006FE21B"
+            BuildableName = "GlobalChat 2 Pro.app"
+            BlueprintName = "GlobalChat 2 Pro"
+            ReferencedContainer = "container:GlobalChat 2 Pro.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
@@ -39,6 +48,15 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
+      <BuildableProductRunnable>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "EF0D4E211579F7EA006FE21B"
+            BuildableName = "GlobalChat 2 Pro.app"
+            BlueprintName = "GlobalChat 2 Pro"
+            ReferencedContainer = "container:GlobalChat 2 Pro.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -48,6 +66,15 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
+      <BuildableProductRunnable>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "EF0D4E211579F7EA006FE21B"
+            BuildableName = "GlobalChat 2 Pro.app"
+            BlueprintName = "GlobalChat 2 Pro"
+            ReferencedContainer = "container:GlobalChat 2 Pro.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

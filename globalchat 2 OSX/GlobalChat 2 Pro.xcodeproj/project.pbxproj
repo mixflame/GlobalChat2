@@ -31,12 +31,12 @@
 
 /* Begin PBXFileReference section */
 		42B66140161614E100381E59 /* myIcon.iconset */ = {isa = PBXFileReference; lastKnownFileType = folder.iconset; path = myIcon.iconset; sourceTree = "<group>"; };
-		EF0D4E221579F7EA006FE21B /* GlobalChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GlobalChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF0D4E221579F7EA006FE21B /* GlobalChat 2 Pro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GlobalChat 2 Pro.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF0D4E261579F7EA006FE21B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		EF0D4E2F1579F7EA006FE21B /* GlobalChat-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GlobalChat-Info.plist"; sourceTree = "<group>"; };
+		EF0D4E2F1579F7EA006FE21B /* GlobalChat 2 Pro-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GlobalChat 2 Pro-Info.plist"; sourceTree = "<group>"; };
 		EF0D4E311579F7EA006FE21B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		EF0D4E331579F7EA006FE21B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		EF0D4E351579F7EA006FE21B /* GlobalChat-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GlobalChat-Prefix.pch"; sourceTree = "<group>"; };
+		EF0D4E351579F7EA006FE21B /* GlobalChat 2 Pro-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GlobalChat 2 Pro-Prefix.pch"; sourceTree = "<group>"; };
 		EF0D4E381579F7EA006FE21B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		EF0D4E3B1579F7EA006FE21B /* rb_main.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = rb_main.rb; sourceTree = "<group>"; };
 		EF0D4E3D1579F7EA006FE21B /* AppDelegate.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = AppDelegate.rb; sourceTree = "<group>"; };
@@ -72,7 +72,7 @@
 		EF0D4E231579F7EA006FE21B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EF0D4E221579F7EA006FE21B /* GlobalChat.app */,
+				EF0D4E221579F7EA006FE21B /* GlobalChat 2 Pro.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -103,10 +103,10 @@
 		EF0D4E2E1579F7EA006FE21B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				EF0D4E2F1579F7EA006FE21B /* GlobalChat-Info.plist */,
+				EF0D4E2F1579F7EA006FE21B /* GlobalChat 2 Pro-Info.plist */,
 				EF0D4E301579F7EA006FE21B /* InfoPlist.strings */,
 				EF0D4E331579F7EA006FE21B /* main.m */,
-				EF0D4E351579F7EA006FE21B /* GlobalChat-Prefix.pch */,
+				EF0D4E351579F7EA006FE21B /* GlobalChat 2 Pro-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -148,9 +148,9 @@
 /* End PBXLegacyTarget section */
 
 /* Begin PBXNativeTarget section */
-		EF0D4E211579F7EA006FE21B /* GlobalChat */ = {
+		EF0D4E211579F7EA006FE21B /* GlobalChat 2 Pro */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EF0D4E411579F7EA006FE21B /* Build configuration list for PBXNativeTarget "GlobalChat" */;
+			buildConfigurationList = EF0D4E411579F7EA006FE21B /* Build configuration list for PBXNativeTarget "GlobalChat 2 Pro" */;
 			buildPhases = (
 				EF0D4E1E1579F7EA006FE21B /* Sources */,
 				EF0D4E1F1579F7EA006FE21B /* Frameworks */,
@@ -160,9 +160,9 @@
 			);
 			dependencies = (
 			);
-			name = GlobalChat;
+			name = "GlobalChat 2 Pro";
 			productName = GlobalChat;
-			productReference = EF0D4E221579F7EA006FE21B /* GlobalChat.app */;
+			productReference = EF0D4E221579F7EA006FE21B /* GlobalChat 2 Pro.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -173,7 +173,7 @@
 			attributes = {
 				LastUpgradeCheck = 0450;
 			};
-			buildConfigurationList = EF0D4E1C1579F7EA006FE21B /* Build configuration list for PBXProject "GlobalChat" */;
+			buildConfigurationList = EF0D4E1C1579F7EA006FE21B /* Build configuration list for PBXProject "GlobalChat 2 Pro" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -185,7 +185,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				EF0D4E211579F7EA006FE21B /* GlobalChat */,
+				EF0D4E211579F7EA006FE21B /* GlobalChat 2 Pro */,
 				EF0D4E2A1579F7EA006FE21B /* Production */,
 			);
 		};
@@ -222,7 +222,7 @@
 /* Begin PBXTargetDependency section */
 		EF0D4E2C1579F7EA006FE21B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EF0D4E211579F7EA006FE21B /* GlobalChat */;
+			target = EF0D4E211579F7EA006FE21B /* GlobalChat 2 Pro */;
 			targetProxy = EF0D4E2B1579F7EA006FE21B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -307,9 +307,9 @@
 				);
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GlobalChat/GlobalChat-Prefix.pch";
-				INFOPLIST_FILE = "GlobalChat/GlobalChat-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "GlobalChat/GlobalChat 2 Pro-Prefix.pch";
+				INFOPLIST_FILE = "GlobalChat/GlobalChat 2 Pro-Info.plist";
+				PRODUCT_NAME = "GlobalChat 2 Pro";
 				PROVISIONING_PROFILE = "62C701A3-08D6-464F-B5EC-8908A302880E";
 				WRAPPER_EXTENSION = app;
 			};
@@ -329,9 +329,9 @@
 				);
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GlobalChat/GlobalChat-Prefix.pch";
-				INFOPLIST_FILE = "GlobalChat/GlobalChat-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "GlobalChat/GlobalChat 2 Pro-Prefix.pch";
+				INFOPLIST_FILE = "GlobalChat/GlobalChat 2 Pro-Info.plist";
+				PRODUCT_NAME = "GlobalChat 2 Pro";
 				PROVISIONING_PROFILE = "62C701A3-08D6-464F-B5EC-8908A302880E";
 				WRAPPER_EXTENSION = app;
 			};
@@ -354,7 +354,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		EF0D4E1C1579F7EA006FE21B /* Build configuration list for PBXProject "GlobalChat" */ = {
+		EF0D4E1C1579F7EA006FE21B /* Build configuration list for PBXProject "GlobalChat 2 Pro" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EF0D4E3F1579F7EA006FE21B /* Debug */,
@@ -363,7 +363,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EF0D4E411579F7EA006FE21B /* Build configuration list for PBXNativeTarget "GlobalChat" */ = {
+		EF0D4E411579F7EA006FE21B /* Build configuration list for PBXNativeTarget "GlobalChat 2 Pro" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EF0D4E421579F7EA006FE21B /* Debug */,
