@@ -5,6 +5,8 @@ require 'rubygems'
 require 'bundler'
 Bundler.require(:RubyMotion)
 
+require 'motion-cocoapods'
+
 Motion::Project::App.setup do |app|
   app.name = 'GlobalChat2 iOS'
   app.device_family = [:ipad, :iphone]
@@ -35,4 +37,6 @@ Motion::Project::App.setup do |app|
   app.pods do
     pod 'CocoaAsyncSocket'
   end
+
+  app.frameworks += ['iAd']
 end

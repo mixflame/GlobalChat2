@@ -109,6 +109,17 @@
                                     <action selector="connect:" destination="3FZ-s6-lRm" eventType="touchUpInside" id="XCR-hK-FUz"/>
                                 </connections>
                             </button>
+                            <adBannerView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="bqs-7o-Dgc">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="66"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <requiredContentSizeIdentifiers>
+                                    <string>ADBannerContentSizeLandscape</string>
+                                    <string>ADBannerContentSizePortrait</string>
+                                </requiredContentSizeIdentifiers>
+                                <connections>
+                                    <outlet property="delegate" destination="3FZ-s6-lRm" id="eY0-v6-Fpo"/>
+                                </connections>
+                            </adBannerView>
                         </subviews>
                         <color key="backgroundColor" red="0.87609693570000002" green="0.97536417220000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
@@ -117,6 +128,7 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <connections>
+                        <outlet property="ad_banner_view" destination="bqs-7o-Dgc" id="qf0-Sf-YgW"/>
                         <outlet property="handle" destination="wtd-3x-8Jf" id="ETD-JE-xdc"/>
                         <outlet property="host" destination="T8Y-Ub-UHd" id="CwM-pv-fs8"/>
                         <outlet property="password" destination="2BN-fI-5Jm" id="Pkh-yA-xuN"/>
@@ -231,6 +243,7 @@
                 <relationship kind="action" name="supportedInterfaceOrientations"/>
                 <relationship kind="action" name="textFieldShouldReturn:"/>
                 <relationship kind="action" name="viewWillAppear:"/>
+                <relationship kind="outlet" name="ad_banner_view" candidateClass="ADBannerView"/>
                 <relationship kind="outlet" name="handle"/>
                 <relationship kind="outlet" name="host" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="names"/>

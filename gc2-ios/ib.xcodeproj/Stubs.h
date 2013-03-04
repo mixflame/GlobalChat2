@@ -52,6 +52,7 @@
 @property IBOutlet UITextField * port;
 @property IBOutlet UITextField * password;
 @property IBOutlet id handle;
+@property IBOutlet ADBannerView * ad_banner_view;
 
 
 

@@ -11,6 +11,8 @@ class ServerListController < UIViewController
   outlet :password, UITextField
   outlet :handle
 
+  outlet :ad_banner_view, ADBannerView
+
   def preferredInterfaceOrientationForPresentation
     UIDeviceOrientationPortrait
   end
@@ -107,6 +109,16 @@ class ServerListController < UIViewController
     $gcc.times = 0
     $gcc.sign_on
 
+  end
+
+  def bannerViewDidLoadAd(banner)
+    NSLog("DidLoadAd")
+    banner.setHidden false
+  end
+
+  def bannerView(banner, didFailToReceiveAdWithError:error)
+    NSLog("DidFailToReceiveAdWithError")
+    banner.setHidden true
   end
 
 
