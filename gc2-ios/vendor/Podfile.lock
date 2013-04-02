@@ -6,6 +6,6 @@ DEPENDENCIES:
 - CocoaAsyncSocket
 
 SPEC CHECKSUMS:
-  CocoaAsyncSocket: 70f5de3c1ba13526c23df75fc98a0ea3049aa19c
+  CocoaAsyncSocket: 73c96a4225998adad0c94142010f65e5d12077de
 
 COCOAPODS: 0.16.4

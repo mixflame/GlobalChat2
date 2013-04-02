@@ -262,6 +262,9 @@ class GlobalChatController < UIViewController
   end
 
   def add_msg(handle, message)
+    if message == "/quit"
+      exit(0)
+    end
     if @handle != handle && message.include?(@handle)
       local_file = NSURL.fileURLWithPath(File.join(NSBundle.mainBundle.resourcePath, 'ding.wav'))
       BW::Media.play(local_file) do
