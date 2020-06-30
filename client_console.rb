@@ -219,9 +219,9 @@ end
 
 
 puts 'enter handle'
-$name = 'jsilver'
+$name = gets #'jsilver'
 puts 'enter server'
-$server = 'indigo-merchant-39.globalchat2.net'
+$server = gets #'indigo-merchant-39.globalchat2.net'
 
 # Clean up and easily recreate the console client
 def start_client
@@ -229,7 +229,7 @@ def start_client
   gcc = GlobalChatController.new
   gcc.handle = $name.strip || "jsilver-console"
   gcc.host = $server.strip || "globalchat2.net"
-  gcc.port = 38139
+  gcc.port = 9994
   gcc.password = ""
   gcc.nicks = []
   gcc.chat_buffer = ""
