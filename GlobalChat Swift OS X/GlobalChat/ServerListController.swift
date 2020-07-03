@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class ServerListController: NSViewController {
+class ServerListController: NSViewController, NSTableViewDataSource {
     
     @IBOutlet weak var server_list_window: NSWindow!
     @IBOutlet weak var chat_window: NSWindow!
@@ -24,10 +24,22 @@ class ServerListController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
+        get_servers()
+    }
+    
+    func get_servers() {
+        let url = URL(string: "http://nexus-msl.heroku.com/msl")!
+
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            guard let data = data else { return }
+            print(String(data: data, encoding: .utf8)!)
+        }
+
+        task.resume()
     }
     
 
-    func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any {
+    func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         if names != nil {
             return names![row]
         } else {
@@ -35,7 +47,7 @@ class ServerListController: NSViewController {
         }
     }
 
-    func numberOfRowsInTableView(_ in: NSTableView) -> Int {
+    func numberOfRows(in: NSTableView) -> Int {
         if names == nil {
             return 0
         } else {
