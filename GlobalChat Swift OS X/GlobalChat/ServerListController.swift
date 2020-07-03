@@ -20,6 +20,7 @@ class ServerListController: NSViewController, NSTableViewDataSource {
     @IBOutlet weak var server_list_table: NSTableView!
     
     var names: [String] = []
+    var server_list_hash: [[String:String]] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +44,7 @@ class ServerListController: NSViewController, NSTableViewDataSource {
                 let ip = server_info[1]
                 let port = server_info[2]
                 self.names.append(String(name))
+                self.server_list_hash.append(["name": name, "ip": ip, "port": port])
             }
             
             
@@ -55,8 +57,12 @@ class ServerListController: NSViewController, NSTableViewDataSource {
         task.resume()
     }
     
-    @IBAction func changeInfo(_ sender: Any) {
-        
+    @IBAction func changeInfo(_ sender: NSTableView) {
+        if(sender.selectedRow == -1) {
+            return
+        }
+        self.host.stringValue = self.server_list_hash[sender.selectedRow]["ip"] ?? ""
+        self.port.stringValue = self.server_list_hash[sender.selectedRow]["port"] ?? ""
     }
     
     @IBAction func connect(_ sender: Any) {
