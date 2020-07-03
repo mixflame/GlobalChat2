@@ -171,13 +171,14 @@
 		EF0D4E191579F7EA006FE21B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 1150;
 			};
 			buildConfigurationList = EF0D4E1C1579F7EA006FE21B /* Build configuration list for PBXProject "GlobalChat 2 Pro" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = EF0D4E171579F7EA006FE21B;
