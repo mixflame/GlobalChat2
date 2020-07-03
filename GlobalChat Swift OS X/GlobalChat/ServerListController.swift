@@ -66,7 +66,21 @@ class ServerListController: NSViewController, NSTableViewDataSource {
     }
     
     @IBAction func connect(_ sender: Any) {
-        
+        print("connect:")
+        let prefs = UserDefaults.standard
+        prefs.set(host.stringValue, forKey: "host")
+        prefs.set(handle.stringValue, forKey: "handle")
+        prefs.set(port.stringValue, forKey: "port")
+
+        gcc.handle = handle.stringValue
+        gcc.host = host.stringValue
+        gcc.port = port.stringValue
+        gcc.password = password.stringValue
+        gcc.nicks = []
+        gcc.chat_buffer = ""
+
+        gcc.sign_on()
+
     }
     
     @IBAction func refresh(_ sender: Any) {

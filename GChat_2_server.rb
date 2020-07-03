@@ -50,7 +50,7 @@ class GlobalChatServer < GServer
     gc.is_private = is_private
     gc.start
     unless is_private == true
-      ping_nexus(@server_name, host, port)
+      gc.ping_nexus(gc.server_name, host, port)
     end
     gc.status
     gc.join
@@ -60,7 +60,7 @@ class GlobalChatServer < GServer
   def GlobalChatServer.finalize(id)
     puts "GlobalChatServer #{id} dying at #{Time.new}"
     unless @private == true
-      nexus_offline(@server_name)
+      gc.nexus_offline(gc.server_name)
     end
     save_chat_log
   end
@@ -353,7 +353,7 @@ class GlobalChatServer < GServer
   # +port+:: The listening port
   def ping_nexus(chatnet_name, host, port)
     puts "Pinging NexusNet that I'm Online!!"
-    uri = URI.parse("http://nexusnet.herokuapp.com/online?name=#{chatnet_name}&host=#{host}&port=#{port}")
+    uri = URI.parse("http://nexus-msl.herokuapp.com/online?name=#{chatnet_name}&port=#{port}")
     #query = {:name => chatnet_name, :port => port, :host => host}
     #uri.query = URI.encode_www_form( query )
     Net::HTTP.get(uri)
@@ -363,7 +363,7 @@ class GlobalChatServer < GServer
   # Tell Nexus I am no longer online
   def nexus_offline(chatnet_name)
     puts "Informing NexusNet that I have exited!!!"
-    Net::HTTP.get_print("nexusnet.herokuapp.com", "/offline_by_name?name=#{chatnet_name}")
+    Net::HTTP.get_print("nexusnet.herokuapp.com", "/offline")
   end
 
 
@@ -372,5 +372,5 @@ end
 
 
 #Thread.new do
-GlobalChatServer.create("GC", "localhost", 9994, true, true)
+GlobalChatServer.create("GC", "localhost", 9994, false, true)
 #end
