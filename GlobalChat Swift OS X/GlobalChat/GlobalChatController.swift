@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class GlobalChatController: NSViewController {
+class GlobalChatController: NSViewController, NSTableViewDataSource {
     
     @IBOutlet weak var application: NSApplication!
     @IBOutlet weak var chat_message: NSTextField!
@@ -17,6 +17,8 @@ class GlobalChatController: NSViewController {
     @IBOutlet weak var nicks_table: NSTableView!
     @IBOutlet weak var scroll_view: NSScrollView!
     @IBOutlet weak var server_list_window: NSWindow!
+    
+    var nicks: [String]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,5 +31,21 @@ class GlobalChatController: NSViewController {
     
     @IBAction func sendMessage(_ sender: Any) {
         
+    }
+    
+    func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
+        if nicks != nil {
+            return nicks![row]
+        } else {
+            return 0
+        }
+    }
+
+    func numberOfRows(in: NSTableView) -> Int {
+        if nicks == nil {
+            return 0
+        } else {
+            return nicks!.count
+        }
     }
 }

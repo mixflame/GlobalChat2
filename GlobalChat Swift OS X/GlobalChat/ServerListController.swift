@@ -24,11 +24,11 @@ class ServerListController: NSViewController, NSTableViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
-        get_servers()
+//        get_servers()
     }
     
     func get_servers() {
-        let url = URL(string: "http://nexus-msl.heroku.com/msl")!
+        let url = URL(string: "https://nexus-msl.herokuapp.com/msl")!
 
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
             guard let data = data else { return }
@@ -47,7 +47,7 @@ class ServerListController: NSViewController, NSTableViewDataSource {
     }
     
     @IBAction func refresh(_ sender: Any) {
-        
+        get_servers()
     }
 
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
