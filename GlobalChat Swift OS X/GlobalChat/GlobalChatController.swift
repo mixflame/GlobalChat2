@@ -23,4 +23,11 @@ class GlobalChatController: NSViewController {
         // Do view setup here.
     }
     
+    @IBAction func quit(_ sender: Any) {
+        
+    }
+    
+    @IBAction func sendMessage(_ sender: Any) {
+        
+    }
 }

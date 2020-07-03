@@ -38,6 +38,17 @@ class ServerListController: NSViewController, NSTableViewDataSource {
         task.resume()
     }
     
+    @IBAction func changeInfo(_ sender: Any) {
+        
+    }
+    
+    @IBAction func connect(_ sender: Any) {
+        
+    }
+    
+    @IBAction func refresh(_ sender: Any) {
+        
+    }
 
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         if names != nil {
