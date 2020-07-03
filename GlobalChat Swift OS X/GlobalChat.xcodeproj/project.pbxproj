@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,6 +12,7 @@
 		72CBCB2824AD651F007B8B3D /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72CBCB2624AD651E007B8B3D /* MainMenu.xib */; };
 		72CBCB2A24AFA89E007B8B3D /* ServerListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72CBCB2924AFA89E007B8B3D /* ServerListController.swift */; };
 		72CBCB2D24AFA909007B8B3D /* GlobalChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72CBCB2B24AFA909007B8B3D /* GlobalChatController.swift */; };
+		72F8AF1024AFE25B00BC9FC3 /* CocoaAsyncSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 72F8AF0F24AFE25B00BC9FC3 /* CocoaAsyncSocket */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72F8AF1024AFE25B00BC9FC3 /* CocoaAsyncSocket in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +84,9 @@
 			dependencies = (
 			);
 			name = GlobalChat;
+			packageProductDependencies = (
+				72F8AF0F24AFE25B00BC9FC3 /* CocoaAsyncSocket */,
+			);
 			productName = GlobalChat;
 			productReference = 72CBCB1524AD6475007B8B3D /* GlobalChat.app */;
 			productType = "com.apple.product-type.application";
@@ -110,6 +115,9 @@
 				Base,
 			);
 			mainGroup = 72CBCB0C24AD6475007B8B3D;
+			packageReferences = (
+				72F8AF0E24AFE25B00BC9FC3 /* XCRemoteSwiftPackageReference "CocoaAsyncSocket" */,
+			);
 			productRefGroup = 72CBCB1624AD6475007B8B3D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -331,6 +339,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		72F8AF0E24AFE25B00BC9FC3 /* XCRemoteSwiftPackageReference "CocoaAsyncSocket" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/robbiehanson/CocoaAsyncSocket";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.6.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		72F8AF0F24AFE25B00BC9FC3 /* CocoaAsyncSocket */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 72F8AF0E24AFE25B00BC9FC3 /* XCRemoteSwiftPackageReference "CocoaAsyncSocket" */;
+			productName = CocoaAsyncSocket;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 72CBCB0D24AD6475007B8B3D /* Project object */;
 }

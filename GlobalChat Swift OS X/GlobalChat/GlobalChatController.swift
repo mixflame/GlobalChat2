@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import CocoaAsyncSocket
 
 class GlobalChatController: NSViewController, NSTableViewDataSource {
     
@@ -19,6 +20,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource {
     @IBOutlet weak var server_list_window: NSWindow!
     
     var nicks: [String]?
+    var msg_count: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
