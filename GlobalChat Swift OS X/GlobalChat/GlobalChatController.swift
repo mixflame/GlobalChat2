@@ -404,7 +404,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
                         break
                     }
                   DispatchQueue.main.sync {
-                    self.output_to_chat_window("Could not connect to GlobalChat. Will retry in 5 seconds..")
+                    self.output_to_chat_window("Could not connect to GlobalChat. Will retry in 5 seconds..\n")
                     print("connected? \(self.connected)")
                     self.sign_on()
                     }
