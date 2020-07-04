@@ -9,7 +9,7 @@
 import Cocoa
 import CocoaAsyncSocket
 
-class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSocketDelegate, NSTextFieldDelegate {
+class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSocketDelegate, NSTextFieldDelegate, NSTableViewDelegate {
     
     @IBOutlet weak var application: NSApplication!
     @IBOutlet weak var chat_message: NSTextField!
@@ -50,15 +50,31 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         super.viewDidLoad()
         // Do view setup here.
         chat_message.delegate = self
+        nicks_table.delegate = self
     }
-    
-//    func tableView(_ tableView: NSTableView, willDisplayCell cell: NSTextFieldCell, for tableColumn: NSTableColumn?, row: Int) {
-//        if away_nicks.contains(cell.stringValue) {
-//          cell.textColor = NSColor.gray
-//        } else {
-//          cell.textColor = NSColor.black
-//        }
-//    }
+
+  
+    func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
+        if tableView == self.nicks_table {
+            if let tableColumn = tableColumn {
+//                print("cell string value is \("\((cell as! NSTextFieldCell).stringValue)")")
+                if osxMode == "Dark" {
+                    if away_nicks.contains((cell as! NSTextFieldCell).stringValue) {
+                        (cell as! NSTextFieldCell).textColor = NSColor.gray
+                    } else {
+                        (cell as! NSTextFieldCell).textColor = NSColor.white
+                    }
+                } else {
+                    if away_nicks.contains((cell as! NSTextFieldCell).stringValue) {
+                      (cell as! NSTextFieldCell).textColor = NSColor.gray
+                    } else {
+                      (cell as! NSTextFieldCell).textColor = NSColor.black
+                    }
+                }
+            }
+        }
+    }
+
     
     func select_chat_text() {
       chat_message.selectText(self)
@@ -333,7 +349,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
         
-        print(data)
+//        print(data)
         let line = String(bytes: data, encoding: .utf8)!
         parse_line(line)
         read_line()
