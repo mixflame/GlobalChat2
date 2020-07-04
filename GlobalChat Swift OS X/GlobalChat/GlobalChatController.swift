@@ -35,6 +35,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     var away_nicks: [String] = []
     var sent_messages: [String] = []
     var sent_message_index : Int = 0
+    var last_match : String = ""
+    var match_index : Int = 0
     
     let queue = DispatchQueue(label: "com.queue.Serial")
     
@@ -72,7 +74,56 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             return true
         } else if commandSelector == #selector(NSStandardKeyBindingResponding.insertTab(_:)) {
             //Do something against TAB key
-            
+            let message = chat_message.stringValue
+            let last_letters_before_tab = String(message.components(separatedBy: " ").last!)
+            var matches : [String] = []
+            if last_match == "" {
+                let regex = try! NSRegularExpression(pattern: "^\(last_letters_before_tab)")
+                
+                for nick in nicks {
+//                    print(nick)
+                    let nsString = nick as NSString
+                    let results = regex.matches(in: nick,
+                    range: NSRange(nick.startIndex..., in: nick))
+                    
+                    for match in results {
+                        // what will be the code
+                        let range = match.range
+                        let matchString = nsString as String
+                        print("match is \(range) \(matchString)")
+                        matches.append(matchString)
+                    }
+                    
+                }
+                
+            } else {
+                let regex = try! NSRegularExpression(pattern: "^\(last_match)")
+              
+                for nick in nicks {
+    //                    print(nick)
+                    let nsString = nick as NSString
+                    let results = regex.matches(in: nick,
+                    range: NSRange(nick.startIndex..., in: nick))
+                    
+                    for match in results {
+                        // what will be the code
+                        let range = match.range
+                        let matchString = nsString as String
+                        print("match is \(range) \(matchString)")
+                        matches.append(matchString)
+                    }
+                    
+                }
+            }
+            print(matches)
+            match_index = match_index + 1
+            if matches.count > 0 {
+              match_index = match_index % matches.count
+              let match = matches[match_index]
+                chat_message.stringValue = String(String(message.reversed()).replacingOccurrences(of: String(last_letters_before_tab.reversed()), with: String(match.reversed())).reversed())
+                //message.reverse.sub(last_letters_before_tab.reverse, match.reverse).reverse
+            }
+            last_match = last_letters_before_tab
             return true
         }
         return false
