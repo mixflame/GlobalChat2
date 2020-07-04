@@ -52,6 +52,14 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         chat_message.delegate = self
     }
     
+//    func tableView(_ tableView: NSTableView, willDisplayCell cell: NSTextFieldCell, for tableColumn: NSTableColumn?, row: Int) {
+//        if away_nicks.contains(cell.stringValue) {
+//          cell.textColor = NSColor.gray
+//        } else {
+//          cell.textColor = NSColor.black
+//        }
+//    }
+    
     func select_chat_text() {
       chat_message.selectText(self)
         chat_message.currentEditor()!.selectedRange = NSRange.init(location: chat_message.stringValue.count, length: 0)
