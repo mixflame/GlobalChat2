@@ -35,15 +35,16 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     var away_nicks: [String] = []
     var sent_messages: [String] = []
     var sent_message_index : Int = 0
-    var last_match : String = ""
     var match_index : Int = 0
     
     let queue = DispatchQueue(label: "com.queue.Serial")
     
     let osxMode = UserDefaults.standard.string(forKey: "AppleInterfaceStyle")
     
-    
-    
+    var last_key_was_tab : Bool = false
+    var first_tab : Bool = false
+    var tab_query : String = ""
+    var tab_completion_index : Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,61 +77,72 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             return true
         } else if commandSelector == #selector(NSStandardKeyBindingResponding.insertTab(_:)) {
             //Do something against TAB key
-            let message = chat_message.stringValue
-            let last_letters_before_tab = String(message.components(separatedBy: " ").last!)
-            var matches : [String] = []
-            if last_match == "" {
-                let regex = try! NSRegularExpression(pattern: "^\(last_letters_before_tab)")
-                
-                for nick in nicks {
-//                    print(nick)
-                    let nsString = nick as NSString
-                    let results = regex.matches(in: nick,
-                    range: NSRange(nick.startIndex..., in: nick))
-                    
-                    for match in results {
-                        // what will be the code
-                        let range = match.range
-                        let matchString = nsString as String
-                        print("match is \(range) \(matchString)")
-                        matches.append(matchString)
-                    }
-                    
-                }
-                
+            if last_key_was_tab {
+                first_tab = false
             } else {
-                let regex = try! NSRegularExpression(pattern: "^\(last_match)")
-              
-                for nick in nicks {
-    //                    print(nick)
-                    let nsString = nick as NSString
-                    let results = regex.matches(in: nick,
-                    range: NSRange(nick.startIndex..., in: nick))
-                    
-                    for match in results {
-                        // what will be the code
-                        let range = match.range
-                        let matchString = nsString as String
-                        print("match is \(range) \(matchString)")
-                        matches.append(matchString)
-                    }
-                    
-                }
+                first_tab = true
             }
-            print(matches)
+            last_key_was_tab = true
+
+            let message = chat_message.stringValue
+            
+            if (first_tab) {
+                print("first tab set tab query")
+                tab_query = String(message.components(separatedBy: " ").last!)
+                print("tab query is set to \(tab_query)")
+            }
+            if tab_query == "" { return true }
+
+            let last_letters_before_tab = tab_query
+            
+            print("last letters before tab \(last_letters_before_tab)")
+            var matches : [String] = []
+            let regex = try! NSRegularExpression(pattern: tab_query)
+            for nick in nicks {
+                let nsString = nick as NSString
+                let results = regex.matches(in: nick,
+                range: NSRange(nick.startIndex..., in: nick))
+                
+                for match in results {
+                    // what will be the code
+                    let range = match.range
+                    let matchString = nsString as String
+                    print("match is \(range) \(matchString)")
+                    matches.append(matchString)
+                }
+                
+            }
+
+            // print(matches)
             match_index = match_index + 1
             if matches.count > 0 {
-              match_index = match_index % matches.count
-              let match = matches[match_index]
-                chat_message.stringValue = String(String(message.reversed()).replacingOccurrences(of: String(last_letters_before_tab.reversed()), with: String(match.reversed())).reversed())
-                //message.reverse.sub(last_letters_before_tab.reverse, match.reverse).reverse
+                match_index = match_index % matches.count
+                let match = matches[match_index]
+            
+                if first_tab {
+                    // clear at position ??
+                    // position would be the length of the string minus the length of the tabquery....
+                    tab_completion_index = chat_message.stringValue.count
+                    tab_completion_index -= tab_query.count
+                }
+                
+                print("replacing at position \(tab_completion_index) with match ", match)
+                let msg = chat_message.stringValue;
+
+                let start_index = String.Index(utf16Offset: tab_completion_index, in: msg)
+                
+                let left_matter = msg.prefix(upTo: start_index)
+                
+                print(left_matter)
+                
+                chat_message.stringValue = left_matter + match;
             }
-            last_match = last_letters_before_tab
+                
             return true
         }
         return false
     }
-    
+      
     @IBAction func quit(_ sender: Any) {
         if connected == false {
           application.terminate(self)
@@ -406,5 +418,12 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             self.chat_window_text.scrollRangeToVisible(NSRange.init(location: y, length: 0))
             self.scroll_view.reflectScrolledClipView(self.scroll_view.contentView)
         }
+    }
+    
+    func controlTextDidChange(_ notification: Notification) {
+        let textField = notification.object as? NSTextField
+        print("controlTextDidChange: stringValue == \(textField?.stringValue ?? "")")
+
+        last_key_was_tab = false
     }
 }
