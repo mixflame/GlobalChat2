@@ -421,9 +421,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
     
     func controlTextDidChange(_ notification: Notification) {
-        let textField = notification.object as? NSTextField
-        print("controlTextDidChange: stringValue == \(textField?.stringValue ?? "")")
-
+        //let textField = notification.object as? NSTextField
+        //print("controlTextDidChange: stringValue == \(textField?.stringValue ?? "")")
         last_key_was_tab = false
     }
 }
