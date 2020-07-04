@@ -25,7 +25,7 @@ class ServerListController: NSViewController, NSTableViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
-//        get_servers()
+        get_servers()
     }
     
     func get_servers() {
