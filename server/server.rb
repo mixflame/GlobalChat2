@@ -26,7 +26,8 @@ class GlobalChatServer < GServer
     super(port, *args)
     self.audit = true
     self.debug = true
-    @pstore = PStore.new("gchat.pstore")
+    Dir.mkdir "data" unless Dir.exists? "data"
+    @pstore = PStore.new("data/gchat.pstore")
     @handle_keys = {} # stores handle
     @socket_keys = {} # stores chat_token
     # @port_keys = {} # unnecessary in PING design
@@ -43,7 +44,7 @@ class GlobalChatServer < GServer
   end
 
   def self.create(name, host, port, is_private, replay)
-    gc = new(port, '0.0.0.0', 1000, $stderr, true)
+    gc = new(port, host, 1000, $stderr, true)
     gc.server_name = name
     gc.host = host
     gc.scrollback = replay
@@ -372,5 +373,5 @@ end
 
 
 #Thread.new do
-GlobalChatServer.create("GC", "localhost", 9994, false, true)
+GlobalChatServer.create("GC", "0.0.0.0", 9994, false, true)
 #end

@@ -1,0 +1,9 @@
+version: '3'
+services:
+    gchat:
+        build: .
+        ports:
+            - 9994:9994
+        volumes:
+            - ./data:/app/data
+        restart: unless-stopped
