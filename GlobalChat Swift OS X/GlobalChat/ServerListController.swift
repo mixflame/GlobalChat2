@@ -30,6 +30,7 @@ class ServerListController: NSViewController, NSTableViewDataSource {
     
     
     func get_servers() {
+        print("get_servers:")
         self.names = []
         
         let url = URL(string: "https://nexus-msl.herokuapp.com/msl")!
@@ -89,11 +90,14 @@ class ServerListController: NSViewController, NSTableViewDataSource {
     }
 
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-        print(self.names)
         return self.names[row]
     }
 
     func numberOfRows(in: NSTableView) -> Int {
+        if self.names.count == 0 {
+            self.get_servers()
+            return 0
+        }
         return self.names.count
     }
     

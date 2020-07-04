@@ -357,6 +357,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
         print(err.debugDescription)
+        self.connected = false
+        autoreconnect()
     }
     
     func send_message(_ opcode: String, args: Array<String>) {
@@ -392,18 +394,21 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     
     func autoreconnect() {
+        print("autoreconnect:")
         queue.async {
             if self.should_autoreconnect != false {
-            while(true) {
-                if self.connected == true {
-                    break
-                }
-              DispatchQueue.main.sync {
-                self.output_to_chat_window("Could not connect to GlobalChat. Will retry in 5 seconds..")
-                print("connected? \(self.connected)")
-                self.sign_on()
-                }
-              sleep(5)
+                print("should autoreconnect")
+                while(true) {
+                    if self.connected == true {
+                        print("reconnect successful.. breaking")
+                        break
+                    }
+                  DispatchQueue.main.sync {
+                    self.output_to_chat_window("Could not connect to GlobalChat. Will retry in 5 seconds..")
+                    print("connected? \(self.connected)")
+                    self.sign_on()
+                    }
+                  sleep(5)
                 }
             }
         }
