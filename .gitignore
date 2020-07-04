@@ -1,4 +1,5 @@
 gchat2pro.pstore
 gchat.pstore
+server/data
 *.dat*
 Node-GChatServ/tmp/**.log
