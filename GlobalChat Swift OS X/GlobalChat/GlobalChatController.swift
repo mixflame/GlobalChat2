@@ -40,6 +40,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     let queue = DispatchQueue(label: "com.queue.Serial")
     
+    let osxMode = UserDefaults.standard.string(forKey: "AppleInterfaceStyle")
+    
     
     
     
@@ -223,13 +225,13 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             add_msg(handle, message: msg)
         } else if command == "JOIN" {
             let handle = parr[1]
-            output_to_chat_window("#{handle} has entered\n")
+            output_to_chat_window("\(handle) has entered\n")
             nicks.append(handle)
 //            @nicks.uniq!
             nicks_table.reloadData()
         } else if command == "LEAVE" {
             let handle = parr[1]
-            output_to_chat_window("#{handle} has exited\n")
+            output_to_chat_window("\(handle) has exited\n")
             nicks = nicks.filter { $0 != handle }
             nicks_table.reloadData()
         } else if command == "ALERT" {
@@ -387,6 +389,9 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             self.chat_window_text.isEditable = true
             self.chat_window_text.isAutomaticLinkDetectionEnabled = true
             self.chat_window_text.textStorage!.setAttributedString(NSAttributedString.init(string: self.chat_buffer))
+            if self.osxMode == "Dark" {
+                self.chat_window_text.textColor = NSColor.white
+            }
             self.chat_window_text.checkTextInDocument(nil)
             self.chat_window_text.isEditable = false
         }
