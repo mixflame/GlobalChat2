@@ -46,7 +46,11 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
     
     @IBAction func quit(_ sender: Any) {
-        
+        if connected == false {
+          application.terminate(self)
+        } else {
+          return_to_server_list()
+        }
     }
     
     @IBAction func sendMessage(_ sender: NSTextField) {
