@@ -9,7 +9,7 @@
 import Cocoa
 import CocoaAsyncSocket
 
-class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSocketDelegate {
+class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSocketDelegate, NSTextFieldDelegate {
     
     @IBOutlet weak var application: NSApplication!
     @IBOutlet weak var chat_message: NSTextField!
@@ -34,6 +34,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     var chat_token: String = ""
     var away_nicks: [String] = []
     var sent_messages: [String] = []
+    var sent_message_index : Int = 0
     
     let queue = DispatchQueue(label: "com.queue.Serial")
     
@@ -43,6 +44,38 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
+        chat_message.delegate = self
+    }
+    
+    func select_chat_text() {
+      chat_message.selectText(self)
+        chat_message.currentEditor()!.selectedRange = NSRange.init(location: chat_message.stringValue.count, length: 0)
+    }
+    
+    func cycle_chat_messages() {
+      chat_message.stringValue = sent_messages[sent_message_index % sent_messages.count]
+    }
+    
+    func control(_ control: NSControl, textView fieldEditor: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
+        print("Selector method is (\(NSStringFromSelector(commandSelector)))")
+        if commandSelector == #selector(NSStandardKeyBindingResponding.moveUp(_:)) {
+            //Do something against ENTER key
+            sent_message_index = sent_message_index + 1
+            cycle_chat_messages()
+            select_chat_text()
+            return true
+        } else if commandSelector == #selector(NSStandardKeyBindingResponding.moveDown(_:)) {
+            //Do something against DELETE key
+            sent_message_index = sent_message_index - 1
+            cycle_chat_messages()
+            select_chat_text()
+            return true
+        } else if commandSelector == #selector(NSStandardKeyBindingResponding.insertTab(_:)) {
+            //Do something against TAB key
+            
+            return true
+        }
+        return false
     }
     
     @IBAction func quit(_ sender: Any) {
@@ -108,6 +141,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
     
     func parse_line(_ line: String) {
+        print("Server: \(line)")
         let parr = line.components(separatedBy: "::!!::")
         let command = parr.first
         if command == "TOKEN" {
