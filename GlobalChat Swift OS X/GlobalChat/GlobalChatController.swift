@@ -381,9 +381,9 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
     
     func check_if_away_or_back(_ handle: String, message: String) {
-        if message.contains("brb") {
+        if message.contains("brb") && !away_nicks.contains(handle) {
             away_nicks.append(handle)
-        } else if message.contains("back") {
+        } else if message.contains("back") && away_nicks.contains(handle) {
             away_nicks = away_nicks.filter { $0 != handle }
         }
     }
