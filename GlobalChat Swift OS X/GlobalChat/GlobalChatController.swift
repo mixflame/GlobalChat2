@@ -52,6 +52,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     var tab_query : String = ""
     var tab_completion_index : Int = 0
     
+    var pm_windows = [NSWindowController]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
@@ -63,20 +65,18 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
   
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         if tableView == self.nicks_table {
-            if let tableColumn = tableColumn {
 //                print("cell string value is \("\((cell as! NSTextFieldCell).stringValue)")")
-                if osxMode == "Dark" {
-                    if away_nicks.contains((cell as! NSTextFieldCell).stringValue) {
-                        (cell as! NSTextFieldCell).textColor = NSColor.gray
-                    } else {
-                        (cell as! NSTextFieldCell).textColor = NSColor.white
-                    }
+            if osxMode == "Dark" {
+                if away_nicks.contains((cell as! NSTextFieldCell).stringValue) {
+                    (cell as! NSTextFieldCell).textColor = NSColor.gray
                 } else {
-                    if away_nicks.contains((cell as! NSTextFieldCell).stringValue) {
-                      (cell as! NSTextFieldCell).textColor = NSColor.gray
-                    } else {
-                      (cell as! NSTextFieldCell).textColor = NSColor.black
-                    }
+                    (cell as! NSTextFieldCell).textColor = NSColor.white
+                }
+            } else {
+                if away_nicks.contains((cell as! NSTextFieldCell).stringValue) {
+                  (cell as! NSTextFieldCell).textColor = NSColor.gray
+                } else {
+                  (cell as! NSTextFieldCell).textColor = NSColor.black
                 }
             }
         }
@@ -185,15 +185,50 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     @IBAction func sendMessage(_ sender: NSTextField) {
       let message = sender.stringValue
-        if message != "" && message.components(separatedBy: " ").first != "/privmsg" {
+        if message == "" {
+            return
+        }
+        if message.components(separatedBy: " ").first != "/privmsg" {
             post_message(message)
             chat_message.stringValue = ""
             sent_messages.append(message)
         } else {
             let handle = message.components(separatedBy: " ")[1]
             let msg = message.components(separatedBy: "/privmsg \(handle) ").last
-            priv_msg(handle, message: msg!)
+            
             chat_message.stringValue = ""
+            
+            var already_open_window : NSWindowController? = nil
+            for window in pm_windows {
+                if (window.window?.contentViewController as! PrivateMessageController).handle == handle {
+                    already_open_window = window
+                }
+            }
+            if already_open_window == nil {
+                let pmc = PrivateMessageController(nibName: "PrivateMessageController", bundle: nil)
+                
+                
+                // pass data to pmc
+                pmc.handle = handle
+                pmc.gcc = self
+                
+                let newWindow = NSWindow(contentViewController: pmc)
+                
+                newWindow.title = "Encrypted PM: \(self.handle) -> \(handle)"
+                
+                newWindow.makeKeyAndOrderFront(self)
+                
+                let controller = NSWindowController(window: newWindow)
+                
+                pm_windows.append(controller)
+                
+                controller.showWindow(self)
+            } else {
+                already_open_window!.showWindow(self)
+            }
+            
+            priv_msg(handle, message: msg!)
+            
         }
     }
     
@@ -337,7 +372,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     func check_if_pinged(_ handle: String, message: String) {
         if self.handle != handle && message.contains(handle) {
-        NSSound.beep()
+            NSSound.beep()
 //        Notification.send(handle, message)
             NSApp.requestUserAttention(NSApplication.RequestUserAttentionType(rawValue: 0)!)
         msg_count = msg_count + 1
@@ -361,10 +396,42 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
     
     func add_priv_msg(_ handleTo: String, handleFrom: String, message: String) {
-        check_if_pinged(self.handle, message: message)
-        check_if_away_or_back(self.handle, message: message)
+        check_if_pinged(handleFrom, message: message)
+        check_if_away_or_back(handleFrom, message: message)
         let msg = "\(handleFrom) -> \(handleTo): \(message)\n"
-        output_to_chat_window(msg)
+        var already_open_window : NSWindowController? = nil
+        for window in pm_windows {
+            if (window.window?.contentViewController as! PrivateMessageController).handle == handleTo {
+                already_open_window = window
+            }
+        }
+        if already_open_window == nil {
+            let pmc = PrivateMessageController(nibName: "PrivateMessageController", bundle: nil)
+            
+            
+            // pass data to pmc
+            pmc.handle = handle
+            pmc.gcc = self
+            
+            let newWindow = NSWindow(contentViewController: pmc)
+            
+            newWindow.title = "Encrypted PM: \(self.handle) -> \(handle)"
+            
+            newWindow.makeKeyAndOrderFront(self)
+            
+            let controller = NSWindowController(window: newWindow)
+            
+            pm_windows.append(controller)
+            
+            controller.showWindow(self)
+            (controller.window?.contentViewController as! PrivateMessageController).output_to_chat_window(msg)
+        } else {
+            already_open_window!.showWindow(self)
+            (already_open_window?.window?.contentViewController as! PrivateMessageController).output_to_chat_window(msg)
+        }
+        
+        
+        
     }
     
     func get_handles() {
