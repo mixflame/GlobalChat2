@@ -254,7 +254,7 @@ class GlobalChatServer < GServer
         pub_key = parr[1]
         @public_keys ||= {}
         @public_keys[handle] = pub_key
-        broadcast_message(io, "PUBKEY", [pub_key, handle])
+        broadcast_message(nil, "PUBKEY", [pub_key, handle])
       elsif command == "PRIVMSG"
         handleTo = parr[1] # handle to send to
         message = parr[2]
