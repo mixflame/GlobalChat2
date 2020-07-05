@@ -8,6 +8,7 @@
 
 import Cocoa
 import CocoaAsyncSocket
+import CryptoKit
 
 class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSocketDelegate, NSTextFieldDelegate, NSTableViewDelegate {
     
@@ -41,6 +42,11 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     let osxMode = UserDefaults.standard.string(forKey: "AppleInterfaceStyle")
     
+    let privateKey = Curve25519.KeyAgreement.PrivateKey()
+    var publicKey : Curve25519.KeyAgreement.PublicKey? = nil
+    var public_keys : [String: String] = [:]
+    
+    
     var last_key_was_tab : Bool = false
     var first_tab : Bool = false
     var tab_query : String = ""
@@ -51,6 +57,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         // Do view setup here.
         chat_message.delegate = self
         nicks_table.delegate = self
+        
     }
 
   
@@ -177,10 +184,15 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     @IBAction func sendMessage(_ sender: NSTextField) {
       let message = sender.stringValue
-        if message != "" {
+        if message != "" && message.components(separatedBy: " ").first != "/privmsg" {
             post_message(message)
             chat_message.stringValue = ""
             sent_messages.append(message)
+        } else {
+            let handle = message.components(separatedBy: " ")[1]
+            let msg = message.components(separatedBy: "/privmsg \(handle) ").last
+            priv_msg(handle, message: msg!)
+            chat_message.stringValue = ""
         }
     }
     
@@ -231,7 +243,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     func parse_line(_ line: String) {
         print("Server: \(line)")
-        let parr = line.components(separatedBy: "::!!::")
+        let parr = line.replacingOccurrences(of: "\0", with: "").components(separatedBy: "::!!::")
         let command = parr.first
         if command == "TOKEN" {
             chat_token = parr[1]
@@ -241,6 +253,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             show_chat()
             get_log()
             get_handles()
+            get_pub_keys()
+            send_pub_key() // generate and send
             connected = true
         } else if command == "HANDLES" {
             nicks = parr.last!.components(separatedBy: "\n")
@@ -274,6 +288,16 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             let text = parr[1]
             alert(text)
             return_to_server_list()
+        } else if command == "PUBKEY" {
+            // add pub key to dictionary
+            let pub_key = parr[1]
+            let handle = parr[2]
+            public_keys[handle] = pub_key
+            print(public_keys)
+        } else if command == "PRIVMSG" {
+            let handle = parr[1] // who sent it
+            let b64_cipher_text = parr[2]
+            receive_encrypted_message(handle, b64_cipher_text: b64_cipher_text)
         }
     }
     
@@ -331,6 +355,13 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         check_if_pinged(handle, message: message)
         check_if_away_or_back(handle, message: message)
         let msg = "\(handle): \(message)\n"
+        output_to_chat_window(msg)
+    }
+    
+    func add_priv_msg(_ handle: String, message: String) {
+        check_if_pinged(self.handle, message: message)
+        check_if_away_or_back(self.handle, message: message)
+        let msg = "\(handle) -> \(self.handle): \(message)\n"
         output_to_chat_window(msg)
     }
     
@@ -453,5 +484,63 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         //let textField = notification.object as? NSTextField
         //print("controlTextDidChange: stringValue == \(textField?.stringValue ?? "")")
         last_key_was_tab = false
+    }
+    
+    func send_pub_key() {
+        publicKey = privateKey.publicKey
+        
+        let b64_pub_key = publicKey?.rawRepresentation.base64EncodedString()
+        
+        send_message("PUBKEY", args: [b64_pub_key!, chat_token])
+    }
+    
+    func priv_msg(_ handle: String, message: String){
+        let b64_key = public_keys[handle]
+        let data = Data(base64Encoded: b64_key!)
+        do {
+            let protocolSalt = "drowssap".data(using: .utf8)
+            let public_key = try Curve25519.KeyAgreement.PublicKey(rawRepresentation: data!)
+            let sharedSecret = try! privateKey.sharedSecretFromKeyAgreement(with: public_key)
+            let symmetricKey = sharedSecret.hkdfDerivedSymmetricKey(using: SHA256.self,
+                                                                    salt: protocolSalt!,
+                                                                    sharedInfo: Data(),
+                                                                    outputByteCount: 32)
+            let sensitiveMessage = message.data(using: .utf8)!
+            let encryptedData = try! ChaChaPoly.seal(sensitiveMessage, using: symmetricKey).combined
+            let b64_cipher_text = encryptedData.base64EncodedString()
+            send_message("PRIVMSG", args: [handle, b64_cipher_text, chat_token])
+//            print("encryptedData: \(b64_cipher_text)")
+        } catch {
+            log("Error encrypting message for user \(handle)")
+        }
+
+    }
+    
+    func receive_encrypted_message(_ handle : String, b64_cipher_text : String) {
+        print("b64: \(b64_cipher_text)")
+        let b64_key = public_keys[handle]
+        let data = Data(base64Encoded: b64_key!)
+        let msg_data = Data(base64Encoded: b64_cipher_text)
+        do {
+            let protocolSalt = "drowssap".data(using: .utf8)
+            let senderPublicKey = try Curve25519.KeyAgreement.PublicKey(rawRepresentation: data!)
+            let sharedSecret = try! privateKey.sharedSecretFromKeyAgreement(with: senderPublicKey)
+            let symmetricKey = sharedSecret.hkdfDerivedSymmetricKey(using: SHA256.self,
+                                                                    salt: protocolSalt!,
+                                                                    sharedInfo: Data(),
+                                                                    outputByteCount: 32)
+            let sealedBox = try! ChaChaPoly.SealedBox(combined: msg_data!)
+            let decryptedData = try! ChaChaPoly.open(sealedBox, using: symmetricKey)
+
+            let sensitiveMessage = String(data: decryptedData, encoding: .utf8)
+            add_priv_msg(handle, message: sensitiveMessage!)
+            
+        } catch {
+            log("Error decrypting message from \(handle)")
+        }
+    }
+    
+    func get_pub_keys() {
+        send_message("GETPUBKEYS", args: [chat_token])
     }
 }

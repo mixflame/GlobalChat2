@@ -30,6 +30,7 @@ class GlobalChatServer < GServer
     @pstore = PStore.new("data/gchat.pstore")
     @handle_keys = {} # stores handle
     @socket_keys = {} # stores chat_token
+    @socket_by_handle = {} # get socket by handle
     # @port_keys = {} # unnecessary in PING design
     @handle_last_pinged = {} # used for clone removal
     @handles = []
@@ -145,7 +146,7 @@ class GlobalChatServer < GServer
   # +msg+:: Entirety of command sans the null terminator
   def sock_send io, msg
     msg = "#{msg}\0"
-    log msg
+    log "Server: #{msg}"
     io.send msg, 0
   end
 
@@ -212,6 +213,7 @@ class GlobalChatServer < GServer
         @mutex.synchronize do
           @handle_keys[chat_token] = handle
           @socket_keys[io] = chat_token
+          @socket_by_handle[handle] = io
           # @port_keys[io.peeraddr[1]] = chat_token
           # not on list until pinged.
           @handles << handle
@@ -247,6 +249,24 @@ class GlobalChatServer < GServer
         @handle_last_pinged[handle] = Time.now
       elsif command == "SIGNOFF"
         broadcast_message(nil, "LEAVE", [handle])
+      elsif command == "PUBKEY"
+        # broadcast user's pub key and store it
+        pub_key = parr[1]
+        @public_keys ||= {}
+        @public_keys[handle] = pub_key
+        broadcast_message(io, "PUBKEY", [pub_key, handle])
+      elsif command == "PRIVMSG"
+        handle = parr[1] # handle to send to
+        message = parr[2]
+        socket = @socket_by_handle[handle]
+        send_message(socket, "PRIVMSG", [handle, message])
+      elsif command == "GETPUBKEYS"
+        @public_keys ||= {}
+        @public_keys.keys.each do |key|
+          handle = key
+          public_key = @public_keys[key]
+          send_message(io, "PUBKEY", [public_key, handle])
+        end
       end
     end
   end
@@ -307,7 +327,7 @@ class GlobalChatServer < GServer
         break
       end
       unless data == ""
-        log "#{data}"
+        log "Client: #{data}"
         parse_line(data, io)
       end
     end
