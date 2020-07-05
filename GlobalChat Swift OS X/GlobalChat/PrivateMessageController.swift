@@ -28,6 +28,9 @@ class PrivateMessageController: NSViewController, NSTextFieldDelegate {
     @IBAction func sendMessage(_ sender: NSTextField) {
         print("sendMessage:")
         let message = sender.stringValue
+        if message == "" {
+            return
+        }
         gcc!.priv_msg(handle, message: message)
         chat_message.stringValue = ""
     }
