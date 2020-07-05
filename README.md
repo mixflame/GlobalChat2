@@ -1,8 +1,8 @@
 GlobalChat 2
 
-how jsilver thinks Chat should work
+Swift and Ruby based Enterprise Chat System
 
-goal: create a non-technical feeling IRC-clone for private teams with useful features to help productivity
+a non-technical feeling but powerful chat for private teams with useful features to help productivity
 
 simple protocol
 
@@ -18,10 +18,10 @@ New features not found in IRC Protocol:
 
 * roomless, single server design
 
-* lack of slash commands
+* few commands
 
 * send anything, handle can be anything too
 
-* written entirely in Ruby
+* written entirely in Ruby and now also has a OS X Swift client
 
-<a href='http://www.pledgie.com/campaigns/18682'><img alt='Click here to lend your support to: GlobalChat: Beat IRC in Pure Ruby and make a donation at www.pledgie.com !' src='http://www.pledgie.com/campaigns/18682.png?skin_name=chrome' border='0' /></a>
+* end to end encryption of private messages

@@ -89,7 +89,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
     
     func cycle_chat_messages() {
-      chat_message.stringValue = sent_messages[sent_message_index % sent_messages.count]
+        if sent_messages.count == 0 { return }
+        chat_message.stringValue = sent_messages[sent_message_index % sent_messages.count]
     }
     
     func control(_ control: NSControl, textView fieldEditor: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
@@ -199,7 +200,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         return nicks[row]
     }
-
+    
     func numberOfRows(in: NSTableView) -> Int {
         return nicks.count
     }
