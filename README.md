@@ -25,5 +25,3 @@ New features not found in IRC Protocol:
 * written entirely in Ruby and now Swift
 
 * end to end encryption of private messages
-
-<a href='http://www.pledgie.com/campaigns/18682'><img alt='Click here to lend your support to: GlobalChat: Beat IRC in Pure Ruby and make a donation at www.pledgie.com !' src='http://www.pledgie.com/campaigns/18682.png?skin_name=chrome' border='0' /></a>
