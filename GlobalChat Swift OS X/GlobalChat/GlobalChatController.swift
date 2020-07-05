@@ -214,7 +214,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
                 
                 let newWindow = NSWindow(contentViewController: pmc)
                 
-                newWindow.title = "Encrypted PM: \(self.handle) -> \(handle)"
+                newWindow.title = "Encrypted PM: \(self.handle) and \(handle)"
                 
                 newWindow.makeKeyAndOrderFront(self)
                 
@@ -395,45 +395,6 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         output_to_chat_window(msg)
     }
     
-    func add_priv_msg(_ handleTo: String, handleFrom: String, message: String) {
-        check_if_pinged(handleFrom, message: message)
-        check_if_away_or_back(handleFrom, message: message)
-        let msg = "\(handleFrom) -> \(handleTo): \(message)\n"
-        var already_open_window : NSWindowController? = nil
-        for window in pm_windows {
-            if (window.window?.contentViewController as! PrivateMessageController).handle == handleTo {
-                already_open_window = window
-            }
-        }
-        if already_open_window == nil {
-            let pmc = PrivateMessageController(nibName: "PrivateMessageController", bundle: nil)
-            
-            
-            // pass data to pmc
-            pmc.handle = handle
-            pmc.gcc = self
-            
-            let newWindow = NSWindow(contentViewController: pmc)
-            
-            newWindow.title = "Encrypted PM: \(self.handle) -> \(handle)"
-            
-            newWindow.makeKeyAndOrderFront(self)
-            
-            let controller = NSWindowController(window: newWindow)
-            
-            pm_windows.append(controller)
-            
-            controller.showWindow(self)
-            (controller.window?.contentViewController as! PrivateMessageController).output_to_chat_window(msg)
-        } else {
-            already_open_window!.showWindow(self)
-            (already_open_window?.window?.contentViewController as! PrivateMessageController).output_to_chat_window(msg)
-        }
-        
-        
-        
-    }
-    
     func get_handles() {
         send_message("GETHANDLES", args: [chat_token])
     }
@@ -582,7 +543,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             let encryptedData = try! ChaChaPoly.seal(sensitiveMessage, using: symmetricKey).combined
             let b64_cipher_text = encryptedData.base64EncodedString()
             send_message("PRIVMSG", args: [handle, b64_cipher_text, chat_token])
-            add_priv_msg(handle, handleFrom: self.handle, message: message)
+            add_priv_msg_from_self(handle, message: message)
 //            print("encryptedData: \(b64_cipher_text)")
         } catch {
             log("Error encrypting message for user \(handle)")
@@ -607,11 +568,89 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             let decryptedData = try! ChaChaPoly.open(sealedBox, using: symmetricKey)
 
             let sensitiveMessage = String(data: decryptedData, encoding: .utf8)
-            add_priv_msg(self.handle, handleFrom: handle, message: sensitiveMessage!)
+            add_priv_msg(handle, message: sensitiveMessage!)
             
         } catch {
             log("Error decrypting message from \(handle)")
         }
+    }
+    
+    func add_priv_msg_from_self(_ handle : String, message: String) {
+        check_if_pinged(handle, message: message)
+        check_if_away_or_back(handle, message: message)
+        let msg = "\(self.handle): \(message)\n"
+        var already_open_window : NSWindowController? = nil
+        for window in pm_windows {
+            if (window.window?.contentViewController as! PrivateMessageController).handle == handle {
+                already_open_window = window
+            }
+        }
+        if already_open_window == nil {
+            let pmc = PrivateMessageController(nibName: "PrivateMessageController", bundle: nil)
+            
+            
+            // pass data to pmc
+            pmc.handle = handle
+            pmc.gcc = self
+            
+            let newWindow = NSWindow(contentViewController: pmc)
+            
+            newWindow.title = "Encrypted PM: \(self.handle) and \(handle)"
+            
+            newWindow.makeKeyAndOrderFront(self)
+            
+            let controller = NSWindowController(window: newWindow)
+            
+            pm_windows.append(controller)
+            
+            controller.showWindow(self)
+            (controller.window?.contentViewController as! PrivateMessageController).output_to_chat_window(msg)
+        } else {
+            already_open_window!.showWindow(self)
+            (already_open_window?.window?.contentViewController as! PrivateMessageController).output_to_chat_window(msg)
+        }
+        
+        
+        
+    }
+    
+    func add_priv_msg(_ handle : String, message: String) {
+        check_if_pinged(handle, message: message)
+        check_if_away_or_back(handle, message: message)
+        let msg = "\(handle): \(message)\n"
+        var already_open_window : NSWindowController? = nil
+        for window in pm_windows {
+            if (window.window?.contentViewController as! PrivateMessageController).handle == handle {
+                already_open_window = window
+            }
+        }
+        if already_open_window == nil {
+            let pmc = PrivateMessageController(nibName: "PrivateMessageController", bundle: nil)
+            
+            
+            // pass data to pmc
+            pmc.handle = handle
+            pmc.gcc = self
+            
+            let newWindow = NSWindow(contentViewController: pmc)
+            
+            newWindow.title = "Encrypted PM: \(handle) and \(self.handle)"
+            
+            newWindow.makeKeyAndOrderFront(self)
+            
+            let controller = NSWindowController(window: newWindow)
+            
+            pm_windows.append(controller)
+            
+            controller.showWindow(self)
+            (controller.window?.contentViewController as! PrivateMessageController).output_to_chat_window(msg)
+        } else {
+            already_open_window!.showWindow(self)
+            (already_open_window?.window?.contentViewController as! PrivateMessageController).output_to_chat_window(msg)
+        }
+        
+        
+        
     }
     
     func get_pub_keys() {

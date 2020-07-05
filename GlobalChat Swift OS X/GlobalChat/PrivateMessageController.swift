@@ -21,7 +21,7 @@ class PrivateMessageController: NSViewController, NSTextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
-        print("pm window loaded \(gcc!.handle) -> \(handle)")
+        print("pm window loaded \(gcc!.handle) and \(handle)")
         chat_message.delegate = self
     }
     
