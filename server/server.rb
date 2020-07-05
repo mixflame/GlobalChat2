@@ -14,6 +14,26 @@ require 'uri'
 require 'securerandom'
 require 'pstore'
 
+class WordGenerator
+  VOGALS = %w(a e i o u y)
+  CONSONANTS = [*?a..?z] - VOGALS
+  MOD_RESULT = [0, 1].freeze
+
+
+  def initialize(length)
+    @length = length
+    @mod_result = MOD_RESULT.sample
+  end
+
+  def generate
+    length.times.map { |i| i % 2 == mod_result ? CONSONANTS.sample : VOGALS.sample }.join
+  end
+
+  private
+
+  attr_reader :length, :mod_result
+end
+
 class GlobalChatServer < GServer
 
   attr_accessor :handles, :buffer, :handle_keys, :sockets, :password, :socket_keys, :scrollback, :server_name, :is_private, :host
@@ -393,5 +413,5 @@ end
 
 
 #Thread.new do
-GlobalChatServer.create("GC", "0.0.0.0", 9994, false, true)
+GlobalChatServer.create("GC-#{WordGenerator.new(10).generate}", "0.0.0.0", 9994, false, true)
 #end
