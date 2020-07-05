@@ -358,10 +358,10 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         output_to_chat_window(msg)
     }
     
-    func add_priv_msg(_ handle: String, message: String) {
+    func add_priv_msg(_ handleTo: String, handleFrom: String, message: String) {
         check_if_pinged(self.handle, message: message)
         check_if_away_or_back(self.handle, message: message)
-        let msg = "\(handle) -> \(self.handle): \(message)\n"
+        let msg = "\(handleFrom) -> \(handleTo): \(message)\n"
         output_to_chat_window(msg)
     }
     
@@ -509,6 +509,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             let encryptedData = try! ChaChaPoly.seal(sensitiveMessage, using: symmetricKey).combined
             let b64_cipher_text = encryptedData.base64EncodedString()
             send_message("PRIVMSG", args: [handle, b64_cipher_text, chat_token])
+            add_priv_msg(handle, handleFrom: self.handle, message: message)
 //            print("encryptedData: \(b64_cipher_text)")
         } catch {
             log("Error encrypting message for user \(handle)")
@@ -533,7 +534,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             let decryptedData = try! ChaChaPoly.open(sealedBox, using: symmetricKey)
 
             let sensitiveMessage = String(data: decryptedData, encoding: .utf8)
-            add_priv_msg(handle, message: sensitiveMessage!)
+            add_priv_msg(self.handle, handleFrom: handle, message: sensitiveMessage!)
             
         } catch {
             log("Error decrypting message from \(handle)")
