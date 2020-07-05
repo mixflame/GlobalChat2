@@ -22,6 +22,6 @@ New features not found in IRC Protocol:
 
 * send anything, handle can be anything too
 
-* written entirely in Ruby and now Swift
+* written entirely in Ruby and now also has a OS X Swift client
 
 * end to end encryption of private messages
