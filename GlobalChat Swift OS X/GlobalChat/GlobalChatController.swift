@@ -496,6 +496,10 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     func priv_msg(_ handle: String, message: String){
         let b64_key = public_keys[handle]
+        if b64_key == nil {
+            log("No public key for this user.\n")
+            return
+        }
         let data = Data(base64Encoded: b64_key!)
         do {
             let protocolSalt = "drowssap".data(using: .utf8)
