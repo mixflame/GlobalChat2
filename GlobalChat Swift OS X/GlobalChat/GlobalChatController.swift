@@ -275,6 +275,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             let msg = parr[2]
             add_msg(handle, message: msg)
         } else if command == "JOIN" {
+            get_pub_keys()
             let handle = parr[1]
             output_to_chat_window("\(handle) has entered\n")
             nicks.append(handle)
