@@ -94,7 +94,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
     
     func control(_ control: NSControl, textView fieldEditor: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
-        print("Selector method is (\(NSStringFromSelector(commandSelector)))")
+//        print("Selector method is (\(NSStringFromSelector(commandSelector)))")
         if commandSelector == #selector(NSStandardKeyBindingResponding.moveUp(_:)) {
             //Do something against ENTER key
             sent_message_index = sent_message_index + 1
@@ -119,15 +119,15 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             let message = chat_message.stringValue
             
             if (first_tab) {
-                print("first tab set tab query")
+//                print("first tab set tab query")
                 tab_query = String(message.components(separatedBy: " ").last!)
-                print("tab query is set to \(tab_query)")
+//                print("tab query is set to \(tab_query)")
             }
             if tab_query == "" { return true }
 
             let last_letters_before_tab = tab_query
             
-            print("last letters before tab \(last_letters_before_tab)")
+//            print("last letters before tab \(last_letters_before_tab)")
             var matches : [String] = []
             let regex = try! NSRegularExpression(pattern: tab_query)
             for nick in nicks {
@@ -139,7 +139,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
                     // what will be the code
                     let range = match.range
                     let matchString = nsString as String
-                    print("match is \(range) \(matchString)")
+//                    print("match is \(range) \(matchString)")
                     matches.append(matchString)
                 }
                 
@@ -158,14 +158,14 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
                     tab_completion_index -= tab_query.count
                 }
                 
-                print("replacing at position \(tab_completion_index) with match ", match)
+//                print("replacing at position \(tab_completion_index) with match ", match)
                 let msg = chat_message.stringValue;
 
                 let start_index = String.Index(utf16Offset: tab_completion_index, in: msg)
                 
                 let left_matter = msg.prefix(upTo: start_index)
                 
-                print(left_matter)
+//                print(left_matter)
                 
                 chat_message.stringValue = left_matter + match;
             }
@@ -246,7 +246,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
     
     func sign_on() {
-        print("sign_on:")
+//        print("sign_on:")
         if (host == "" || port == "") {
             return;
         }
@@ -330,7 +330,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             let pub_key = parr[1]
             let handle = parr[2]
             public_keys[handle] = pub_key
-            print(public_keys)
+//            print(public_keys)
         } else if command == "PRIVMSG" {
             let handle = parr[1] // who sent it
             let b64_cipher_text = parr[2]
@@ -449,24 +449,20 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
     
     func log(_ str: String) {
-        print(str)
+//        print(str) // noisy
         output_to_chat_window(str)
     }
     
     
     func autoreconnect() {
-        print("autoreconnect:")
         queue.async {
             if self.should_autoreconnect != false {
-                print("should autoreconnect")
                 while(true) {
                     if self.connected == true {
-                        print("reconnect successful.. breaking")
                         break
                     }
                   DispatchQueue.main.sync {
                     self.output_to_chat_window("Could not connect to GlobalChat. Will retry in 5 seconds..\n")
-                    print("connected? \(self.connected)")
                     self.sign_on()
                     }
                   sleep(5)
@@ -556,7 +552,6 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
     
     func receive_encrypted_message(_ handle : String, b64_cipher_text : String) {
-        print("b64: \(b64_cipher_text)")
         let b64_key = public_keys[handle]
         if b64_key == nil {
             log("No public key for this user.\n")
