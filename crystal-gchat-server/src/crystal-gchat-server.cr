@@ -196,10 +196,17 @@ class GlobalChatServer
   end
 
   def initialize
+    status
     @server = TCPServer.new("0.0.0.0", 9994)
     while client = @server.accept?
       spawn handle_client(client)
     end
+  end
+
+  def status
+    passworded = (@password != "")
+    scrollback = @scrollback
+    log "#{@server_name} running on GlobalChat2 platform Replay:#{scrollback} Passworded:#{passworded}"
   end
 
   def log(msg)
@@ -211,7 +218,7 @@ class GlobalChatServer
   end
 
   def check_token(chat_token)
-    sender = @handle_keys[chat_token]
+    sender = @handle_keys[chat_token]?
     return !sender.nil?
   end
 
