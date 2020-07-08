@@ -92,6 +92,7 @@ class GlobalChatServer
         spawn do
           sleep 5
           send_message(io, "PONG", [build_handle_list])
+          clean_handles
         end
       elsif command == "SIGNOFF"
         broadcast_message(nil, "LEAVE", [handle])
@@ -115,6 +116,15 @@ class GlobalChatServer
     end
 
 
+  end
+
+  def clean_handles
+    @handle_keys.each do |k, v|
+      if @handle_last_pinged[v] && @handle_last_pinged[v] < Time.utc - 30.seconds
+        log "removed clone handle: #{v}"
+        remove_user_by_handle(v)
+      end
+    end
   end
 
   def send_message(io, opcode, args)
@@ -146,6 +156,28 @@ class GlobalChatServer
     @handle_keys.delete ct
     @socket_keys.delete socket
     @socket_by_handle.delete handle
+
+    begin
+      broadcast_message(socket, "LEAVE", [handle])
+    rescue
+      log "failed to broadcast LEAVE for handle #{handle}"
+    end
+  end
+
+  def remove_user_by_handle(handle)
+    ct = @handle_keys.key_for(handle)
+    socket = @socket_keys.key_for(ct)
+    @sockets.delete socket
+
+    @handles.delete handle
+    @handle_keys.delete ct
+    @socket_keys.delete socket
+    @socket_by_handle.delete handle
+    begin
+      broadcast_message(socket, "LEAVE", [handle])
+    rescue
+      log "failed to broadcast LEAVE for handle #{handle}"
+    end
   end
 
   # Send to a single socket
