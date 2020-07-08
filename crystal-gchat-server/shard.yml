@@ -1,0 +1,13 @@
+name: crystal-gchat-server
+version: 0.1.0
+
+authors:
+  - your-name-here <your-email-here>
+
+targets:
+  crystal-gchat-server:
+    main: src/crystal-gchat-server.cr
+
+crystal: 0.35.1
+
+license: MIT
