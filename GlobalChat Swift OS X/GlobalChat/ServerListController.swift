@@ -25,6 +25,7 @@ class ServerListController: NSViewController, NSTableViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
+        print("view did load")
     }
     
     
@@ -95,7 +96,6 @@ class ServerListController: NSViewController, NSTableViewDataSource {
 
     func numberOfRows(in: NSTableView) -> Int {
         if self.names.count == 0 {
-            self.get_servers()
             return 0
         }
         return self.names.count

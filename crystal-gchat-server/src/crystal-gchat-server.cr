@@ -1,5 +1,7 @@
 require "socket"
 require "random"
+require "uri"
+require "http/client"
 
 class GlobalChatServer
 
@@ -15,6 +17,8 @@ class GlobalChatServer
   @server_name = "GC-crystal"
   @public_keys = {} of String => String
   @scrollback = true
+  @port = 9994
+  @is_private = false
 
   def handle_client(client)
     begin
@@ -196,11 +200,18 @@ class GlobalChatServer
   end
 
   def initialize
+    unless @is_private == true
+      ping_nexus(@server_name, @port)
+    end
     status
-    @server = TCPServer.new("0.0.0.0", 9994)
+    @server = TCPServer.new("0.0.0.0", @port)
     while client = @server.accept?
       spawn handle_client(client)
     end
+  end
+
+  def finalize
+    nexus_offline
   end
 
   def status
@@ -237,6 +248,35 @@ class GlobalChatServer
     return output
   end
 
+  def ping_nexus(chatnet_name, port)
+    puts "Pinging NexusNet that I'm Online!!"
+    
+    #query = {:name => chatnet_name, :port => port, :host => host}
+    #uri.query = URI.encode_www_form( query )
+    response = HTTP::Client.get "http://nexus-msl.herokuapp.com/online?name=#{chatnet_name}&port=#{port}"
+    @published = true
+
+    Signal::INT.trap do
+      nexus_offline
+      exit
+    end
+  
+    at_exit do |status|
+      nexus_offline
+    end
+  
+  end
+
+    # Tell Nexus I am no longer online
+  def nexus_offline
+    if @published == true
+      puts "Informing NexusNet that I have exited!!!"
+      response = HTTP::Client.get "http://nexus-msl.herokuapp.com/offline"
+      @published = false
+    end
+  end
+
 end
 
 gcs = GlobalChatServer.new
+

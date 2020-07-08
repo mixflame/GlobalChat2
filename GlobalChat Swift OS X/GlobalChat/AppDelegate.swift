@@ -38,6 +38,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         ver_menu_item.title = "v\(versionNum) build \(build)"
         
         connected = false
+        
+        slc.get_servers()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
