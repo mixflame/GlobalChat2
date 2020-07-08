@@ -10,9 +10,11 @@ class GlobalChatServer
   @socket_by_handle = {} of String => TCPSocket # get socket by handle
   # @port_keys = {} # unnecessary in PING design
   @handle_last_pinged = {} of String => Time # used for clone removal
-  @buffer = [] of String
+  @buffer = [] of Array(String)
   @password = "" # edit for password
   @server_name = "GC-crystal"
+  @public_keys = {} of String => String
+  @scrollback = true
 
   def handle_client(client)
     begin
@@ -25,10 +27,8 @@ class GlobalChatServer
       client.close
     end
     # client.puts message
-    client.close
-    if client.closed?
-      @sockets.delete client
-    end
+    puts "socket disconnected"
+    remove_dead_socket(client)
 
   end
 
@@ -67,8 +67,54 @@ class GlobalChatServer
         io.close
       end
       return
-
     end
+
+
+    chat_token = parr.last
+
+
+    if check_token(chat_token)
+      handle = get_handle(chat_token)
+      if command == "GETHANDLES"
+        send_message(io, "HANDLES", [build_handle_list])
+      elsif command == "GETBUFFER"
+        buffer = build_chat_log
+        send_message(io, "BUFFER", [buffer])
+      elsif command == "MESSAGE"
+        msg = parr[1]
+        @buffer << [handle, msg]
+        broadcast_message(io, "SAY", [handle, msg])
+      elsif command == "PING"
+        unless @handles.includes?(handle)
+          @handles << handle
+        end
+        @handle_last_pinged[handle] = Time.utc
+        spawn do
+          sleep 5
+          send_message(io, "PONG", [build_handle_list])
+        end
+      elsif command == "SIGNOFF"
+        broadcast_message(nil, "LEAVE", [handle])
+      elsif command == "PUBKEY"
+        # broadcast user's pub key and store it
+        pub_key = parr[1]
+        @public_keys[handle] = pub_key
+        broadcast_message(nil, "PUBKEY", [pub_key, handle])
+      elsif command == "PRIVMSG"
+        handleTo = parr[1] # handle to send to
+        message = parr[2]
+        socket = @socket_by_handle[handleTo]
+        send_message(socket, "PRIVMSG", [handle, message])
+      elsif command == "GETPUBKEYS"
+        @public_keys.keys.each do |key|
+          handle = key
+          public_key = @public_keys[key]
+          send_message(io, "PUBKEY", [public_key, handle])
+        end
+      end
+    end
+
+
   end
 
   def send_message(io, opcode, args)
@@ -99,6 +145,7 @@ class GlobalChatServer
     @handles.delete handle
     @handle_keys.delete ct
     @socket_keys.delete socket
+    @socket_by_handle.delete handle
   end
 
   # Send to a single socket
@@ -120,6 +167,30 @@ class GlobalChatServer
 
   def log(msg)
     puts(msg)
+  end
+
+  def build_handle_list
+    return @handles.uniq.join("\n")
+  end
+
+  def check_token(chat_token)
+    sender = @handle_keys[chat_token]
+    return !sender.nil?
+  end
+
+  def get_handle(chat_token)
+    sender = @handle_keys[chat_token]
+    return sender
+  end
+
+  def build_chat_log
+    return "" unless @scrollback
+    output = ""
+    displayed_buffer = @buffer.size > 30 ? @buffer[@buffer.size-30..-1] : @buffer
+    displayed_buffer.each do |msg|
+      output += "#{msg[0]}: #{msg[1]}\n"
+    end
+    return output
   end
 
 end
