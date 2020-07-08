@@ -91,8 +91,8 @@ class GlobalChatServer
         @handle_last_pinged[handle] = Time.utc
         spawn do
           sleep 5
-          send_message(io, "PONG", [build_handle_list])
           clean_handles
+          send_message(io, "PONG", [build_handle_list])
         end
       elsif command == "SIGNOFF"
         broadcast_message(nil, "LEAVE", [handle])
@@ -157,7 +157,7 @@ class GlobalChatServer
     @sockets.delete socket if @sockets.includes?(socket)
     ct = @socket_keys[socket] if @socket_keys.has_key?(socket)
     handle = @handle_keys[ct] if @handle_keys.has_key?(ct)
-    @handles.delete handle if @handles.includes?(socket)
+    @handles.delete handle if @handles.includes?(handle)
     @handle_keys.delete ct if @handle_keys.has_key?(ct)
     @socket_keys.delete socket if @socket_keys.has_key?(socket)
     @socket_by_handle.delete handle if @socket_by_handle.has_key?(handle)
@@ -174,7 +174,7 @@ class GlobalChatServer
     socket = @socket_keys.key_for(ct)
     @sockets.delete socket if @sockets.includes?(socket)
 
-    @handles.delete handle if @handles.includes?(socket)
+    @handles.delete handle if @handles.includes?(handle)
     @handle_keys.delete ct if @handle_keys.has_key?(ct)
     @socket_keys.delete socket if @socket_keys.has_key?(socket)
     @socket_by_handle.delete handle if @socket_by_handle.has_key?(handle)
