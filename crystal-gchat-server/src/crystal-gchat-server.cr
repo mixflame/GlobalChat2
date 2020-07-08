@@ -129,7 +129,12 @@ class GlobalChatServer
 
   def send_message(io, opcode, args)
     msg = opcode + "::!!::" + args.join("::!!::")
-    sock_send io, msg
+    begin
+      sock_send io, msg
+    rescue
+      log "sock send fail removal event"
+      remove_dead_socket io
+    end
   end
 
   def broadcast_message(sender, opcode, args)
@@ -149,13 +154,13 @@ class GlobalChatServer
   end
 
   def remove_dead_socket(socket)
-    @sockets.delete socket
-    ct = @socket_keys[socket]
-    handle = @handle_keys[ct]
-    @handles.delete handle
-    @handle_keys.delete ct
-    @socket_keys.delete socket
-    @socket_by_handle.delete handle
+    @sockets.delete socket if @sockets.includes?(socket)
+    ct = @socket_keys[socket] if @socket_keys.has_key?(socket)
+    handle = @handle_keys[ct] if @handle_keys.has_key?(ct)
+    @handles.delete handle if @handles.includes?(socket)
+    @handle_keys.delete ct if @handle_keys.has_key?(ct)
+    @socket_keys.delete socket if @socket_keys.has_key?(socket)
+    @socket_by_handle.delete handle if @socket_by_handle.has_key?(handle)
 
     begin
       broadcast_message(socket, "LEAVE", [handle])
@@ -167,12 +172,12 @@ class GlobalChatServer
   def remove_user_by_handle(handle)
     ct = @handle_keys.key_for(handle)
     socket = @socket_keys.key_for(ct)
-    @sockets.delete socket
+    @sockets.delete socket if @sockets.includes?(socket)
 
-    @handles.delete handle
-    @handle_keys.delete ct
-    @socket_keys.delete socket
-    @socket_by_handle.delete handle
+    @handles.delete handle if @handles.includes?(socket)
+    @handle_keys.delete ct if @handle_keys.has_key?(ct)
+    @socket_keys.delete socket if @socket_keys.has_key?(socket)
+    @socket_by_handle.delete handle if @socket_by_handle.has_key?(handle)
     begin
       broadcast_message(socket, "LEAVE", [handle])
     rescue
