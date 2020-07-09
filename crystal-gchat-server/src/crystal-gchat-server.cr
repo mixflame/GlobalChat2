@@ -19,6 +19,7 @@ class GlobalChatServer
   @scrollback = true
   @port = 9994
   @is_private = false
+  @canvas_size = "1280x690"
 
   def handle_client(client)
     begin
@@ -65,6 +66,7 @@ class GlobalChatServer
         @handles << handle
         @sockets << io
         send_message(io, "TOKEN", [chat_token, handle, @server_name])
+        send_message(io, "CANVAS", [@canvas_size])
         broadcast_message(io, "JOIN", [handle])
       else
         send_message(io, "ALERT", ["Password is incorrect."])
