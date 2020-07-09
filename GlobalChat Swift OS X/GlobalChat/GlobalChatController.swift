@@ -54,6 +54,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     var pm_windows = [NSWindowController]()
     
+    var draw_window : NSWindowController? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
@@ -188,11 +190,18 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         if message == "" {
             return
         }
-        if message.components(separatedBy: " ").first != "/privmsg" {
+        if message.components(separatedBy: " ").first?.prefix(1) != "/" {
             post_message(message)
-            chat_message.stringValue = ""
             sent_messages.append(message)
         } else {
+            run_command(message)
+        }
+        chat_message.stringValue = ""
+    }
+    
+    func run_command(_ message : String) {
+        let command = message.components(separatedBy: " ").first
+        if command == "/privmsg" {
             let handle = message.components(separatedBy: " ")[1]
             let msg = message.components(separatedBy: "/privmsg \(handle) ").last
             
@@ -228,7 +237,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             }
             
             priv_msg(handle, message: msg!)
-            
+        } else if command == "/draw" {
+            open_draw_window()
         }
     }
     
@@ -658,5 +668,27 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     func get_pub_keys() {
         send_message("GETPUBKEYS", args: [chat_token])
+    }
+    
+    
+    func open_draw_window() {
+        if draw_window == nil {
+            let gdc = GlobalDrawController(nibName: "GlobalDrawController", bundle: nil)
+            
+            // pass data
+            
+            let newWindow = NSWindow(contentViewController: gdc)
+            
+            newWindow.makeKeyAndOrderFront(self)
+            
+            let controller = NSWindowController(window: newWindow)
+            
+            draw_window = controller
+            
+            
+            controller.showWindow(self)
+        } else {
+            draw_window!.showWindow(self)
+        }
     }
 }

@@ -12,6 +12,8 @@
 		72CBCB2824AD651F007B8B3D /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72CBCB2624AD651E007B8B3D /* MainMenu.xib */; };
 		72CBCB2A24AFA89E007B8B3D /* ServerListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72CBCB2924AFA89E007B8B3D /* ServerListController.swift */; };
 		72CBCB2D24AFA909007B8B3D /* GlobalChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72CBCB2B24AFA909007B8B3D /* GlobalChatController.swift */; };
+		72D97CFF24B7CAFD0098E17C /* GlobalDrawController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D97CFD24B7CAFD0098E17C /* GlobalDrawController.swift */; };
+		72D97D0024B7CAFD0098E17C /* GlobalDrawController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72D97CFE24B7CAFD0098E17C /* GlobalDrawController.xib */; };
 		72F8AF1024AFE25B00BC9FC3 /* CocoaAsyncSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 72F8AF0F24AFE25B00BC9FC3 /* CocoaAsyncSocket */; };
 		72F8AF1924B26C0300BC9FC3 /* PrivateMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72F8AF1724B26C0300BC9FC3 /* PrivateMessageController.swift */; };
 		72F8AF1A24B26C0300BC9FC3 /* PrivateMessageController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72F8AF1824B26C0300BC9FC3 /* PrivateMessageController.xib */; };
@@ -26,6 +28,8 @@
 		72CBCB2724AD651E007B8B3D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "../../globalchat 2 OSX/GlobalChat/en.lproj/MainMenu.xib"; sourceTree = "<group>"; };
 		72CBCB2924AFA89E007B8B3D /* ServerListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerListController.swift; sourceTree = "<group>"; };
 		72CBCB2B24AFA909007B8B3D /* GlobalChatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalChatController.swift; sourceTree = "<group>"; };
+		72D97CFD24B7CAFD0098E17C /* GlobalDrawController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalDrawController.swift; sourceTree = "<group>"; };
+		72D97CFE24B7CAFD0098E17C /* GlobalDrawController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GlobalDrawController.xib; sourceTree = "<group>"; };
 		72F8AF1724B26C0300BC9FC3 /* PrivateMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateMessageController.swift; sourceTree = "<group>"; };
 		72F8AF1824B26C0300BC9FC3 /* PrivateMessageController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrivateMessageController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -64,6 +68,8 @@
 				72F8AF1724B26C0300BC9FC3 /* PrivateMessageController.swift */,
 				72F8AF1824B26C0300BC9FC3 /* PrivateMessageController.xib */,
 				72CBCB1824AD6475007B8B3D /* AppDelegate.swift */,
+				72D97CFD24B7CAFD0098E17C /* GlobalDrawController.swift */,
+				72D97CFE24B7CAFD0098E17C /* GlobalDrawController.xib */,
 				72CBCB1A24AD6477007B8B3D /* Assets.xcassets */,
 				72CBCB2624AD651E007B8B3D /* MainMenu.xib */,
 				72CBCB2924AFA89E007B8B3D /* ServerListController.swift */,
@@ -138,6 +144,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72D97D0024B7CAFD0098E17C /* GlobalDrawController.xib in Resources */,
 				72CBCB1B24AD6477007B8B3D /* Assets.xcassets in Resources */,
 				72CBCB2824AD651F007B8B3D /* MainMenu.xib in Resources */,
 				72F8AF1A24B26C0300BC9FC3 /* PrivateMessageController.xib in Resources */,
@@ -153,6 +160,7 @@
 			files = (
 				72CBCB2A24AFA89E007B8B3D /* ServerListController.swift in Sources */,
 				72F8AF1924B26C0300BC9FC3 /* PrivateMessageController.swift in Sources */,
+				72D97CFF24B7CAFD0098E17C /* GlobalDrawController.swift in Sources */,
 				72CBCB1924AD6475007B8B3D /* AppDelegate.swift in Sources */,
 				72CBCB2D24AFA909007B8B3D /* GlobalChatController.swift in Sources */,
 			);
