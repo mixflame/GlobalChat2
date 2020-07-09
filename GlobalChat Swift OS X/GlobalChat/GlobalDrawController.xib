@@ -7,21 +7,22 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="GlobalDrawController" customModule="GlobalChat" customModuleProvider="target">
             <connections>
+                <outlet property="drawing_view" destination="d0u-g7-a0V" id="BTw-fm-w3y"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <rect key="frame" x="0.0" y="0.0" width="434" height="221"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d0u-g7-a0V" customClass="LineDrawer" customModule="GlobalChat" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+                    <rect key="frame" x="0.0" y="0.0" width="434" height="221"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </customView>
             </subviews>
-            <point key="canvasLocation" x="139" y="154"/>
+            <point key="canvasLocation" x="116" y="128.5"/>
         </customView>
     </objects>
 </document>

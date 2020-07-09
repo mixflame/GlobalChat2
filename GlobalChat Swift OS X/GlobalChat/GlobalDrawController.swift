@@ -9,7 +9,12 @@
 import Cocoa
 
 class GlobalDrawController: NSViewController {
-
+    
+    @IBOutlet weak var drawing_view: NSView!
+    
+    
+    var gcc: GlobalChatController?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.

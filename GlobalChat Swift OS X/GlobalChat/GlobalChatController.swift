@@ -678,10 +678,11 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             let gdc = GlobalDrawController(nibName: "GlobalDrawController", bundle: nil)
             
             // pass data
+            gdc.gcc = self
             
             let newWindow = NSWindow(contentViewController: gdc)
             
-//            newWindow.setFrame(NSRect(x: 0, y: 0, width: width, height: height), display: true)
+            newWindow.setFrame(NSRect(x: 0, y: 0, width: width, height: height), display: true)
             
             newWindow.makeKeyAndOrderFront(self)
             
@@ -690,7 +691,10 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             draw_window = controller
             
             
+            
             controller.showWindow(self)
+            
+
         } else {
             draw_window!.showWindow(self)
         }
