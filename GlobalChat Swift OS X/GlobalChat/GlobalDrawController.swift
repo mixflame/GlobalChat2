@@ -9,7 +9,12 @@
 import Cocoa
 
 class GlobalDrawController: NSViewController {
-
+    
+    @IBOutlet weak var drawing_view: NSView!
+    
+    
+    var gcc: GlobalChatController?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
@@ -28,8 +33,9 @@ class LineDrawer : NSView {
 
     override func mouseDown(with event: NSEvent) {
         super.mouseDown(with: event)
-        let location = event.locationInWindow
-        var lastPt = event.locationInWindow
+//        let location = event.locationInWindow
+//        var lastPt = event.locationInWindow
+        var lastPt = convert(event.locationInWindow, from: nil)
         lastPt.x -= frame.origin.x
         lastPt.y -= frame.origin.y
         newLinear.move(to: lastPt)
@@ -37,7 +43,8 @@ class LineDrawer : NSView {
 
     override func mouseDragged(with event: NSEvent) {
         super.mouseDragged(with: event)
-        var newPt = event.locationInWindow
+//        var newPt = event.locationInWindow
+        var newPt = convert(event.locationInWindow, from: nil)
         newPt.x -= frame.origin.x
         newPt.y -= frame.origin.y
         newLinear.line(to: newPt)

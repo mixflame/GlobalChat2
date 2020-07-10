@@ -127,7 +127,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             }
             if tab_query == "" { return true }
 
-            let last_letters_before_tab = tab_query
+//            let last_letters_before_tab = tab_query
             
 //            print("last letters before tab \(last_letters_before_tab)")
             var matches : [String] = []
@@ -139,7 +139,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
                 
                 for match in results {
                     // what will be the code
-                    let range = match.range
+//                    let range = match.range
                     let matchString = nsString as String
 //                    print("match is \(range) \(matchString)")
                     matches.append(matchString)
@@ -237,8 +237,6 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             }
             
             priv_msg(handle, message: msg!)
-        } else if command == "/draw" {
-            open_draw_window()
         }
     }
     
@@ -345,6 +343,10 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             let handle = parr[1] // who sent it
             let b64_cipher_text = parr[2]
             receive_encrypted_message(handle, b64_cipher_text: b64_cipher_text)
+        } else if command == "CANVAS" {
+            let width = parr[1].components(separatedBy: "x")[0]
+            let height = parr[1].components(separatedBy: "x")[1]
+            open_draw_window(Int(width)!, Int(height)!)
         }
     }
     
@@ -671,13 +673,16 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
     
     
-    func open_draw_window() {
+    func open_draw_window(_ width : Int, _ height : Int) {
         if draw_window == nil {
             let gdc = GlobalDrawController(nibName: "GlobalDrawController", bundle: nil)
             
             // pass data
+            gdc.gcc = self
             
             let newWindow = NSWindow(contentViewController: gdc)
+            
+            newWindow.setFrame(NSRect(x: 0, y: 0, width: width, height: height), display: true)
             
             newWindow.makeKeyAndOrderFront(self)
             
@@ -686,7 +691,10 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             draw_window = controller
             
             
+            
             controller.showWindow(self)
+            
+
         } else {
             draw_window!.showWindow(self)
         }
