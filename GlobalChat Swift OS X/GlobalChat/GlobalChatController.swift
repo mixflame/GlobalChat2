@@ -682,6 +682,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             
             let newWindow = NSWindow(contentViewController: gdc)
             
+            newWindow.styleMask.remove(.resizable)
+            
             newWindow.setFrame(NSRect(x: 0, y: 0, width: width, height: height), display: true)
             
             newWindow.makeKeyAndOrderFront(self)
