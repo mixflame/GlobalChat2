@@ -84,20 +84,55 @@ class LineDrawer : NSView {
             layerOrder.append(layerName)
         }
         
-        print(layerOrder)
-        
     }
     
+    func drawLineTo(_ lastPoint : CGPoint, _ endPoint : CGPoint, _ penColor : NSColor, _ penWidth : CGFloat) {
+        newLinear.move(to: lastPoint)
+        newLinear.line(to: endPoint)
+        penColor.set()
+        newLinear.lineWidth = penWidth
+        newLinear.stroke()
+    }
+    
+    
     func redraw() {
+        NSColor.white.setFill() // allow configuration of this later
+        bounds.fill()
         
+        for layer in layerOrder {
+            let layerArray = layers[layer] as! [[String : Any]]
+            for i in 1...layerArray.count - 1 {
+                let lastObj = layerArray[i - 1] as [String : Any]
+                var lastPoint : CGPoint = CGPoint()
+                lastPoint.x = lastObj["x"] as! CGFloat
+                lastPoint.y = lastObj["y"] as! CGFloat
+                let thisObj = layerArray[i] as [String : Any]
+                var thisPoint : CGPoint = CGPoint()
+                thisPoint.x = thisObj["x"] as! CGFloat
+                thisPoint.y = thisObj["y"] as! CGFloat
+                if(thisObj["dragging"] as! Bool && lastObj["dragging"] as! Bool) {
+                    let red = lastObj["red"] as! CGFloat
+                    let green = lastObj["green"] as! CGFloat
+                    let blue = lastObj["blue"] as! CGFloat
+                    let alpha = lastObj["alpha"] as! CGFloat
+                    let penColor : NSColor = NSColor.init(red: red, green: green, blue: blue, alpha: alpha)
+                    let penWidth = lastObj["width"] as! CGFloat
+                    drawLineTo(lastPoint, thisPoint, penColor, penWidth)
+                }
+            }
+        }
     }
 
     override func draw(_ dirtyRect: NSRect) {
+        super.draw(dirtyRect)
+        
+        guard (NSGraphicsContext.current?.cgContext) != nil else {return}
 //        let gdc = self.window?.contentViewController as! GlobalDrawController
-//        pen_color.set()
-//        newLinear.lineWidth = pen_width
-//        newLinear.stroke()
-        redraw()
+        let objectFrame: NSRect = self.frame
+        if self.needsToDraw(objectFrame) {
+            // drawing code for object
+            redraw()
+        }
     }
 
     override func mouseDown(with event: NSEvent) {
@@ -111,9 +146,8 @@ class LineDrawer : NSView {
         
         addClick(lastPt.x, y: lastPt.y, dragging: false, red: pen_color.redComponent, green: pen_color.greenComponent, blue: pen_color.blueComponent, alpha: pen_color.alphaComponent, width: pen_width, clickName: gdc.gcc!.handle)
         
-        send_point(lastPt.x, y: lastPt.y, dragging: false, red: pen_color.redComponent, green: pen_color.greenComponent, blue: pen_color.blueComponent, alpha: pen_color.alphaComponent, width: pen_width, clickName: gdc.gcc!.handle)
+//        send_point(lastPt.x, y: lastPt.y, dragging: false, red: pen_color.redComponent, green: pen_color.greenComponent, blue: pen_color.blueComponent, alpha: pen_color.alphaComponent, width: pen_width, clickName: gdc.gcc!.handle)
         
-//        newLinear.move(to: lastPt)
     }
 
     override func mouseDragged(with event: NSEvent) {
@@ -127,14 +161,15 @@ class LineDrawer : NSView {
         addClick(newPt.x, y: newPt.y, dragging: true, red: pen_color.redComponent, green: pen_color.greenComponent, blue: pen_color.blueComponent, alpha: pen_color.alphaComponent, width: pen_width, clickName: gdc.gcc!.handle)
         
         
-        send_point(newPt.x, y: newPt.y, dragging: true, red: pen_color.redComponent, green: pen_color.greenComponent, blue: pen_color.blueComponent, alpha: pen_color.alphaComponent, width: pen_width, clickName: gdc.gcc!.handle)
-//        newLinear.line(to: newPt)
-        needsDisplay = true
+//        send_point(newPt.x, y: newPt.y, dragging: true, red: pen_color.redComponent, green: pen_color.greenComponent, blue: pen_color.blueComponent, alpha: pen_color.alphaComponent, width: pen_width, clickName: gdc.gcc!.handle)
+        
+        
     }
     
     override func mouseUp(with event: NSEvent) {
         super.mouseUp(with: event)
         scribbling = false
+        needsDisplay = true
     }
     
     
