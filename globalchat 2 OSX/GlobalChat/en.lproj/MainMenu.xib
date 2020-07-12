@@ -20,6 +20,11 @@
                             <menuItem title="GlobalChat 2 Pro #{ver}" id="708">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                             </menuItem>
+                            <menuItem title="Change Color" keyEquivalent="k" id="3lR-Vm-Kpr">
+                                <connections>
+                                    <action selector="changeColor:" target="sFe-dP-nHo" id="ugZ-Ec-I2c"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Hide" keyEquivalent="h" id="704">
                                 <connections>
                                     <action selector="hide:" target="-1" id="705"/>
@@ -365,5 +370,6 @@
                 <outlet property="server_list_window" destination="602" id="618"/>
             </connections>
         </customObject>
+        <customObject id="sFe-dP-nHo" customClass="GlobalDrawController" customModule="GlobalChat" customModuleProvider="target"/>
     </objects>
 </document>

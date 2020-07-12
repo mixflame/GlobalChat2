@@ -11,7 +11,7 @@ import CoreGraphics
 
 class GlobalDrawController: NSViewController {
     
-    @IBOutlet weak var drawing_view: NSView!
+    @IBOutlet weak var drawing_view: LineDrawer!
     
     var gcc: GlobalChatController?
 
@@ -21,6 +21,27 @@ class GlobalDrawController: NSViewController {
         // Do view setup here.
         print("viewDidLoad: gdc")
     }
+    
+    @objc func colorDidChange(sender:AnyObject) {
+        if let cp = sender as? NSColorPanel {
+            print(cp.color)
+            if(drawing_view == nil) {
+                self.loadView()
+            }
+            drawing_view.pen_color = cp.color
+            
+        }
+    }
+    
+    @IBAction func changeColor(_ sender : Any) {
+        let cp = NSColorPanel.shared
+        cp.setTarget(self)
+        cp.setAction(#selector(self.colorDidChange(sender:)))
+        cp.makeKeyAndOrderFront(self)
+        cp.isContinuous = true
+        cp.showsAlpha = true
+    }
+
     
 }
 
