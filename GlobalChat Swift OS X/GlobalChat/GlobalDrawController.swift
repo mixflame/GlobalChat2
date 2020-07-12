@@ -42,8 +42,14 @@ class LineDrawer : NSImageView {
     var pen_color : NSColor = NSColor.black.usingColorSpace(NSColorSpace.deviceRGB)!
     var pen_width : CGFloat = CGFloat(1)
     
+//    override init(frame frameRect: NSRect) {
+//        super.init(frame: frameRect)
+//        let gdc = self.window?.contentViewController as! GlobalDrawController
+//        gdc.gcc?.send_message("GETPOINTS", args: [])
+//    }
     
-    func addClick(_ x: CGFloat, y: CGFloat, dragging: Bool, red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, width: CGFloat, clickName: String) {
+    
+    public func addClick(_ x: CGFloat, y: CGFloat, dragging: Bool, red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, width: CGFloat, clickName: String) {
         var point : [String : Any] = [:]
         point["x"] = x
         point["y"] = y
@@ -95,11 +101,7 @@ class LineDrawer : NSImageView {
         context.move(to: lastPoint)
         context.addLine(to: endPoint)
         context.strokePath()
-//        newLinear.move(to: lastPoint)
-//        newLinear.line(to: endPoint)
-//        penColor.set()
-//        newLinear.lineWidth = penWidth
-//        newLinear.stroke()
+        
     }
     
     
@@ -109,19 +111,21 @@ class LineDrawer : NSImageView {
         
         for layer in layerOrder {
             let layerArray = layers[layer] as! [[String : Any]]
-            for i in 1...layerArray.count - 1 {
-                let lastObj = layerArray[i - 1] as [String : Any]
-                let lastPoint : CGPoint = CGPoint(x: lastObj["x"] as! CGFloat, y: lastObj["y"] as! CGFloat)
-                let thisObj = layerArray[i] as [String : Any]
-                let thisPoint : CGPoint = CGPoint(x: thisObj["x"] as! CGFloat, y: thisObj["y"] as! CGFloat)
-                if(thisObj["dragging"] as! Bool && lastObj["dragging"] as! Bool) {
-                    let red = lastObj["red"] as! CGFloat
-                    let green = lastObj["green"] as! CGFloat
-                    let blue = lastObj["blue"] as! CGFloat
-                    let alpha = lastObj["alpha"] as! CGFloat
-                    let penColor : NSColor = NSColor.init(red: red, green: green, blue: blue, alpha: alpha)
-                    let penWidth = lastObj["width"] as! CGFloat
-                    drawLineTo(lastPoint, thisPoint, penColor, penWidth)
+            if(layerArray.count > 1) {
+                for i in 1...layerArray.count - 1 {
+                    let lastObj = layerArray[i - 1] as [String : Any]
+                    let lastPoint : CGPoint = CGPoint(x: lastObj["x"] as! CGFloat, y: lastObj["y"] as! CGFloat)
+                    let thisObj = layerArray[i] as [String : Any]
+                    let thisPoint : CGPoint = CGPoint(x: thisObj["x"] as! CGFloat, y: thisObj["y"] as! CGFloat)
+                    if(thisObj["dragging"] as! Bool && lastObj["dragging"] as! Bool) {
+                        let red = lastObj["red"] as! CGFloat
+                        let green = lastObj["green"] as! CGFloat
+                        let blue = lastObj["blue"] as! CGFloat
+                        let alpha = lastObj["alpha"] as! CGFloat
+                        let penColor : NSColor = NSColor.init(red: red, green: green, blue: blue, alpha: alpha)
+                        let penWidth = lastObj["width"] as! CGFloat
+                        drawLineTo(lastPoint, thisPoint, penColor, penWidth)
+                    }
                 }
             }
         }
