@@ -233,6 +233,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             }
             
             priv_msg(handle, message: msg!)
+        } else if command == "/canvas" {
+            draw_window?.showWindow(self)
         }
     }
     
