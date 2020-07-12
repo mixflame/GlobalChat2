@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import CoreGraphics
 
 class GlobalDrawController: NSViewController {
     
@@ -18,12 +19,12 @@ class GlobalDrawController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
-//        print("viewDidLoad: gdc")
+        print("viewDidLoad: gdc")
     }
     
 }
 
-class LineDrawer : NSView {
+class LineDrawer : NSImageView {
     var newLinear = NSBezierPath()
     
     
@@ -41,7 +42,7 @@ class LineDrawer : NSView {
     var pen_color : NSColor = NSColor.black.usingColorSpace(NSColorSpace.deviceRGB)!
     var pen_width : CGFloat = CGFloat(1)
     
-    // void addClick(int x, int y, bool dragging, int r, int g, int b, int width, QString clickName);
+    
     func addClick(_ x: CGFloat, y: CGFloat, dragging: Bool, red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, width: CGFloat, clickName: String) {
         var point : [String : Any] = [:]
         point["x"] = x
@@ -87,11 +88,18 @@ class LineDrawer : NSView {
     }
     
     func drawLineTo(_ lastPoint : CGPoint, _ endPoint : CGPoint, _ penColor : NSColor, _ penWidth : CGFloat) {
-        newLinear.move(to: lastPoint)
-        newLinear.line(to: endPoint)
-        penColor.set()
-        newLinear.lineWidth = penWidth
-        newLinear.stroke()
+        
+        guard let context = NSGraphicsContext.current?.cgContext else { return }
+        context.setStrokeColor(penColor.cgColor)
+        context.setLineWidth(penWidth)
+        context.move(to: lastPoint)
+        context.addLine(to: endPoint)
+        context.strokePath()
+//        newLinear.move(to: lastPoint)
+//        newLinear.line(to: endPoint)
+//        penColor.set()
+//        newLinear.lineWidth = penWidth
+//        newLinear.stroke()
     }
     
     
@@ -103,13 +111,9 @@ class LineDrawer : NSView {
             let layerArray = layers[layer] as! [[String : Any]]
             for i in 1...layerArray.count - 1 {
                 let lastObj = layerArray[i - 1] as [String : Any]
-                var lastPoint : CGPoint = CGPoint()
-                lastPoint.x = lastObj["x"] as! CGFloat
-                lastPoint.y = lastObj["y"] as! CGFloat
+                let lastPoint : CGPoint = CGPoint(x: lastObj["x"] as! CGFloat, y: lastObj["y"] as! CGFloat)
                 let thisObj = layerArray[i] as [String : Any]
-                var thisPoint : CGPoint = CGPoint()
-                thisPoint.x = thisObj["x"] as! CGFloat
-                thisPoint.y = thisObj["y"] as! CGFloat
+                let thisPoint : CGPoint = CGPoint(x: thisObj["x"] as! CGFloat, y: thisObj["y"] as! CGFloat)
                 if(thisObj["dragging"] as! Bool && lastObj["dragging"] as! Bool) {
                     let red = lastObj["red"] as! CGFloat
                     let green = lastObj["green"] as! CGFloat
@@ -123,11 +127,9 @@ class LineDrawer : NSView {
         }
     }
 
+    
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
-        
-        guard (NSGraphicsContext.current?.cgContext) != nil else {return}
-//        let gdc = self.window?.contentViewController as! GlobalDrawController
         let objectFrame: NSRect = self.frame
         if self.needsToDraw(objectFrame) {
             // drawing code for object
@@ -146,14 +148,13 @@ class LineDrawer : NSView {
         
         addClick(lastPt.x, y: lastPt.y, dragging: false, red: pen_color.redComponent, green: pen_color.greenComponent, blue: pen_color.blueComponent, alpha: pen_color.alphaComponent, width: pen_width, clickName: gdc.gcc!.handle)
         
-//        send_point(lastPt.x, y: lastPt.y, dragging: false, red: pen_color.redComponent, green: pen_color.greenComponent, blue: pen_color.blueComponent, alpha: pen_color.alphaComponent, width: pen_width, clickName: gdc.gcc!.handle)
+        send_point(lastPt.x, y: lastPt.y, dragging: false, red: pen_color.redComponent, green: pen_color.greenComponent, blue: pen_color.blueComponent, alpha: pen_color.alphaComponent, width: pen_width, clickName: gdc.gcc!.handle)
         
     }
 
     override func mouseDragged(with event: NSEvent) {
         let gdc = self.window?.contentViewController as! GlobalDrawController
         super.mouseDragged(with: event)
-//        var newPt = event.locationInWindow
         var newPt = convert(event.locationInWindow, from: nil)
         newPt.x -= frame.origin.x
         newPt.y -= frame.origin.y
@@ -161,15 +162,16 @@ class LineDrawer : NSView {
         addClick(newPt.x, y: newPt.y, dragging: true, red: pen_color.redComponent, green: pen_color.greenComponent, blue: pen_color.blueComponent, alpha: pen_color.alphaComponent, width: pen_width, clickName: gdc.gcc!.handle)
         
         
-//        send_point(newPt.x, y: newPt.y, dragging: true, red: pen_color.redComponent, green: pen_color.greenComponent, blue: pen_color.blueComponent, alpha: pen_color.alphaComponent, width: pen_width, clickName: gdc.gcc!.handle)
-        
+        send_point(newPt.x, y: newPt.y, dragging: true, red: pen_color.redComponent, green: pen_color.greenComponent, blue: pen_color.blueComponent, alpha: pen_color.alphaComponent, width: pen_width, clickName: gdc.gcc!.handle)
+
+        needsDisplay = true
         
     }
     
     override func mouseUp(with event: NSEvent) {
         super.mouseUp(with: event)
         scribbling = false
-        needsDisplay = true
+        
     }
     
     
@@ -184,7 +186,7 @@ class LineDrawer : NSView {
         point.append(String(blue.description))
         point.append(String(alpha.description))
         point.append(String(width.description))
-        point.append(String(clickName))
+        point.append(String(gdc.gcc!.chat_token))
         gdc.gcc?.send_message("POINT", args: point)
     }
     
