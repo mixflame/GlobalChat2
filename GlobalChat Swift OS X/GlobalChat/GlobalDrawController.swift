@@ -136,6 +136,7 @@ class LineDrawer : NSImageView {
         
         guard let context = NSGraphicsContext.current?.cgContext else { return }
         context.setStrokeColor(penColor.cgColor)
+        context.setLineCap(.round)
         context.setLineWidth(penWidth)
         context.move(to: lastPoint)
         context.addLine(to: endPoint)
