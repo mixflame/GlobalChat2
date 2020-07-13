@@ -151,21 +151,25 @@ class LineDrawer : NSImageView {
         
         for layer in layerOrder {
             let layerArray = layers[layer] as! [[String : Any]]
-            if(layerArray.count > 1) {
-                for i in 1...layerArray.count - 1 {
+            for i in 0...layerArray.count - 1 {
+
+                let thisObj = layerArray[i] as [String : Any]
+                let thisPoint : CGPoint = CGPoint(x: thisObj["x"] as! CGFloat, y: thisObj["y"] as! CGFloat)
+                let red = thisObj["red"] as! CGFloat
+                let green = thisObj["green"] as! CGFloat
+                let blue = thisObj["blue"] as! CGFloat
+                let alpha = thisObj["alpha"] as! CGFloat
+                let penColor : NSColor = NSColor.init(red: red, green: green, blue: blue, alpha: alpha)
+                let penWidth = thisObj["width"] as! CGFloat
+                if(thisObj["dragging"] as! Bool && i > 0) {
                     let lastObj = layerArray[i - 1] as [String : Any]
                     let lastPoint : CGPoint = CGPoint(x: lastObj["x"] as! CGFloat, y: lastObj["y"] as! CGFloat)
-                    let thisObj = layerArray[i] as [String : Any]
-                    let thisPoint : CGPoint = CGPoint(x: thisObj["x"] as! CGFloat, y: thisObj["y"] as! CGFloat)
-                    if(thisObj["dragging"] as! Bool && lastObj["dragging"] as! Bool) {
-                        let red = lastObj["red"] as! CGFloat
-                        let green = lastObj["green"] as! CGFloat
-                        let blue = lastObj["blue"] as! CGFloat
-                        let alpha = lastObj["alpha"] as! CGFloat
-                        let penColor : NSColor = NSColor.init(red: red, green: green, blue: blue, alpha: alpha)
-                        let penWidth = lastObj["width"] as! CGFloat
-                        drawLineTo(lastPoint, thisPoint, penColor, penWidth)
-                    }
+                    drawLineTo(lastPoint, thisPoint, penColor, penWidth)
+                } else {
+                    var drawPoint = NSPoint()
+                    drawPoint.x = thisPoint.x - 1
+                    drawPoint.y = thisPoint.y
+                    drawLineTo(thisPoint, drawPoint, penColor, penWidth)
                 }
             }
         }
@@ -193,6 +197,8 @@ class LineDrawer : NSImageView {
         addClick(lastPt.x, y: lastPt.y, dragging: false, red: pen_color.redComponent, green: pen_color.greenComponent, blue: pen_color.blueComponent, alpha: pen_color.alphaComponent, width: pen_width, clickName: gdc.gcc!.handle)
         
         send_point(lastPt.x, y: lastPt.y, dragging: false, red: pen_color.redComponent, green: pen_color.greenComponent, blue: pen_color.blueComponent, alpha: pen_color.alphaComponent, width: pen_width, clickName: gdc.gcc!.handle)
+        
+        needsDisplay = true
         
     }
 
