@@ -715,4 +715,13 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         
         send_message("GETPOINTS", args: [chat_token])
     }
+    
+    // couldnt get this to work inside GlobalDrawController
+    @IBAction func brushBigger(_ sender : Any) {
+        (draw_window?.window?.contentViewController as! GlobalDrawController).brushBigger()
+    }
+    
+    @IBAction func brushSmaller(_ sender : Any) {
+        (draw_window?.window?.contentViewController as! GlobalDrawController).brushSmaller()
+    }
 }

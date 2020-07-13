@@ -14,12 +14,30 @@ class GlobalDrawController: NSViewController {
     @IBOutlet weak var drawing_view: LineDrawer!
     
     var gcc: GlobalChatController?
+    
+    var loaded = false
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
         print("viewDidLoad: gdc")
+//        drawing_view.pen_width = CGFloat(5.0)
+        loaded = true
+    }
+    
+    func brushBigger() {
+        if(loaded) {
+            drawing_view.pen_width = CGFloat(drawing_view.pen_width + 1.0)
+        }
+    }
+    
+    func brushSmaller() {
+        if(loaded) {
+            if(drawing_view.pen_width > 1) {
+                drawing_view.pen_width = CGFloat(drawing_view.pen_width - 1.0)
+            }
+        }
     }
     
     @objc func colorDidChange(sender:AnyObject) {

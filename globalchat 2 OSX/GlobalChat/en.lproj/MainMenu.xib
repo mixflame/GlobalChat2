@@ -25,6 +25,16 @@
                                     <action selector="changeColor:" target="sFe-dP-nHo" id="ugZ-Ec-I2c"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Make Brush Bigger" keyEquivalent="=" id="RvF-LD-AM4">
+                                <connections>
+                                    <action selector="brushBigger:" target="580" id="kTc-xu-jBG"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Make Brush Smaller" keyEquivalent="-" id="AWF-8S-rAf">
+                                <connections>
+                                    <action selector="brushSmaller:" target="580" id="u8Y-CF-s33"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Hide" keyEquivalent="h" id="704">
                                 <connections>
                                     <action selector="hide:" target="-1" id="705"/>
@@ -65,7 +75,7 @@
             <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="668" y="56" width="732" height="384"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="800"/>
             <value key="minSize" type="size" width="732" height="384"/>
             <view key="contentView" id="372">
                 <rect key="frame" x="0.0" y="0.0" width="732" height="384"/>
@@ -84,7 +94,7 @@
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="xlE-qh-4Bs">
                                             <rect key="frame" x="1" y="1" width="120" height="358"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" id="560">
                                                     <rect key="frame" x="0.0" y="0.0" width="120" height="358"/>
@@ -134,7 +144,7 @@
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="PPY-wM-3Tg">
                                             <rect key="frame" x="1" y="1" width="598" height="360"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" findStyle="panel" linkDetection="YES" dataDetection="YES" spellingCorrection="YES" id="681">
                                                     <rect key="frame" x="0.0" y="0.0" width="598" height="360"/>
@@ -208,7 +218,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="131" y="159" width="480" height="322"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="800"/>
             <view key="contentView" id="603">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="322"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -218,7 +228,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <clipView key="contentView" drawsBackground="NO" id="L6x-aH-wa4">
                             <rect key="frame" x="1" y="1" width="480" height="152"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" id="605">
                                     <rect key="frame" x="0.0" y="0.0" width="480" height="152"/>
