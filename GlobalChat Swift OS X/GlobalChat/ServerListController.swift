@@ -42,10 +42,10 @@ class ServerListController: NSViewController, NSTableViewDataSource {
             let data_string = String(data: data, encoding: .utf8)
             let each_line = data_string!.split(separator: Character("\n"))
             for server in each_line {
-                let server_info = server.components(separatedBy: "-!!!-")
-                let name = server_info[0]
-                let ip = server_info[1]
-                let port = server_info[2]
+                let server_info = server.components(separatedBy: "::!!::")
+                let name = server_info[1]
+                let ip = server_info[2]
+                let port = server_info[3]
                 self.names.append(String(name))
                 self.server_list_hash.append(["name": name, "ip": ip, "port": port])
             }

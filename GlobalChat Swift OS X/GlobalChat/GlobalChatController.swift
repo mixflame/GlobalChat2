@@ -178,11 +178,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
       
     @IBAction func quit(_ sender: Any) {
-        if connected == false {
-          application.terminate(self)
-        } else {
-          return_to_server_list()
-        }
+        application.terminate(self)
     }
     
     @IBAction func sendMessage(_ sender: NSTextField) {
@@ -237,6 +233,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             }
             
             priv_msg(handle, message: msg!)
+        } else if command == "/canvas" {
+            draw_window?.showWindow(self)
         }
     }
     
@@ -347,6 +345,19 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             let width = parr[1].components(separatedBy: "x")[0]
             let height = parr[1].components(separatedBy: "x")[1]
             open_draw_window(Int(width)!, Int(height)!)
+        } else if command == "POINT" {
+            let x = CGFloat(Double(parr[1])!)
+            let y = CGFloat(Double(parr[2])!)
+            let dragging = Bool(parr[3])!
+            let red = CGFloat(Double(parr[4])!)
+            let green = CGFloat(Double(parr[5])!)
+            let blue = CGFloat(Double(parr[6])!)
+            let alpha = CGFloat(Double(parr[7])!)
+            let width = CGFloat(Double(parr[8])!)
+            let clickName = parr[9]
+            ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view as! LineDrawer).addClick(x, y: y, dragging: dragging, red: red, green: green, blue: blue, alpha: alpha, width: width, clickName: clickName)
+            
+            ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view as! LineDrawer).needsDisplay = true
         }
     }
     
@@ -680,7 +691,10 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             // pass data
             gdc.gcc = self
             
+            
             let newWindow = NSWindow(contentViewController: gdc)
+            
+            newWindow.styleMask.remove(.resizable)
             
             newWindow.setFrame(NSRect(x: 0, y: 0, width: width, height: height), display: true)
             
@@ -698,5 +712,29 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         } else {
             draw_window!.showWindow(self)
         }
+        
+        send_message("GETPOINTS", args: [chat_token])
+    }
+    
+    // couldnt get this to work inside GlobalDrawController
+    @IBAction func brushBigger(_ sender : Any) {
+        if draw_window == nil {
+            return
+        }
+        (draw_window?.window?.contentViewController as! GlobalDrawController).brushBigger()
+    }
+    
+    @IBAction func brushSmaller(_ sender : Any) {
+        if draw_window == nil {
+            return
+        }
+        (draw_window?.window?.contentViewController as! GlobalDrawController).brushSmaller()
+    }
+    
+    @IBAction func saveImage(_ sender : Any) {
+        if draw_window == nil {
+            return
+        }
+        (draw_window?.window?.contentViewController as! GlobalDrawController).saveImage()
     }
 }

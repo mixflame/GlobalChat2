@@ -20,6 +20,7 @@ class GlobalChatServer
   @port = 9994
   @is_private = false
   @canvas_size = "1280x690"
+  @points = [] of String
 
   def handle_client(client)
     begin
@@ -118,10 +119,33 @@ class GlobalChatServer
           public_key = @public_keys[key]
           send_message(io, "PUBKEY", [public_key, handle])
         end
+      elsif command == "POINT"
+        
+        @points << line.gsub(parr.last, handle)
+        x = parr[1]
+        y = parr[2]
+        dragging = parr[3]
+        red = parr[4]
+        green = parr[5]
+        blue = parr[6]
+        alpha = parr[7]
+        width = parr[8]
+        broadcast_message(io, "POINT", [x, y, dragging, red, green, blue, alpha, width, handle])
+      elsif command == "GETPOINTS"
+        send_points(io)
       end
     end
 
 
+  end
+
+  def send_points(io)
+    points_str = ""
+    @points.each do |point|
+      points_str += "#{point}\0"
+    end
+
+    sock_send(io, points_str)
   end
 
   def clean_handles

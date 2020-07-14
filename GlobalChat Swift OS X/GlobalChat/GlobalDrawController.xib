@@ -7,7 +7,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="GlobalDrawController" customModule="GlobalChat" customModuleProvider="target">
             <connections>
-                <outlet property="drawing_view" destination="d0u-g7-a0V" id="BTw-fm-w3y"/>
+                <outlet property="drawing_view" destination="d0u-g7-a0V" id="m7B-HH-mFn"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
