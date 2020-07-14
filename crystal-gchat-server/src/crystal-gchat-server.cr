@@ -140,10 +140,12 @@ class GlobalChatServer
   end
 
   def send_points(io)
-    points_str = ""
-    @points.each do |point|
-      # points_str += "#{point}\0"
-      sock_send(io, "#{point}\0")
+    # points_str = ""
+    spawn do
+      @points.each do |point|
+        # points_str += "#{point}\0"
+        sock_send(io, "#{point}\0")
+      end
     end
 
     # sock_send(io, points_str)
