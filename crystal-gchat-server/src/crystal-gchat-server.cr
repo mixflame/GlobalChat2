@@ -67,7 +67,7 @@ class GlobalChatServer
         @handles << handle
         @sockets << io
         send_message(io, "TOKEN", [chat_token, handle, @server_name])
-        send_message(io, "CANVAS", [@canvas_size])
+        send_message(io, "CANVAS", [@canvas_size, @points.size])
         broadcast_message(io, "JOIN", [handle])
       else
         send_message(io, "ALERT", ["Password is incorrect."])

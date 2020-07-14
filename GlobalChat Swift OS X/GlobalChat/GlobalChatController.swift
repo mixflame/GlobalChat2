@@ -344,7 +344,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         } else if command == "CANVAS" {
             let width = parr[1].components(separatedBy: "x")[0]
             let height = parr[1].components(separatedBy: "x")[1]
-            open_draw_window(Int(width)!, Int(height)!)
+            let points_size = parr[2]
+            open_draw_window(Int(width)!, Int(height)!, Int(points_size)!)
         } else if command == "POINT" {
             let x = CGFloat(Double(parr[1])!)
             let y = CGFloat(Double(parr[2])!)
@@ -684,12 +685,13 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
     
     
-    func open_draw_window(_ width : Int, _ height : Int) {
+    func open_draw_window(_ width : Int, _ height : Int, _ points_size : Int) {
         if draw_window == nil {
             let gdc = GlobalDrawController(nibName: "GlobalDrawController", bundle: nil)
             
             // pass data
             gdc.gcc = self
+            gdc.points_size = points_size
             
             
             let newWindow = NSWindow(contentViewController: gdc)

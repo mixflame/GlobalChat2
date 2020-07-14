@@ -15,6 +15,8 @@ class GlobalDrawController: NSViewController {
     
     var gcc: GlobalChatController?
     
+    var points_size : Int?
+    
     var loaded = false
 
     
@@ -24,6 +26,7 @@ class GlobalDrawController: NSViewController {
         print("viewDidLoad: gdc")
 //        drawing_view.pen_width = CGFloat(5.0)
         loaded = true
+        print("points size: \(points_size)")
     }
     
     func brushBigger() {
@@ -99,6 +102,8 @@ class LineDrawer : NSImageView {
     
     var layers : [String : Any] = [:] // which points are in a layer
     
+    var points_total : Int = 0
+    
 //    var username : String = ""
     
     var scribbling : Bool = false
@@ -106,12 +111,6 @@ class LineDrawer : NSImageView {
     var pen_width : CGFloat = CGFloat(1)
     
     var flattenedImage: NSImage?
-    
-//    override init(frame frameRect: NSRect) {
-//        super.init(frame: frameRect)
-//        let gdc = self.window?.contentViewController as! GlobalDrawController
-//        gdc.gcc?.send_message("GETPOINTS", args: [])
-//    }
     
     
     public func addClick(_ x: CGFloat, y: CGFloat, dragging: Bool, red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, width: CGFloat, clickName: String) {
@@ -129,6 +128,7 @@ class LineDrawer : NSImageView {
         point["width"] = width
         point["clickName"] = clickName
         points.append(point)
+        points_total = points_total + 1
         
         var layerName : String = ""
         
@@ -248,7 +248,13 @@ class LineDrawer : NSImageView {
 
     override func mouseDown(with event: NSEvent) {
         let gdc = self.window?.contentViewController as! GlobalDrawController
+        
+        if points_total < gdc.points_size! {
+            return
+        }
+        
         super.mouseDown(with: event)
+        
         scribbling = true
         
         var lastPt = convert(event.locationInWindow, from: nil)
@@ -265,6 +271,11 @@ class LineDrawer : NSImageView {
 
     override func mouseDragged(with event: NSEvent) {
         let gdc = self.window?.contentViewController as! GlobalDrawController
+        
+        if points_total < gdc.points_size! {
+            return
+        }
+        
         super.mouseDragged(with: event)
         var newPt = convert(event.locationInWindow, from: nil)
         newPt.x -= frame.origin.x
