@@ -1,18 +1,22 @@
 # crystal-gchat-server
 
-TODO: Write a description here
+Asynchronous Chat and Drawing server
 
 ## Installation
 
-TODO: Write installation instructions here
+Install Crystal 0.35.1
+
+Optionally edit variables at the top of crystal-gchat-server.cr
+
+Run `crystal src/crystal-gchat-server.cr`
 
 ## Usage
 
-TODO: Write usage instructions here
+To be used with the GlobalChat2 client.
 
 ## Development
 
-TODO: Write development instructions here
+Runs on Crystal 0.35.1 with no shards
 
 ## Contributing
 
@@ -24,4 +28,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [your-name-here](https://github.com/your-github-user) - creator and maintainer
+- [Jonathan Silverman](https://github.com/mixflame) - creator and maintainer
