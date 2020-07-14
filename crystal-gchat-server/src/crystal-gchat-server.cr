@@ -98,7 +98,7 @@ class GlobalChatServer
         @handle_last_pinged[handle] = Time.utc
         spawn do
           sleep 5
-          clean_handles
+          # clean_handles
           send_message(io, "PONG", [build_handle_list])
         end
       elsif command == "SIGNOFF"
