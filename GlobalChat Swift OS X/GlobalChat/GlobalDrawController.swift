@@ -67,7 +67,7 @@ class GlobalDrawController: NSViewController {
             if result.rawValue == NSApplication.ModalResponse.OK.rawValue {
                 let path = savePanel.url!.path
                 
-                let image = self.drawing_view.imageRepresentation() as! NSImage
+                let image = self.drawing_view.imageRepresentation()
                 
                 let imgRep = image.representations[0] as! NSBitmapImageRep
                 let data = imgRep.representation(using: NSBitmapImageRep.FileType.png, properties: [:])
@@ -87,7 +87,11 @@ class LineDrawer : NSImageView {
     var newLinear = NSBezierPath()
     
     
-    var points : [[String : Any]] = []
+    var points : [[String : Any]] = [] {
+        didSet {
+            checkIfTooManyPointsIn(&points)
+        }
+    }
     
     var nameHash : [String : Int] = [:] // which layer is this handle on
     
@@ -101,6 +105,8 @@ class LineDrawer : NSImageView {
     var pen_color : NSColor = NSColor.black.usingColorSpace(NSColorSpace.deviceRGB)!
     var pen_width : CGFloat = CGFloat(1)
     
+    var flattenedImage: NSImage?
+    
 //    override init(frame frameRect: NSRect) {
 //        super.init(frame: frameRect)
 //        let gdc = self.window?.contentViewController as! GlobalDrawController
@@ -109,6 +115,9 @@ class LineDrawer : NSImageView {
     
     
     public func addClick(_ x: CGFloat, y: CGFloat, dragging: Bool, red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, width: CGFloat, clickName: String) {
+        
+        print("num points \(points.count)")
+        
         var point : [String : Any] = [:]
         point["x"] = x
         point["y"] = y
@@ -164,10 +173,41 @@ class LineDrawer : NSImageView {
         
     }
     
+    func checkIfTooManyPointsIn(_ line: inout [[String : Any]]) {
+        let maxPoints = 200
+        if line.count > maxPoints {
+//            print("too many points")
+            flattenedImage = self.imageRepresentation()
+
+            // we leave one point to ensure no gaps in drawing
+            line.removeAll()
+            layerOrder.removeAll()
+            layers.removeAll()
+            nameHash.removeAll()
+        }
+    }
+    
+    func flattenImage() {
+        flattenedImage = self.imageRepresentation()
+        points.removeAll()
+        layerOrder.removeAll()
+        layers.removeAll()
+        nameHash.removeAll()
+    }
+    
     
     func redraw() {
         NSColor.white.setFill() // allow configuration of this later
         bounds.fill()
+        
+        guard let context = NSGraphicsContext.current?.cgContext else { return }
+        
+        if let image = flattenedImage {
+            var imageRect = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
+            let imageRef = image.cgImage(forProposedRect: &imageRect, context: nil, hints: nil)!
+            context.draw(imageRef, in: self.frame)
+        }
+        
         
         for layer in layerOrder {
             let layerArray = layers[layer] as! [[String : Any]]
@@ -242,6 +282,7 @@ class LineDrawer : NSImageView {
     override func mouseUp(with event: NSEvent) {
         super.mouseUp(with: event)
         scribbling = false
+        flattenImage()
         
     }
     
@@ -261,7 +302,7 @@ class LineDrawer : NSImageView {
         gdc.gcc?.send_message("POINT", args: point)
     }
     
-    func imageRepresentation() -> Any! {
+    func imageRepresentation() -> NSImage {
         let mySize = bounds.size
         let imgSize = NSMakeSize(mySize.width, mySize.height)
 
