@@ -347,18 +347,20 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             let points_size = parr[2]
             open_draw_window(Int(width)!, Int(height)!, Int(points_size)!)
         } else if command == "POINT" {
-            let x = CGFloat(Double(parr[1])!)
-            let y = CGFloat(Double(parr[2])!)
-            let dragging = Bool(parr[3])!
-            let red = CGFloat(Double(parr[4])!)
-            let green = CGFloat(Double(parr[5])!)
-            let blue = CGFloat(Double(parr[6])!)
-            let alpha = CGFloat(Double(parr[7])!)
-            let width = CGFloat(Double(parr[8])!)
-            let clickName = parr[9]
-            ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view as! LineDrawer).addClick(x, y: y, dragging: dragging, red: red, green: green, blue: blue, alpha: alpha, width: width, clickName: clickName)
-            
-            ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view as! LineDrawer).needsDisplay = true
+            if parr.count == 10 {
+                let x = CGFloat(Double(parr[1])!)
+                let y = CGFloat(Double(parr[2])!)
+                let dragging = Bool(parr[3])!
+                let red = CGFloat(Double(parr[4])!)
+                let green = CGFloat(Double(parr[5])!)
+                let blue = CGFloat(Double(parr[6])!)
+                let alpha = CGFloat(Double(parr[7])!)
+                let width = CGFloat(Double(parr[8])!)
+                let clickName = parr[9]
+                ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view as! LineDrawer).addClick(x, y: y, dragging: dragging, red: red, green: green, blue: blue, alpha: alpha, width: width, clickName: clickName)
+                
+                ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view as! LineDrawer).needsDisplay = true
+            }
         }
     }
     
