@@ -30,6 +30,15 @@ class MainActivity : AppCompatActivity() {
 
         serverList.setOnItemClickListener { adapterView, view, i, l ->
             val listItem = list[i]
+
+            // start the connection attempt
+
+
+            // did it succeeed?
+
+            // yes, change over
+
+
             val intent = Intent(this, GlobalChat::class.java)
             intent.putExtra("serverName", listItem.name)
             intent.putExtra("serverIp", listItem.ip)

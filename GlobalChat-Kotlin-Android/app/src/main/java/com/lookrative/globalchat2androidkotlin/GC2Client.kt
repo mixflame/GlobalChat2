@@ -44,7 +44,7 @@ class GC2Client(private val globalChat: GlobalChat, private val ip: String?, pri
 
     var userList : ArrayList<UserListItem> = arrayListOf<UserListItem>()
 
-    suspend fun start() {
+    fun start() {
         println("Connecting to $ip:$port")
         connFuture = channel.connect(InetSocketAddress(ip, port))
         connFuture.get()
@@ -135,6 +135,7 @@ class GC2Client(private val globalChat: GlobalChat, private val ip: String?, pri
             }
             "PONG" -> {
                 nicks = parr.last().toString().splitToSequence("\n")
+                updateNickList()
                 ping()
             }
             "SAY" -> {
@@ -173,8 +174,13 @@ class GC2Client(private val globalChat: GlobalChat, private val ip: String?, pri
     }
 
     private fun updateNickList() {
+        userList.clear()
+        for (nick in nicks) {
+            val user = UserListItem(nick)
+            userList.add(user)
+        }
         globalChat.runOnUiThread {
-            globalChat.handles.adapter = ArrayAdapter<UserListItem>(globalChat,
+            globalChat.usersList.adapter = ArrayAdapter<UserListItem>(globalChat,
                 R.layout.user_list_item, userList)
         }
     }
@@ -225,14 +231,10 @@ class GC2Client(private val globalChat: GlobalChat, private val ip: String?, pri
     }
 
     fun stop() {
-        if (connected) {
-            sendMessage("SIGNOFF", listOf(token))
+        if (connected)
             channel.close()
-        }
-        stopping = true
-        if (connFuture != null && !connFuture.isDone) {
-            println("CANCELING UNFINISHED CONNECTION ATTEMPT")
+        else if (!connFuture.isDone)
             connFuture.cancel(true)
-        }
+        stopping = true
     }
 }
