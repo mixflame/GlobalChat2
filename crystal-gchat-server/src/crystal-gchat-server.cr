@@ -131,6 +131,7 @@ class GlobalChatServer
         alpha = parr[7]
         width = parr[8]
         broadcast_message(io, "POINT", [x, y, dragging, red, green, blue, alpha, width, handle])
+        File.write("buffer.txt", "#{@points.last}\n", mode: "a")
       elsif command == "GETPOINTS"
         send_points(io)
       end
@@ -146,6 +147,7 @@ class GlobalChatServer
         # points_str += "#{point}\0"
         sock_send(io, "#{point}\0")
         # sleep 0.seconds
+        # Fiber.yield
       end
     end
 
@@ -230,6 +232,7 @@ class GlobalChatServer
   end
 
   def initialize
+    load_canvas_buffer
     unless @is_private == true
       ping_nexus(@server_name, @port)
     end
@@ -242,6 +245,12 @@ class GlobalChatServer
 
   def finalize
     nexus_offline
+  end
+
+  def load_canvas_buffer
+    if File.exists?("buffer.txt")
+      @points = File.read("buffer.txt").chomp.split("\n")
+    end
   end
 
   def status
