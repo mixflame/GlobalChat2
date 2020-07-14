@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name = "GlobalChat2AndroidKotlin"
+rootProject.name = "GlobalChat2"

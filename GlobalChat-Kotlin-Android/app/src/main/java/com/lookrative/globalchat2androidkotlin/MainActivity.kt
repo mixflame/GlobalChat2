@@ -41,11 +41,11 @@ class MainActivity : AppCompatActivity() {
             list.clear()
 
             URL(msl).readText().split("\n").forEach {
-                var parts = it.split("-!!!-");
-
-                val item = ServerListItem(parts[0], parts[1], parts[2].toInt())
-
-                list.add(item)
+                var parts = it.split("::!!::")
+                if (parts[0] == "SERVER" && parts.count() == 4) {
+                    var item = ServerListItem(parts[1], parts[2], parts[3].toInt())
+                    list.add(item)
+                }
 
                 runOnUiThread {
                     populateServerList(list)
