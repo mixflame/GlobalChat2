@@ -718,10 +718,23 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     // couldnt get this to work inside GlobalDrawController
     @IBAction func brushBigger(_ sender : Any) {
+        if draw_window == nil {
+            return
+        }
         (draw_window?.window?.contentViewController as! GlobalDrawController).brushBigger()
     }
     
     @IBAction func brushSmaller(_ sender : Any) {
+        if draw_window == nil {
+            return
+        }
         (draw_window?.window?.contentViewController as! GlobalDrawController).brushSmaller()
+    }
+    
+    @IBAction func saveImage(_ sender : Any) {
+        if draw_window == nil {
+            return
+        }
+        (draw_window?.window?.contentViewController as! GlobalDrawController).saveImage()
     }
 }

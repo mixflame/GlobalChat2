@@ -59,6 +59,26 @@ class GlobalDrawController: NSViewController {
         cp.isContinuous = true
         cp.showsAlpha = true
     }
+    
+    func saveImage() {
+        let savePanel = NSSavePanel()
+        savePanel.allowedFileTypes = ["png"]
+        savePanel.begin { (result) in
+            if result.rawValue == NSApplication.ModalResponse.OK.rawValue {
+                let path = savePanel.url!.path
+                
+                let image = self.drawing_view.imageRepresentation() as! NSImage
+                
+                let imgRep = image.representations[0] as! NSBitmapImageRep
+                let data = imgRep.representation(using: NSBitmapImageRep.FileType.png, properties: [:])
+                if let data = data {
+                    NSData(data: data).write(toFile: path, atomically: false)
+                }
+
+
+            }
+        }
+    }
 
     
 }
@@ -173,6 +193,7 @@ class LineDrawer : NSImageView {
                 }
             }
         }
+        
     }
 
     
@@ -238,6 +259,23 @@ class LineDrawer : NSImageView {
         point.append(String(width.description))
         point.append(String(gdc.gcc!.chat_token))
         gdc.gcc?.send_message("POINT", args: point)
+    }
+    
+    func imageRepresentation() -> Any! {
+        let mySize = bounds.size
+        let imgSize = NSMakeSize(mySize.width, mySize.height)
+
+        let bir = bitmapImageRepForCachingDisplay(in: bounds)
+        bir?.size = imgSize
+        if let bir = bir {
+            cacheDisplay(in: bounds, to: bir)
+        }
+
+        let image = NSImage(size: imgSize)
+        if let bir = bir {
+            image.addRepresentation(bir)
+        }
+        return image
     }
     
 }

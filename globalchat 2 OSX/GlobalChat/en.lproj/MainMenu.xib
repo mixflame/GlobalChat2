@@ -35,6 +35,11 @@
                                     <action selector="brushSmaller:" target="580" id="u8Y-CF-s33"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Save Image to File" keyEquivalent="s" id="Kta-sT-148">
+                                <connections>
+                                    <action selector="saveImage:" target="580" id="3VG-Tg-nlN"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Hide" keyEquivalent="h" id="704">
                                 <connections>
                                     <action selector="hide:" target="-1" id="705"/>
