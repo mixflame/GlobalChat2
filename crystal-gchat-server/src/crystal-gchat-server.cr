@@ -145,6 +145,7 @@ class GlobalChatServer
       @points.each do |point|
         # points_str += "#{point}\0"
         sock_send(io, "#{point}\0")
+        sleep 0.seconds
       end
     end
 
