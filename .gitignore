@@ -31,3 +31,6 @@ DerivedData/
 
 ## Gcc Patch
 /*.gcno
+
+*.app
+.DS_Store
