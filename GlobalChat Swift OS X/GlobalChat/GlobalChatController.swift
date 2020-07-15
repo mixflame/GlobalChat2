@@ -359,9 +359,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
                 let alpha = CGFloat(Double(parr[7])!)
                 let width = CGFloat(Double(parr[8])!)
                 let clickName = parr[9]
-                ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view as! LineDrawer).addClick(x, y: y, dragging: dragging, red: red, green: green, blue: blue, alpha: alpha, width: width, clickName: clickName)
+            ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).receive_point(x, y: y, dragging: dragging, red: red, green: green, blue: blue, alpha: alpha, width: width, clickName: clickName)
                 
-                ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view as! LineDrawer).needsDisplay = true
 //            }
         }
     }

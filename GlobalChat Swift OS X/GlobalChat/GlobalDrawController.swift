@@ -87,6 +87,11 @@ class LineDrawer : NSImageView {
     
     var gdc : GlobalDrawController = GlobalDrawController()
     
+    
+    var lastPt : CGPoint = CGPoint()
+    var newPt : CGPoint = CGPoint()
+    
+    
 //    var username : String = ""
     
     var scribbling : Bool = false
@@ -104,6 +109,21 @@ class LineDrawer : NSImageView {
         needsDisplay = true
     }
     
+    public func receive_point(_ x: CGFloat, y: CGFloat, dragging: Bool, red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, width: CGFloat, clickName: String) {
+        if(points.count > 1) {
+            let newPt = CGPoint(x: points[points.count - 1]["x"] as! CGFloat, y: points[points.count - 1]["y"] as! CGFloat)
+            let lastPt = CGPoint(x: points[points.count - 2]["x"] as! CGFloat, y: points[points.count - 2]["y"] as! CGFloat)
+            let rect = calculateRectBetween(lastPoint: lastPt, newPoint: newPt, lineWidth: width)
+            
+            addClick(x, y: y, dragging: dragging, red: red, green: green, blue: blue, alpha: alpha, width: width, clickName: clickName)
+
+            setNeedsDisplay(rect)
+        } else {
+            addClick(x, y: y, dragging: dragging, red: red, green: green, blue: blue, alpha: alpha, width: width, clickName: clickName)
+
+             setNeedsDisplay()
+        }
+    }
     
     public func addClick(_ x: CGFloat, y: CGFloat, dragging: Bool, red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, width: CGFloat, clickName: String) {
         
@@ -250,7 +270,7 @@ class LineDrawer : NSImageView {
         
         scribbling = true
         
-        var lastPt = convert(event.locationInWindow, from: nil)
+        lastPt = convert(event.locationInWindow, from: nil)
         lastPt.x -= frame.origin.x
         lastPt.y -= frame.origin.y
         
@@ -268,7 +288,7 @@ class LineDrawer : NSImageView {
         }
         
         super.mouseDragged(with: event)
-        var newPt = convert(event.locationInWindow, from: nil)
+        newPt = convert(event.locationInWindow, from: nil)
         newPt.x -= frame.origin.x
         newPt.y -= frame.origin.y
         
@@ -277,7 +297,9 @@ class LineDrawer : NSImageView {
         
         send_point(newPt.x, y: newPt.y, dragging: true, red: pen_color.redComponent, green: pen_color.greenComponent, blue: pen_color.blueComponent, alpha: pen_color.alphaComponent, width: pen_width, clickName: gdc.gcc!.handle)
 
-        needsDisplay = true
+        let rect = calculateRectBetween(lastPoint: lastPt, newPoint: newPt, lineWidth: pen_width)
+
+        setNeedsDisplay(rect)
         
     }
     
@@ -319,6 +341,19 @@ class LineDrawer : NSImageView {
             image.addRepresentation(bir)
         }
         return image
+    }
+    
+    func calculateRectBetween(lastPoint: CGPoint, newPoint: CGPoint, lineWidth: CGFloat) -> CGRect {
+        let originX = min(lastPoint.x, newPoint.x) - (lineWidth / 2)
+        let originY = min(lastPoint.y, newPoint.y) - (lineWidth / 2)
+
+        let maxX = max(lastPoint.x, newPoint.x) + (lineWidth / 2)
+        let maxY = max(lastPoint.y, newPoint.y) + (lineWidth / 2)
+
+        let width = maxX - originX
+        let height = maxY - originY
+
+        return CGRect(x: originX, y: originY, width: width, height: height)
     }
     
 }
