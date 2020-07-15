@@ -114,11 +114,20 @@ class LineDrawer : NSImageView {
     
     var flattenedImage: NSImage?
     
+    public func clearCanvas() {
+        points.removeAll()
+        layerOrder.removeAll()
+        layers.removeAll()
+        nameHash.removeAll()
+        points_total = 0
+        needsDisplay = true
+    }
+    
     
     public func addClick(_ x: CGFloat, y: CGFloat, dragging: Bool, red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, width: CGFloat, clickName: String) {
         
 //        print("num points \(points.count)")
-        (self.window?.contentViewController as! GlobalDrawController).title = "\(points_total)/\(gdc.points_size!)"
+        (self.window?.contentViewController as! GlobalDrawController).title = "\(points_total)/\(gdc.points_size! - 1)"
         
         var point : [String : Any] = [:]
         point["x"] = x
@@ -252,6 +261,10 @@ class LineDrawer : NSImageView {
     override func mouseDown(with event: NSEvent) {
         
         
+        if points_total < gdc.points_size! - 1 {
+            return
+        }
+        
         super.mouseDown(with: event)
         
         scribbling = true
@@ -269,6 +282,9 @@ class LineDrawer : NSImageView {
     }
 
     override func mouseDragged(with event: NSEvent) {
+        if points_total < gdc.points_size! - 1 {
+            return
+        }
         
         super.mouseDragged(with: event)
         var newPt = convert(event.locationInWindow, from: nil)

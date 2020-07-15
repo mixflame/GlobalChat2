@@ -269,6 +269,9 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
   
     func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
         print("Connected")
+        if(draw_window != nil) {
+            (draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view.clearCanvas()
+        }
         should_autoreconnect = true
         connected = true
         last_ping = Date()
