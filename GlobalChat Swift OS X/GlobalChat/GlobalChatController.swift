@@ -291,7 +291,6 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             chat_token = parr[1]
             handle = parr[2]
             server_name = parr[3]
-            ping()
             show_chat()
             get_log()
             get_handles()
@@ -347,7 +346,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             let points_size = parr[2]
             open_draw_window(Int(width)!, Int(height)!, Int(points_size)!)
         } else if command == "POINT" {
-            if parr.count == 10 {
+//            if parr.count == 10 {
                 let x = CGFloat(Double(parr[1])!)
                 let y = CGFloat(Double(parr[2])!)
                 let dragging = Bool(parr[3])!
@@ -360,7 +359,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
                 ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view as! LineDrawer).addClick(x, y: y, dragging: dragging, red: red, green: green, blue: blue, alpha: alpha, width: width, clickName: clickName)
                 
                 ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view as! LineDrawer).needsDisplay = true
-            }
+//            }
         }
     }
     

@@ -26,7 +26,7 @@ class GlobalDrawController: NSViewController {
         print("viewDidLoad: gdc")
 //        drawing_view.pen_width = CGFloat(5.0)
         loaded = true
-        print("points size: \(points_size)")
+        drawing_view.gdc = self
     }
     
     func brushBigger() {
@@ -104,6 +104,8 @@ class LineDrawer : NSImageView {
     
     var points_total : Int = 0
     
+    var gdc : GlobalDrawController = GlobalDrawController()
+    
 //    var username : String = ""
     
     var scribbling : Bool = false
@@ -115,7 +117,8 @@ class LineDrawer : NSImageView {
     
     public func addClick(_ x: CGFloat, y: CGFloat, dragging: Bool, red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, width: CGFloat, clickName: String) {
         
-        print("num points \(points.count)")
+//        print("num points \(points.count)")
+        (self.window?.contentViewController as! GlobalDrawController).title = "\(points_total)/\(gdc.points_size!)"
         
         var point : [String : Any] = [:]
         point["x"] = x
@@ -247,11 +250,7 @@ class LineDrawer : NSImageView {
     }
 
     override func mouseDown(with event: NSEvent) {
-        let gdc = self.window?.contentViewController as! GlobalDrawController
         
-        if points_total < gdc.points_size! {
-            return
-        }
         
         super.mouseDown(with: event)
         
@@ -270,11 +269,6 @@ class LineDrawer : NSImageView {
     }
 
     override func mouseDragged(with event: NSEvent) {
-        let gdc = self.window?.contentViewController as! GlobalDrawController
-        
-        if points_total < gdc.points_size! {
-            return
-        }
         
         super.mouseDragged(with: event)
         var newPt = convert(event.locationInWindow, from: nil)

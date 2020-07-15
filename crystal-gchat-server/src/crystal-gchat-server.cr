@@ -149,6 +149,7 @@ class GlobalChatServer
         # sleep 0.seconds
         # Fiber.yield
       end
+      send_message(io, "PONG", [build_handle_list])
     end
 
     # sock_send(io, points_str)
