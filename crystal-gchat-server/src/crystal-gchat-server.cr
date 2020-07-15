@@ -45,7 +45,7 @@ class GlobalChatServer
     if command == "SIGNON"
       handle = parr[1]
       password = parr[2] if parr.size > 2
-      if !@handles.size == 0 && @handles.includes?(handle)
+      if @handles.includes?(handle)
         send_message(io, "ALERT", ["Your handle is in use."])
         io.close
         return

@@ -32,6 +32,7 @@ class GlobalDrawController: NSViewController {
     func brushBigger() {
         if(loaded) {
             drawing_view.pen_width = CGFloat(drawing_view.pen_width + 1.0)
+            drawing_view.window!.title = "Brush size: \(drawing_view.pen_width)"
         }
     }
     
@@ -39,6 +40,7 @@ class GlobalDrawController: NSViewController {
         if(loaded) {
             if(drawing_view.pen_width > 1) {
                 drawing_view.pen_width = CGFloat(drawing_view.pen_width - 1.0)
+                drawing_view.window!.title = "Brush size: \(drawing_view.pen_width)"
             }
         }
     }
