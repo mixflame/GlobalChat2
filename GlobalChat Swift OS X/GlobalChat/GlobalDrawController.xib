@@ -7,7 +7,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="GlobalDrawController" customModule="GlobalChat" customModuleProvider="target">
             <connections>
-                <outlet property="drawing_view" destination="d0u-g7-a0V" id="m7B-HH-mFn"/>
+                <outlet property="drawing_view" destination="pgA-PZ-0vs" id="pyE-tw-GBg"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -17,10 +17,34 @@
             <rect key="frame" x="0.0" y="0.0" width="434" height="221"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d0u-g7-a0V" customClass="LineDrawer" customModule="GlobalChat" customModuleProvider="target">
+                <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" allowsMagnification="YES" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mh8-GM-fOJ">
                     <rect key="frame" x="0.0" y="0.0" width="434" height="221"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                </customView>
+                    <clipView key="contentView" id="P36-0q-jgQ">
+                        <rect key="frame" x="1" y="1" width="432" height="219"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view id="pgA-PZ-0vs" customClass="LineDrawer" customModule="GlobalChat" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="417" height="204"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tn1-PI-vv3">
+                                        <rect key="frame" x="0.0" y="0.0" width="417" height="204"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    </customView>
+                                </subviews>
+                            </view>
+                        </subviews>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="CPD-az-fpD">
+                        <rect key="frame" x="-100" y="-100" width="432" height="16"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="eDV-EG-2Ga">
+                        <rect key="frame" x="-100" y="-100" width="16" height="219"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
             </subviews>
             <point key="canvasLocation" x="116" y="128.5"/>
         </customView>
