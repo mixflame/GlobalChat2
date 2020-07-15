@@ -43,25 +43,6 @@ class GlobalDrawController: NSViewController {
         }
     }
     
-    @objc func colorDidChange(sender:AnyObject) {
-        if let cp = sender as? NSColorPanel {
-            print(cp.color)
-            if(drawing_view == nil) {
-                self.loadView()
-            }
-            drawing_view.pen_color = cp.color
-            
-        }
-    }
-    
-    @IBAction func changeColor(_ sender : Any) {
-        let cp = NSColorPanel.shared
-        cp.setTarget(self)
-        cp.setAction(#selector(self.colorDidChange(sender:)))
-        cp.makeKeyAndOrderFront(self)
-        cp.isContinuous = true
-        cp.showsAlpha = true
-    }
     
     func saveImage() {
         let savePanel = NSSavePanel()

@@ -22,7 +22,7 @@
                             </menuItem>
                             <menuItem title="Change Color" keyEquivalent="k" id="3lR-Vm-Kpr">
                                 <connections>
-                                    <action selector="changeColor:" target="sFe-dP-nHo" id="ugZ-Ec-I2c"/>
+                                    <action selector="changeColor:" target="580" id="aaC-1r-KMm"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Make Brush Bigger" keyEquivalent="=" id="RvF-LD-AM4">

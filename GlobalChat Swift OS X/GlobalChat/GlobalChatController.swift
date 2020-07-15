@@ -743,4 +743,21 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         }
         (draw_window?.window?.contentViewController as! GlobalDrawController).saveImage()
     }
+    
+    @objc func colorDidChange(sender:AnyObject) {
+         if let cp = sender as? NSColorPanel {
+             print(cp.color)
+            (draw_window?.contentViewController as! GlobalDrawController).drawing_view.pen_color = cp.color
+             
+         }
+     }
+     
+     @IBAction func changeColor(_ sender : Any) {
+         let cp = NSColorPanel.shared
+         cp.setTarget(self)
+         cp.setAction(#selector(self.colorDidChange(sender:)))
+         cp.makeKeyAndOrderFront(self)
+         cp.isContinuous = true
+         cp.showsAlpha = true
+     }
 }
