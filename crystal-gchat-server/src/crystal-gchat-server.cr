@@ -90,6 +90,7 @@ class GlobalChatServer
       elsif command == "MESSAGE"
         msg = parr[1]
         @buffer << [handle, msg]
+        File.write("messages.txt", "#{handle}: #{msg}\n", mode: "a")
         broadcast_message(io, "SAY", [handle, msg])
       elsif command == "PING"
         unless @handles.includes?(handle)
@@ -234,6 +235,7 @@ class GlobalChatServer
 
   def initialize
     load_canvas_buffer
+    load_text_buffer
     unless @is_private == true
       ping_nexus(@server_name, @port)
     end
@@ -251,6 +253,15 @@ class GlobalChatServer
   def load_canvas_buffer
     if File.exists?("buffer.txt")
       @points = File.read("buffer.txt").chomp.split("\n")
+    end
+  end
+
+  def load_text_buffer
+    if File.exists?("messages.txt")
+      lines = File.read("messages.txt").chomp.split("\n")
+      lines.each do |line|
+        @buffer << [line.split(": ").first, line.split(": ").last]
+      end
     end
   end
 
