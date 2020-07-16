@@ -300,9 +300,9 @@ class LineDrawer : NSImageView {
         
         send_point(newPt.x, y: newPt.y, dragging: true, red: pen_color.redComponent, green: pen_color.greenComponent, blue: pen_color.blueComponent, alpha: pen_color.alphaComponent, width: pen_width, clickName: gdc.gcc!.handle)
 
-        let rect = calculateRectBetween(lastPoint: lastPt, newPoint: newPt, lineWidth: pen_width)
+//        let rect = calculateRectBetween(lastPoint: lastPt, newPoint: newPt, lineWidth: pen_width)
 
-        setNeedsDisplay(rect)
+        needsDisplay = true
         
     }
     
@@ -347,11 +347,11 @@ class LineDrawer : NSImageView {
     }
     
     func calculateRectBetween(lastPoint: CGPoint, newPoint: CGPoint, lineWidth: CGFloat) -> CGRect {
-        let originX = min(lastPoint.x, newPoint.x) - (lineWidth / 2)
-        let originY = min(lastPoint.y, newPoint.y) - (lineWidth / 2)
+        let originX = min(lastPoint.x, newPoint.x) - (lineWidth)
+        let originY = min(lastPoint.y, newPoint.y) - (lineWidth)
 
-        let maxX = max(lastPoint.x, newPoint.x) + (lineWidth / 2)
-        let maxY = max(lastPoint.y, newPoint.y) + (lineWidth / 2)
+        let maxX = max(lastPoint.x, newPoint.x) + (lineWidth)
+        let maxY = max(lastPoint.y, newPoint.y) + (lineWidth)
 
         let width = maxX - originX
         let height = maxY - originY
