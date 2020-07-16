@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7211855A24BFEA960009D522 /* myIcon.iconset in Resources */ = {isa = PBXBuildFile; fileRef = 7211855924BFEA960009D522 /* myIcon.iconset */; };
 		72CBCB1924AD6475007B8B3D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72CBCB1824AD6475007B8B3D /* AppDelegate.swift */; };
 		72CBCB1B24AD6477007B8B3D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72CBCB1A24AD6477007B8B3D /* Assets.xcassets */; };
 		72CBCB2824AD651F007B8B3D /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72CBCB2624AD651E007B8B3D /* MainMenu.xib */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7211855924BFEA960009D522 /* myIcon.iconset */ = {isa = PBXFileReference; lastKnownFileType = folder.iconset; name = myIcon.iconset; path = "../../globalchat 2 OSX/myIcon.iconset"; sourceTree = "<group>"; };
 		72CBCB1524AD6475007B8B3D /* GlobalChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GlobalChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72CBCB1824AD6475007B8B3D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		72CBCB1A24AD6477007B8B3D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				72CBCB2624AD651E007B8B3D /* MainMenu.xib */,
 				72CBCB2924AFA89E007B8B3D /* ServerListController.swift */,
 				72CBCB2B24AFA909007B8B3D /* GlobalChatController.swift */,
+				7211855924BFEA960009D522 /* myIcon.iconset */,
 				72CBCB1F24AD6477007B8B3D /* Info.plist */,
 				72CBCB2024AD6477007B8B3D /* GlobalChat.entitlements */,
 			);
@@ -145,6 +148,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				72D97D0024B7CAFD0098E17C /* GlobalDrawController.xib in Resources */,
+				7211855A24BFEA960009D522 /* myIcon.iconset in Resources */,
 				72CBCB1B24AD6477007B8B3D /* Assets.xcassets in Resources */,
 				72CBCB2824AD651F007B8B3D /* MainMenu.xib in Resources */,
 				72F8AF1A24B26C0300BC9FC3 /* PrivateMessageController.xib in Resources */,
