@@ -759,4 +759,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
          cp.isContinuous = true
          cp.showsAlpha = true
      }
+    
+    @IBAction func toggleRainbowColors(_ sender : Any) {
+        (draw_window?.contentViewController as! GlobalDrawController).drawing_view.rainbowPenToolOn = !(draw_window?.contentViewController as! GlobalDrawController).drawing_view.rainbowPenToolOn
+    }
 }

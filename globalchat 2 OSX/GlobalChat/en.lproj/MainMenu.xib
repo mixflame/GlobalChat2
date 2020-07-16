@@ -40,6 +40,11 @@
                                     <action selector="saveImage:" target="580" id="3VG-Tg-nlN"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Toggle Rainbow Colors" keyEquivalent="r" id="QNs-YA-4Gl">
+                                <connections>
+                                    <action selector="toggleRainbowColors:" target="580" id="KVq-vJ-q62"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Hide" keyEquivalent="h" id="704">
                                 <connections>
                                     <action selector="hide:" target="-1" id="705"/>

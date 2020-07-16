@@ -9,6 +9,23 @@
 import Cocoa
 import CoreGraphics
 
+extension CGFloat {
+    static func random() -> CGFloat {
+        return CGFloat(arc4random()) / CGFloat(UInt32.max)
+    }
+}
+
+extension NSColor {
+    static func random() -> NSColor {
+        return NSColor(
+           red:   .random(),
+           green: .random(),
+           blue:  .random(),
+           alpha: .random()
+        )
+    }
+}
+
 class GlobalDrawController: NSViewController {
     
     @IBOutlet weak var drawing_view: LineDrawer!
@@ -99,6 +116,8 @@ class LineDrawer : NSImageView {
     var scribbling : Bool = false
     var pen_color : NSColor = NSColor.black.usingColorSpace(NSColorSpace.deviceRGB)!
     var pen_width : CGFloat = CGFloat(1)
+    
+    var rainbowPenToolOn : Bool = false
     
     var flattenedImage: NSImage?
     
@@ -263,13 +282,17 @@ class LineDrawer : NSImageView {
     }
 
     override func mouseDown(with event: NSEvent) {
-        
+        super.mouseDown(with: event)
         
         if points_total < gdc.points_size! - 1 {
             return
         }
         
-        super.mouseDown(with: event)
+        if(rainbowPenToolOn) {
+            pen_color = NSColor.random()
+        }
+        
+        
         
         scribbling = true
         
@@ -286,11 +309,15 @@ class LineDrawer : NSImageView {
     }
 
     override func mouseDragged(with event: NSEvent) {
+        super.mouseDragged(with: event)
         if points_total < gdc.points_size! - 1 {
             return
         }
         
-        super.mouseDragged(with: event)
+        if(rainbowPenToolOn) {
+            pen_color = NSColor.random()
+        }
+        
         newPt = convert(event.locationInWindow, from: nil)
         newPt.x -= frame.origin.x
         newPt.y -= frame.origin.y
