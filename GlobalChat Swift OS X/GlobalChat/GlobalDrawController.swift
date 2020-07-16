@@ -103,6 +103,7 @@ class LineDrawer : NSImageView {
     var flattenedImage: NSImage?
     
     public func clearCanvas() {
+        flattenedImage = nil
         points.removeAll()
         layerOrder.removeAll()
         layers.removeAll()
