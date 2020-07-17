@@ -5,3 +5,4 @@
 *.dwarf
 buffer.txt
 messages.txt
+config.yml
