@@ -2,6 +2,7 @@ require "socket"
 require "random"
 require "uri"
 require "http/client"
+require "yaml"
 
 class GlobalChatServer
 
@@ -13,7 +14,8 @@ class GlobalChatServer
   # @port_keys = {} # unnecessary in PING design
   @handle_last_pinged = {} of String => Time # used for clone removal
   @buffer = [] of Array(String)
-  @password = "" # edit for password
+  @password = "" # use change-password to change this
+  @admin_password = "" # change for admin ability
   @server_name = "GC-crystal"
   @public_keys = {} of String => String
   @scrollback = true
@@ -234,6 +236,7 @@ class GlobalChatServer
   end
 
   def initialize
+    read_config
     load_canvas_buffer
     load_text_buffer
     unless @is_private == true
@@ -325,6 +328,31 @@ class GlobalChatServer
       response = HTTP::Client.get "http://nexus-msl.herokuapp.com/offline"
       @published = false
     end
+  end
+
+  def read_config
+
+    if File.exists?("config.yml")
+
+      puts "reading config from config.yml"
+
+      yaml = File.open("config.yml") do |file|
+        YAML.parse(file)
+      end
+
+      @server_name = yaml["server_name"].to_s
+      @port = yaml["port"].to_s.to_i
+      @password = yaml["password"].to_s # bcrypted
+      @admin_password = yaml["admin_password"].to_s # bcrypted
+      @is_private = yaml["is_private"].to_s == "y"
+      @canvas_size = yaml["canvas_size"].to_s
+
+    else
+
+      puts "Use the change-password command to create config.yml"
+
+    end
+
   end
 
 end
