@@ -374,11 +374,11 @@ class LineDrawer : NSImageView {
     }
     
     func calculateRectBetween(lastPoint: CGPoint, newPoint: CGPoint, lineWidth: CGFloat) -> CGRect {
-        let originX = min(lastPoint.x, newPoint.x) - (lineWidth)
-        let originY = min(lastPoint.y, newPoint.y) - (lineWidth)
+        let originX = min(lastPoint.x, newPoint.x) - (lineWidth / 2)
+        let originY = min(lastPoint.y, newPoint.y) - (lineWidth / 2)
 
-        let maxX = max(lastPoint.x, newPoint.x) + (lineWidth)
-        let maxY = max(lastPoint.y, newPoint.y) + (lineWidth)
+        let maxX = max(lastPoint.x, newPoint.x) + (lineWidth / 2)
+        let maxY = max(lastPoint.y, newPoint.y) + (lineWidth / 2)
 
         let width = maxX - originX
         let height = maxY - originY

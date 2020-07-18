@@ -63,31 +63,11 @@ class GlobalChatServer
         @admins << handle
         puts "admins: #{@admins}"
         # uuid are guaranteed unique
-        chat_token = Random.new.hex
-        @handle_keys[chat_token] = handle
-        @socket_keys[io] = chat_token
-        @socket_by_handle[handle] = io
-        # @port_keys[io.peeraddr[1]] = chat_token
-        # not on list until pinged.
-        @handles << handle
-        @sockets << io
-        send_message(io, "TOKEN", [chat_token, handle, @server_name])
-        send_message(io, "CANVAS", [@canvas_size, @points.size])
-        broadcast_message(io, "JOIN", [handle])
+        welcome_handle(io, handle)
       else
         if ((@password == password) || ((password === nil) && (@password == "")))
           # uuid are guaranteed unique
-          chat_token = Random.new.hex
-          @handle_keys[chat_token] = handle
-          @socket_keys[io] = chat_token
-          @socket_by_handle[handle] = io
-          # @port_keys[io.peeraddr[1]] = chat_token
-          # not on list until pinged.
-          @handles << handle
-          @sockets << io
-          send_message(io, "TOKEN", [chat_token, handle, @server_name])
-          send_message(io, "CANVAS", [@canvas_size, @points.size])
-          broadcast_message(io, "JOIN", [handle])
+          welcome_handle(io, handle)
         else
           send_message(io, "ALERT", ["Password is incorrect."])
           io.close
@@ -157,9 +137,21 @@ class GlobalChatServer
         send_points(io)
       end
     end
-
-
   end
+
+def welcome_handle(io, handle)
+  chat_token = Random.new.hex
+  @handle_keys[chat_token] = handle
+  @socket_keys[io] = chat_token
+  @socket_by_handle[handle] = io
+  # @port_keys[io.peeraddr[1]] = chat_token
+  # not on list until pinged.
+  @handles << handle
+  @sockets << io
+  send_message(io, "TOKEN", [chat_token, handle, @server_name])
+  send_message(io, "CANVAS", [@canvas_size, @points.size])
+  broadcast_message(io, "JOIN", [handle])
+end
 
   def send_points(io)
     # points_str = ""
