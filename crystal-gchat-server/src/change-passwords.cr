@@ -1,4 +1,5 @@
 require "yaml"
+require "crypto/bcrypt/password"
 require "option_parser"
 
 module Globals
@@ -11,10 +12,10 @@ module Globals
         port = gets.to_s.chomp.to_i
 
         puts "enter login password"
-        password = gets.to_s.chomp
+        password = Crypto::Bcrypt::Password.create(gets.to_s.chomp, cost: 10).to_s
 
         puts "enter admin password"
-        admin_password = gets.to_s.chomp
+        admin_password = Crypto::Bcrypt::Password.create(gets.to_s.chomp, cost: 10).to_s
         puts "should appear in server list? y/n"
         is_private = gets.to_s.chomp == "n"
 
@@ -48,8 +49,5 @@ module Globals
         exit(1)
         end
     end
-
-    # automatic
-
 
 end

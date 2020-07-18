@@ -3,6 +3,7 @@ require "random"
 require "uri"
 require "http/client"
 require "yaml"
+require "crypto/bcrypt/password"
 
 class GlobalChatServer
 
@@ -59,13 +60,15 @@ class GlobalChatServer
         io.close
         return
       end
-      if password == @admin_password && @admin_password != nil && @admin_password != ""
+      bcrypt_pass = Crypto::Bcrypt::Password.new(@password)
+      bcrypt_admin_pass = Crypto::Bcrypt::Password.new(@admin_password)
+      if bcrypt_admin_pass.verify(password.to_s) && @admin_password != nil && @admin_password != ""
         @admins << handle
         puts "admins: #{@admins}"
         # uuid are guaranteed unique
         welcome_handle(io, handle)
       else
-        if ((@password == password) || ((password === nil) && (@password == "")))
+        if (bcrypt_pass.verify(password.to_s) || ((password === nil) && (@password == "")))
           # uuid are guaranteed unique
           welcome_handle(io, handle)
         else
