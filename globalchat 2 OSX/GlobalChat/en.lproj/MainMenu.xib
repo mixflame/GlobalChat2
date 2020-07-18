@@ -20,36 +20,6 @@
                             <menuItem title="GlobalChat 2 Pro #{ver}" id="708">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                             </menuItem>
-                            <menuItem title="Change Color" keyEquivalent="k" id="3lR-Vm-Kpr">
-                                <connections>
-                                    <action selector="changeColor:" target="580" id="aaC-1r-KMm"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Make Brush Bigger" keyEquivalent="=" id="RvF-LD-AM4">
-                                <connections>
-                                    <action selector="brushBigger:" target="580" id="kTc-xu-jBG"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Make Brush Smaller" keyEquivalent="-" id="AWF-8S-rAf">
-                                <connections>
-                                    <action selector="brushSmaller:" target="580" id="u8Y-CF-s33"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Save Image to File" keyEquivalent="s" id="Kta-sT-148">
-                                <connections>
-                                    <action selector="saveImage:" target="580" id="3VG-Tg-nlN"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Toggle Rainbow Colors" keyEquivalent="r" id="QNs-YA-4Gl">
-                                <connections>
-                                    <action selector="toggleRainbowColors:" target="580" id="KVq-vJ-q62"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Clear Canvas (Admin)" keyEquivalent="C" id="aUP-Gg-9nB">
-                                <connections>
-                                    <action selector="clearCanvas:" target="580" id="lli-I5-bW4"/>
-                                </connections>
-                            </menuItem>
                             <menuItem title="Hide" keyEquivalent="h" id="704">
                                 <connections>
                                     <action selector="hide:" target="-1" id="705"/>
@@ -83,6 +53,43 @@
                         </items>
                     </menu>
                 </menuItem>
+                <menuItem title="Canvas" enabled="NO" id="B76-8K-JtK">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Canvas" id="2Om-Q7-zMd">
+                        <items>
+                            <menuItem title="Change Color" enabled="NO" keyEquivalent="k" id="a5G-vI-qhe">
+                                <connections>
+                                    <action selector="changeColor:" target="580" id="NCv-DU-Abb"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Make Brush Bigger" enabled="NO" keyEquivalent="=" id="isP-MR-seB">
+                                <connections>
+                                    <action selector="brushBigger:" target="580" id="ccI-cg-UeN"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Make Brush Smaller" enabled="NO" keyEquivalent="-" id="GRu-Mo-M9I">
+                                <connections>
+                                    <action selector="brushSmaller:" target="580" id="g6E-7X-X6Z"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Save Image to File" enabled="NO" keyEquivalent="s" id="0fs-Wb-zGd">
+                                <connections>
+                                    <action selector="saveImage:" target="580" id="3kh-Eb-dUf"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Toggle Rainbow Colors" enabled="NO" keyEquivalent="r" id="5K0-Xl-F2D">
+                                <connections>
+                                    <action selector="toggleRainbowColors:" target="580" id="Jrn-9G-037"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Clear Canvas (Admin)" enabled="NO" keyEquivalent="C" id="mAO-EX-T4h">
+                                <connections>
+                                    <action selector="clearCanvas:" target="580" id="fYi-Du-AS0"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
             </items>
             <point key="canvasLocation" x="140" y="154"/>
         </menu>
@@ -90,7 +97,7 @@
             <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="668" y="56" width="732" height="384"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="800"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <value key="minSize" type="size" width="732" height="384"/>
             <view key="contentView" id="372">
                 <rect key="frame" x="0.0" y="0.0" width="732" height="384"/>
@@ -124,7 +131,7 @@
                                                                 <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                                             </tableHeaderCell>
                                                             <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="567">
-                                                                <font key="font" metaFont="system"/>
+                                                                <font key="font" metaFont="message"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
@@ -221,6 +228,7 @@
         <customObject id="580" customClass="GlobalChatController" customModule="GlobalChat">
             <connections>
                 <outlet property="application" destination="-3" id="596"/>
+                <outlet property="canvas_menu_item" destination="B76-8K-JtK" id="ad6-EZ-McK"/>
                 <outlet property="chat_message" destination="544" id="591"/>
                 <outlet property="chat_window" destination="371" id="586"/>
                 <outlet property="chat_window_text" destination="681" id="684"/>
@@ -233,7 +241,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="131" y="159" width="480" height="322"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="800"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <view key="contentView" id="603">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="322"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -258,7 +266,7 @@
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                             </tableHeaderCell>
                                             <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="621">
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="message"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -287,7 +295,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Connect" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="614">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="message"/>
                         </buttonCell>
                         <connections>
                             <action selector="connect:" target="616" id="628"/>
@@ -298,7 +306,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Refresh" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="624">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="message"/>
                         </buttonCell>
                         <connections>
                             <action selector="refresh:" target="616" id="625"/>
@@ -308,7 +316,7 @@
                         <rect key="frame" x="10" y="95" width="59" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Address" id="630">
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="message"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -317,7 +325,7 @@
                         <rect key="frame" x="255" y="95" width="38" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Port" id="632">
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="message"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -326,7 +334,7 @@
                         <rect key="frame" x="38" y="57" width="44" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Key" id="634">
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="message"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -335,7 +343,7 @@
                         <rect key="frame" x="81" y="92" width="137" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="636">
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="message"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -344,7 +352,7 @@
                         <rect key="frame" x="298" y="90" width="137" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="638">
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="message"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -353,7 +361,7 @@
                         <rect key="frame" x="81" y="53" width="137" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="642">
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="message"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             <allowedInputSourceLocales>
@@ -365,7 +373,7 @@
                         <rect key="frame" x="17" y="134" width="59" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Handle" id="644">
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="message"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -374,7 +382,7 @@
                         <rect key="frame" x="81" y="133" width="137" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="646">
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="message"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>

@@ -19,6 +19,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     @IBOutlet weak var nicks_table: NSTableView!
     @IBOutlet weak var scroll_view: NSScrollView!
     @IBOutlet weak var server_list_window: NSWindow!
+    @IBOutlet weak var canvas_menu_item: NSMenuItem!
     
     var nicks: [String] = []
     var msg_count: Int = 0
