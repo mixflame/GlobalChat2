@@ -19,6 +19,7 @@ class GlobalChatServer
   @server_name = "GC-crystal"
   @public_keys = {} of String => String
   @scrollback = true
+  @buffer_line_limit = 500
   @port = 9994
   @is_private = false
   @canvas_size = "1280x690"
@@ -307,7 +308,7 @@ class GlobalChatServer
   def build_chat_log
     return "" unless @scrollback
     output = ""
-    displayed_buffer = @buffer.size > 30 ? @buffer[@buffer.size - 30..-1] : @buffer
+    displayed_buffer = @buffer.size > @buffer_line_limit ? @buffer[@buffer.size - @buffer_line_limit..-1] : @buffer
     displayed_buffer.each do |msg|
       output += "#{msg[0]}: #{msg[1]}\n"
     end
@@ -347,12 +348,14 @@ class GlobalChatServer
         YAML.parse(file)
       end
 
-      @server_name = yaml["server_name"].to_s
-      @port = yaml["port"].to_s.to_i
-      @password = yaml["password"].to_s             # bcrypted
-      @admin_password = yaml["admin_password"].to_s # bcrypted
-      @is_private = yaml["is_private"].to_s == "y"
-      @canvas_size = yaml["canvas_size"].to_s
+      @server_name = yaml["server_name"].as_s
+      @port = yaml["port"].as_i
+      @password = yaml["password"].as_s             # bcrypted
+      @admin_password = yaml["admin_password"].as_s # bcrypted
+      @is_private = yaml["is_private"].as_bool
+      @canvas_size = yaml["canvas_size"].as_s
+      @scrollback = yaml["scrollback"].as_bool
+      @buffer_line_limit = yaml["buffer_line_limit"].as_i
     else
       puts "Use the change-password command to create config.yml"
     end
