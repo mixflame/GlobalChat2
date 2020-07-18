@@ -133,6 +133,13 @@ class GlobalChatServer
         File.write("buffer.txt", "#{@points.last}\n", mode: "a")
       elsif command == "GETPOINTS"
         send_points(io)
+      elsif command == "CLEARCANVAS"
+        return unless @admins.includes?(handle) # admin function
+        if File.exists?("buffer.txt")
+          File.delete("buffer.txt")
+        end
+        @points = [] of String
+        broadcast_message(nil, "CLEARCANVAS", [handle])
       end
     end
   end
@@ -166,14 +173,14 @@ class GlobalChatServer
     # sock_send(io, points_str)
   end
 
-  def clean_handles
-    @handle_keys.each do |k, v|
-      if @handle_last_pinged[v] && @handle_last_pinged[v] < Time.utc - 30.seconds
-        log "removed clone handle: #{v}"
-        remove_user_by_handle(v)
-      end
-    end
-  end
+  # def clean_handles
+  #   @handle_keys.each do |k, v|
+  #     if @handle_last_pinged[v] && @handle_last_pinged[v] < Time.utc - 30.seconds
+  #       log "removed clone handle: #{v}"
+  #       remove_user_by_handle(v)
+  #     end
+  #   end
+  # end
 
   def send_message(io, opcode, args)
     msg = opcode + "::!!::" + args.join("::!!::")
@@ -206,6 +213,7 @@ class GlobalChatServer
     ct = @socket_keys[socket] if @socket_keys.has_key?(socket)
     handle = @handle_keys[ct] if @handle_keys.has_key?(ct)
     @handles.delete handle if @handles.includes?(handle)
+    @admins.delete handle if @admins.includes?(handle)
     @handle_keys.delete ct if @handle_keys.has_key?(ct)
     @socket_keys.delete socket if @socket_keys.has_key?(socket)
     @socket_by_handle.delete handle if @socket_by_handle.has_key?(handle)

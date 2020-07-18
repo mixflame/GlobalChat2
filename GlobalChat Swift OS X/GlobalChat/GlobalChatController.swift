@@ -235,6 +235,9 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             priv_msg(handle, message: msg!)
         } else if command == "/canvas" {
             draw_window?.showWindow(self)
+        } else if command == "/clearcanvas" {
+            // attempt to clear the canvas
+            send_message("CLEARCANVAS", args: [chat_token])
         }
     }
     
@@ -362,6 +365,12 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).receive_point(x, y: y, dragging: dragging, red: red, green: green, blue: blue, alpha: alpha, width: width, clickName: clickName)
                 
 //            }
+        } else if command == "CLEARCANVAS" {
+            ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).clearCanvas()
+            
+            ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).needsDisplay = true
+            
+            output_to_chat_window("\(handle) cleared the canvas")
         }
     }
     

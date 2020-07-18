@@ -128,6 +128,7 @@ class LineDrawer : NSImageView {
         layers.removeAll()
         nameHash.removeAll()
         points_total = 0
+        gdc.points_size = 1 // to prevent off by one
         needsDisplay = true
     }
     
