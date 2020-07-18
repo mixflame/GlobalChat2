@@ -7,11 +7,11 @@ require "crypto/bcrypt/password"
 
 class GlobalChatServer
 
-  @sockets = [] of TCPSocket
+  @sockets = [] of OpenSSL::SSL::Socket::Server
   @handles = [] of String
   @handle_keys = {} of String => String # stores handle
-  @socket_keys = {} of TCPSocket => String # stores chat_token
-  @socket_by_handle = {} of String => TCPSocket # get socket by handle
+  @socket_keys = {} of OpenSSL::SSL::Socket::Server => String # stores chat_token
+  @socket_by_handle = {} of String => OpenSSL::SSL::Socket::Server # get socket by handle
   # @port_keys = {} # unnecessary in PING design
   @handle_last_pinged = {} of String => Time # used for clone removal
   @buffer = [] of Array(String)
@@ -27,19 +27,34 @@ class GlobalChatServer
   @admins = [] of String # warning, this controls admin
 
   def handle_client(client)
+    ssl_socket = OpenSSL::SSL::Socket::Server.new(client, @context)
+    
     begin
-      while message = client.gets("\0")
+      while message = ssl_socket.gets("\0")
+        
         puts "Client: #{message}"
 
-        parse_line(message.gsub("\0", ""), client)
+        parse_line(message.gsub("\0", ""), ssl_socket)
       end
     rescue IO::Error
-      client.close
+      ssl_socket.close
     end
     # client.puts message
     puts "socket disconnected"
-    remove_dead_socket(client)
+    remove_dead_socket(ssl_socket)
 
+  end
+
+  def welcome_handle(io, handle)
+    chat_token = Random.new.hex
+    @handle_keys[chat_token] = handle
+    @socket_keys[io] = chat_token
+    @socket_by_handle[handle] = io
+    @handles << handle
+    @sockets << io
+    send_message(io, "TOKEN", [chat_token, handle, @server_name])
+    send_message(io, "CANVAS", [@canvas_size, @points.size])
+    broadcast_message(io, "JOIN", [handle])
   end
 
   def parse_line(line, io)
@@ -142,20 +157,6 @@ class GlobalChatServer
     end
   end
 
-def welcome_handle(io, handle)
-  chat_token = Random.new.hex
-  @handle_keys[chat_token] = handle
-  @socket_keys[io] = chat_token
-  @socket_by_handle[handle] = io
-  # @port_keys[io.peeraddr[1]] = chat_token
-  # not on list until pinged.
-  @handles << handle
-  @sockets << io
-  send_message(io, "TOKEN", [chat_token, handle, @server_name])
-  send_message(io, "CANVAS", [@canvas_size, @points.size])
-  broadcast_message(io, "JOIN", [handle])
-end
-
   def send_points(io)
     # points_str = ""
     spawn do
@@ -257,6 +258,11 @@ end
     end
     status
     @server = TCPServer.new("0.0.0.0", @port)
+    @context = OpenSSL::SSL::Context::Server.new
+    @context.private_key = "MyKey.key"
+    @context.certificate_chain = "MyCertificate.crt"
+
+
     while client = @server.accept?
       spawn handle_client(client)
     end
