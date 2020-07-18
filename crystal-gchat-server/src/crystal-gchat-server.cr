@@ -6,16 +6,15 @@ require "yaml"
 require "crypto/bcrypt/password"
 
 class GlobalChatServer
-
   @sockets = [] of TCPSocket
   @handles = [] of String
-  @handle_keys = {} of String => String # stores handle
-  @socket_keys = {} of TCPSocket => String # stores chat_token
+  @handle_keys = {} of String => String         # stores handle
+  @socket_keys = {} of TCPSocket => String      # stores chat_token
   @socket_by_handle = {} of String => TCPSocket # get socket by handle
   # @port_keys = {} # unnecessary in PING design
   @handle_last_pinged = {} of String => Time # used for clone removal
   @buffer = [] of Array(String)
-  @password = "" # use change-password to change this
+  @password = ""       # use change-password to change this
   @admin_password = "" # change for admin ability
   @server_name = "GC-crystal"
   @public_keys = {} of String => String
@@ -39,7 +38,6 @@ class GlobalChatServer
     # client.puts message
     puts "socket disconnected"
     remove_dead_socket(client)
-
   end
 
   def parse_line(line, io)
@@ -56,7 +54,7 @@ class GlobalChatServer
       end
       if handle == nil || handle == ""
         send_message(io, "ALERT", ["You cannot have a blank name."])
-        #remove_dead_socket io
+        # remove_dead_socket io
         io.close
         return
       end
@@ -79,9 +77,7 @@ class GlobalChatServer
       return
     end
 
-
     chat_token = parr.last
-
 
     if check_token(chat_token)
       handle = get_handle(chat_token)
@@ -124,7 +120,6 @@ class GlobalChatServer
           send_message(io, "PUBKEY", [public_key, handle])
         end
       elsif command == "POINT"
-        
         @points << line.gsub(parr.last, handle)
         x = parr[1]
         y = parr[2]
@@ -142,19 +137,19 @@ class GlobalChatServer
     end
   end
 
-def welcome_handle(io, handle)
-  chat_token = Random.new.hex
-  @handle_keys[chat_token] = handle
-  @socket_keys[io] = chat_token
-  @socket_by_handle[handle] = io
-  # @port_keys[io.peeraddr[1]] = chat_token
-  # not on list until pinged.
-  @handles << handle
-  @sockets << io
-  send_message(io, "TOKEN", [chat_token, handle, @server_name])
-  send_message(io, "CANVAS", [@canvas_size, @points.size])
-  broadcast_message(io, "JOIN", [handle])
-end
+  def welcome_handle(io, handle)
+    chat_token = Random.new.hex
+    @handle_keys[chat_token] = handle
+    @socket_keys[io] = chat_token
+    @socket_by_handle[handle] = io
+    # @port_keys[io.peeraddr[1]] = chat_token
+    # not on list until pinged.
+    @handles << handle
+    @sockets << io
+    send_message(io, "TOKEN", [chat_token, handle, @server_name])
+    send_message(io, "CANVAS", [@canvas_size, @points.size])
+    broadcast_message(io, "JOIN", [handle])
+  end
 
   def send_points(io)
     # points_str = ""
@@ -195,7 +190,7 @@ end
     broadcast msg, sender
   end
 
-  def broadcast(message, sender=nil)
+  def broadcast(message, sender = nil)
     @sockets.each do |socket|
       begin
         sock_send(socket, message) unless socket == sender
@@ -238,10 +233,6 @@ end
     end
   end
 
-  # Send to a single socket
-  # Params:
-  # +io+:: Sending socket
-  # +msg+:: Entirety of command sans the null terminator
   def sock_send(io, msg)
     msg = "#{msg}\0"
     log "Server: #{msg}"
@@ -308,7 +299,7 @@ end
   def build_chat_log
     return "" unless @scrollback
     output = ""
-    displayed_buffer = @buffer.size > 30 ? @buffer[@buffer.size-30..-1] : @buffer
+    displayed_buffer = @buffer.size > 30 ? @buffer[@buffer.size - 30..-1] : @buffer
     displayed_buffer.each do |msg|
       output += "#{msg[0]}: #{msg[1]}\n"
     end
@@ -317,9 +308,7 @@ end
 
   def ping_nexus(chatnet_name, port)
     puts "Pinging NexusNet that I'm Online!!"
-    
-    #query = {:name => chatnet_name, :port => port, :host => host}
-    #uri.query = URI.encode_www_form( query )
+
     response = HTTP::Client.get "http://nexus-msl.herokuapp.com/online?name=#{chatnet_name}&port=#{port}"
     @published = true
 
@@ -327,14 +316,13 @@ end
       nexus_offline
       exit
     end
-  
+
     at_exit do |status|
       nexus_offline
     end
-  
   end
 
-    # Tell Nexus I am no longer online
+  # Tell Nexus I am no longer online
   def nexus_offline
     if @published == true
       puts "Informing NexusNet that I have exited!!!"
@@ -344,9 +332,7 @@ end
   end
 
   def read_config
-
     if File.exists?("config.yml")
-
       puts "reading config from config.yml"
 
       yaml = File.open("config.yml") do |file|
@@ -355,20 +341,14 @@ end
 
       @server_name = yaml["server_name"].to_s
       @port = yaml["port"].to_s.to_i
-      @password = yaml["password"].to_s # bcrypted
+      @password = yaml["password"].to_s             # bcrypted
       @admin_password = yaml["admin_password"].to_s # bcrypted
       @is_private = yaml["is_private"].to_s == "y"
       @canvas_size = yaml["canvas_size"].to_s
-
     else
-
       puts "Use the change-password command to create config.yml"
-
     end
-
   end
-
 end
 
 gcs = GlobalChatServer.new
-
