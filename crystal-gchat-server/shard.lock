@@ -1,0 +1,6 @@
+version: 2.0
+shards:
+  atomic_write:
+    git: https://github.com/chris-huxtable/atomic_write.cr.git
+    version: 0.1.5
+

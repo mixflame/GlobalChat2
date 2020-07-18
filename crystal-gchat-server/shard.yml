@@ -2,7 +2,11 @@ name: crystal-gchat-server
 version: 0.1.0
 
 authors:
-  - your-name-here <your-email-here>
+  - Jonathan Silverman <jsilverman2@gmail.com>
+
+dependencies:
+  atomic_write:
+    github: chris-huxtable/atomic_write.cr
 
 targets:
   crystal-gchat-server:

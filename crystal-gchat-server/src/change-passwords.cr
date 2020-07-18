@@ -1,6 +1,7 @@
 require "yaml"
 require "crypto/bcrypt/password"
 require "option_parser"
+require "atomic_write"
 
 module Globals
 
@@ -22,7 +23,7 @@ module Globals
         puts "canvas size in widthxheight"
         canvas_size = gets.to_s.chomp
 
-        File.open("config.yml", "w") { |f| YAML.dump({
+        File.atomic_write("config.yml") { |f| YAML.dump({
             server_name: server_name,
             port: port,
             password: password,
