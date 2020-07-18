@@ -368,8 +368,6 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         } else if command == "CLEARCANVAS" {
             ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).clearCanvas()
             
-            ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).needsDisplay = true
-            
             output_to_chat_window("\(handle) cleared the canvas")
         }
     }
@@ -771,5 +769,9 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     @IBAction func toggleRainbowColors(_ sender : Any) {
         (draw_window?.contentViewController as! GlobalDrawController).drawing_view.rainbowPenToolOn = !(draw_window?.contentViewController as! GlobalDrawController).drawing_view.rainbowPenToolOn
+    }
+    
+    @IBAction func clearCanvas(_ sender : Any) {
+        send_message("CLEARCANVAS", args: [chat_token])
     }
 }

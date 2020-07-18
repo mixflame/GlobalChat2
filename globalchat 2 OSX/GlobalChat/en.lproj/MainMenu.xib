@@ -45,6 +45,11 @@
                                     <action selector="toggleRainbowColors:" target="580" id="KVq-vJ-q62"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Clear Canvas (Admin)" keyEquivalent="C" id="aUP-Gg-9nB">
+                                <connections>
+                                    <action selector="clearCanvas:" target="580" id="lli-I5-bW4"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Hide" keyEquivalent="h" id="704">
                                 <connections>
                                     <action selector="hide:" target="-1" id="705"/>
