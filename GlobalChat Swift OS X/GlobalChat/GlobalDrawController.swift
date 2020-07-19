@@ -159,7 +159,7 @@ class LineDrawer : NSImageView {
     public func addClick(_ x: CGFloat, y: CGFloat, dragging: Bool, red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, width: CGFloat, clickName: String) {
         
 //        print("num points \(points.count)")
-        (self.window?.contentViewController as! GlobalDrawController).title = "\(points_total)/\(gdc.points_size! - 1)"
+        (self.window?.contentViewController as! GlobalDrawController).title = "\(points_total)/\(gdc.points_size! - 1) \(clickName) is drawing"
         
         var point : [String : Any] = [:]
         point["x"] = x
