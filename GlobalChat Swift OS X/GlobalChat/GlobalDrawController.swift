@@ -122,6 +122,13 @@ class LineDrawer : NSImageView {
     
     var flattenedImage: NSImage?
     
+    public func deleteLayers(_ handle : String) {
+        layerOrder = layerOrder.filter { !($0.components(separatedBy: "::!!::").first == handle) }
+        flattenedImage = nil
+        print(layerOrder)
+        setNeedsDisplay(bounds)
+    }
+    
     public func clearCanvas() {
         flattenedImage = nil
         points.removeAll()
@@ -130,7 +137,7 @@ class LineDrawer : NSImageView {
         nameHash.removeAll()
         points_total = 0
         gdc.points_size = 1 // to prevent off by one
-        needsDisplay = true
+        setNeedsDisplay(bounds)
     }
     
     public func receive_point(_ x: CGFloat, y: CGFloat, dragging: Bool, red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, width: CGFloat, clickName: String) {
@@ -145,7 +152,7 @@ class LineDrawer : NSImageView {
         } else {
             addClick(x, y: y, dragging: dragging, red: red, green: green, blue: blue, alpha: alpha, width: width, clickName: clickName)
 
-             setNeedsDisplay()
+             setNeedsDisplay(bounds)
         }
     }
     
@@ -172,19 +179,19 @@ class LineDrawer : NSImageView {
         if(nameHash[clickName] == nil) {
             let layer = 0
             nameHash[clickName] = layer
-            layerName = "\(clickName)_\(layer)"
+            layerName = "\(clickName)::!!::\(layer)"
             let layerArray : [[String : Any]] = []
             layers[layerName] = layerArray
         } else {
             if(dragging == false) {
                 let layer = nameHash[clickName]! + 1
                 nameHash[clickName] = layer
-                layerName = "\(clickName)_\(layer)"
+                layerName = "\(clickName)::!!::\(layer)"
                 let layerArray : [[String : Any]] = []
                 layers[layerName] = layerArray
             } else {
                 let layer = nameHash[clickName]!
-                layerName = "\(clickName)_\(layer)"
+                layerName = "\(clickName)::!!::\(layer)"
             }
         }
         
@@ -331,7 +338,7 @@ class LineDrawer : NSImageView {
 
 //        let rect = calculateRectBetween(lastPoint: lastPt, newPoint: newPt, lineWidth: pen_width)
 
-        needsDisplay = true
+        setNeedsDisplay(bounds)
         
     }
     

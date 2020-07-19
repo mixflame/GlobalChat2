@@ -239,6 +239,12 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         } else if command == "/clearcanvas" {
             // attempt to clear the canvas
             send_message("CLEARCANVAS", args: [chat_token])
+        } else if command == "/deletelayers" {
+            let handle = message.components(separatedBy: " ")[1]
+            if handle == "" {
+                return
+            }
+            send_message("DELETELAYERS", args: [handle, chat_token])
         }
     }
     
@@ -367,9 +373,15 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
                 
 //            }
         } else if command == "CLEARCANVAS" {
+            let handle = parr[1]
             ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).clearCanvas()
             
             output_to_chat_window("\(handle) cleared the canvas")
+        } else if command == "DELETELAYERS" {
+            let handle = parr[1]
+            ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).deleteLayers(handle)
+            
+            output_to_chat_window("\(handle)'s layers were deleted by admin\n")
         }
     }
     
@@ -775,4 +787,33 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     @IBAction func clearCanvas(_ sender : Any) {
         send_message("CLEARCANVAS", args: [chat_token])
     }
+    
+    func getString(title: String, question: String, defaultValue: String) -> String {
+        let msg = NSAlert()
+        msg.addButton(withTitle: "OK")      // 1st button
+        msg.addButton(withTitle: "Cancel")  // 2nd button
+        msg.messageText = title
+        msg.informativeText = question
+
+        let txt = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
+        txt.stringValue = defaultValue
+
+        msg.accessoryView = txt
+        let response: NSApplication.ModalResponse = msg.runModal()
+
+        if (response == NSApplication.ModalResponse.alertFirstButtonReturn) {
+            return txt.stringValue
+        } else {
+            return ""
+        }
+    }
+    
+    @IBAction func deleteLayers(_ sender : Any) {
+        let handle_to_delete = getString(title: "Handle to delete", question: "Which handle's layers to delete?", defaultValue: "")
+        if handle_to_delete == "" {
+            return
+        }
+        send_message("DELETELAYERS", args: [handle_to_delete, chat_token])
+    }
+    
 }

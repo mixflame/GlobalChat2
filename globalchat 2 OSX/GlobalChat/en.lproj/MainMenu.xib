@@ -87,6 +87,11 @@
                                     <action selector="clearCanvas:" target="580" id="fYi-Du-AS0"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Delete Layers (Admin)" enabled="NO" keyEquivalent="D" id="gRd-Ql-4X3">
+                                <connections>
+                                    <action selector="deleteLayers:" target="580" id="bAj-8s-rUc"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>

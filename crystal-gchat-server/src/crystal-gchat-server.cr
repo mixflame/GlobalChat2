@@ -141,8 +141,19 @@ class GlobalChatServer
         end
         @points = [] of String
         broadcast_message(nil, "CLEARCANVAS", [handle])
+      elsif command == "DELETELAYERS"
+        return unless @admins.includes?(handle) # admin function
+        handle_to_delete = parr[1]
+        delete_layers(handle_to_delete)
+        broadcast_message(nil, "DELETELAYERS", [handle_to_delete])
       end
     end
+  end
+
+  def delete_layers(handle)
+    @points.reject! { |p| p.split("::!!::").last == handle }
+
+    File.write("buffer.txt", @points.join("\n"), mode: "w")
   end
 
   def welcome_handle(io, handle)
