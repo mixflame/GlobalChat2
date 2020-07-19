@@ -179,7 +179,11 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
       
     @IBAction func quit(_ sender: Any) {
-        application.terminate(self)
+        if connected == false {
+            application.terminate(self)
+        } else {
+            return_to_server_list()
+        }
     }
     
     @IBAction func sendMessage(_ sender: NSTextField) {
@@ -403,6 +407,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         DispatchQueue.main.async {
             self.server_list_window.makeKeyAndOrderFront(nil)
             self.chat_window.orderOut(self)
+            self.draw_window?.window?.orderOut(self)
             self.cleanup()
             self.connected = false
         }

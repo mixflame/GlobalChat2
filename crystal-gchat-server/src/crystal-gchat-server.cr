@@ -61,13 +61,13 @@ class GlobalChatServer
       end
       bcrypt_pass = Crypto::Bcrypt::Password.new(@password)
       bcrypt_admin_pass = Crypto::Bcrypt::Password.new(@admin_password)
-      if bcrypt_admin_pass.verify(password.to_s) && @admin_password != nil && @admin_password != ""
+      if bcrypt_admin_pass.verify(password.to_s)
         @admins << handle
         puts "admins: #{@admins}"
         # uuid are guaranteed unique
         welcome_handle(io, handle)
       else
-        if (bcrypt_pass.verify(password.to_s) || ((password === nil) && (@password == "")))
+        if bcrypt_pass.verify(password.to_s)
           # uuid are guaranteed unique
           welcome_handle(io, handle)
         else
