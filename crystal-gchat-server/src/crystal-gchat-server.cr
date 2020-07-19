@@ -19,7 +19,7 @@ class GlobalChatServer
   @server_name = "GC-crystal"
   @public_keys = {} of String => String
   @scrollback = true
-  @buffer_line_limit = 500
+  @buffer_line_limit = 100
   @port = 9994
   @is_private = false
   @canvas_size = "1280x690"
