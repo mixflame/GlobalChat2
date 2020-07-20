@@ -249,6 +249,23 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
                 return
             }
             send_message("DELETELAYERS", args: [handle, chat_token])
+        } else if command == "/ban" {
+            let handle = message.components(separatedBy: " ")[1]
+            if handle == "" {
+                return
+            }
+            if message.components(separatedBy: " ").count > 2 {
+                let time = message.components(separatedBy: " ")[2]
+                send_message("BAN", args: [handle, time, chat_token])
+            } else {
+                send_message("BAN", args: [handle, chat_token])
+            }
+        } else if command == "/unban" {
+            let handle = message.components(separatedBy: " ")[1]
+            if handle == "" {
+                return
+            }
+            send_message("UNBAN", args: [handle, chat_token])
         }
     }
     
@@ -296,7 +313,6 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             sign_on_array = [handle, password]
         }
         send_message("SIGNON", args: sign_on_array)
-        should_autoreconnect = true
         read_line()
     }
     
@@ -402,15 +418,16 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
 
     func return_to_server_list() {
-        should_autoreconnect = false
+        
         sign_out()
-        DispatchQueue.main.async {
-            self.server_list_window.makeKeyAndOrderFront(nil)
-            self.chat_window.orderOut(self)
-            self.draw_window?.window?.orderOut(self)
-            self.cleanup()
-            self.connected = false
-        }
+//        DispatchQueue.main.async {
+        self.server_list_window.makeKeyAndOrderFront(nil)
+        self.chat_window.orderOut(self)
+        self.draw_window?.window?.orderOut(self)
+        self.cleanup()
+        self.connected = false
+        self.should_autoreconnect = false
+//        }
     }
     
     
@@ -510,7 +527,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         queue.async {
             if self.should_autoreconnect != false {
                 while(true) {
-                    if self.connected == true {
+                    if self.connected == true || self.should_autoreconnect == false {
                         break
                     }
                   DispatchQueue.main.sync {

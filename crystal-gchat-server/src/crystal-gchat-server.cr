@@ -25,8 +25,27 @@ class GlobalChatServer
   @canvas_size = "1280x690"
   @points = [] of String
   @admins = [] of String # warning, this controls admin
+  @banned = {} of String => String
+  @banned_ips = [] of String
+  @ban_length = {} of String => Time
 
   def handle_client(client)
+    ip = client.remote_address.address.to_s
+    if(@ban_length[ip]? && @ban_length[ip] > Time.utc)
+      puts "denying banned ip, time left: #{(@ban_length[ip] - Time.utc).to_i} seconds"
+      send_message(client, "ALERT", ["You are banned. Time left: #{(@ban_length[ip] - Time.utc).to_i} seconds"])
+      client.close
+      remove_dead_socket(client)
+      return
+    elsif !@ban_length[ip]?
+      if(@banned_ips.includes?(ip))
+        puts "denying banned ip"
+        send_message(client, "ALERT", ["You are banned."])
+        client.close
+        remove_dead_socket(client)
+        return
+      end
+    end
     begin
       while message = client.gets("\0")
         puts "Client: #{message}"
@@ -146,6 +165,40 @@ class GlobalChatServer
         handle_to_delete = parr[1]
         delete_layers(handle_to_delete)
         broadcast_message(nil, "DELETELAYERS", [handle_to_delete])
+      elsif command == "BAN"
+        return unless @admins.includes?(handle) # admin function
+        handle_to_ban = parr[1]
+        time_length = parr[2]
+        if(time_length != nil)
+          time_length = time_length.chomp.to_i.minutes
+          # puts "banning #{handle_to_ban} for #{time_length.to_i} seconds"
+          socket = @socket_by_handle[handle_to_ban]
+          ip = socket.remote_address.address.to_s
+          
+          @banned[handle_to_ban] = ip
+          if typeof(time_length) == Time::Span
+            @ban_length[ip] = Time.utc + Time::Span.new(seconds: time_length.to_i)
+          end
+          @banned_ips << ip
+          socket.close
+          remove_dead_socket(socket)
+        else
+          puts "banning #{handle_to_ban} forever"
+          socket = @socket_by_handle[handle_to_ban]
+          ip = socket.remote_address.address.to_s
+          
+          @banned[handle_to_ban] = ip
+          @banned_ips << ip
+          socket.close
+          remove_dead_socket(socket)
+        end
+      elsif command == "UNBAN"
+        return unless @admins.includes?(handle) # admin function
+        handle_to_unban = parr[1]
+        ip = @banned[handle_to_unban]
+        @banned_ips.reject! { |banned| banned == ip}
+        @banned.delete handle_to_unban if @banned.includes?(handle_to_unban)
+        @ban_length.delete ip if @ban_length.has_key?(ip)
       end
     end
   end
@@ -255,7 +308,7 @@ class GlobalChatServer
 
   def sock_send(io, msg)
     msg = "#{msg}\0"
-    log "Server: #{msg}"
+    # log "Server: #{msg}"
     io << msg
   end
 
