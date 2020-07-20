@@ -790,6 +790,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
          if let cp = sender as? NSColorPanel {
              print(cp.color)
             (draw_window?.contentViewController as! GlobalDrawController).drawing_view.pen_color = cp.color
+            
+            (draw_window?.contentViewController as! GlobalDrawController).drawing_view.needsDisplay = true
              
          }
      }

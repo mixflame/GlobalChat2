@@ -359,10 +359,6 @@ class LineDrawer : NSImageView {
             return
         }
         
-        if(rainbowPenToolOn) {
-            pen_color = NSColor.random()
-        }
-        
         
         
         scribbling = true
