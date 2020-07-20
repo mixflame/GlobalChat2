@@ -50,6 +50,7 @@ class GlobalDrawController: NSViewController {
     func brushBigger() {
         if(loaded) {
             drawing_view.pen_width = CGFloat(drawing_view.pen_width + 1.0)
+            drawing_view.needsDisplay = true
             drawing_view.window!.title = "Brush size: \(drawing_view.pen_width)"
         }
     }
@@ -58,6 +59,7 @@ class GlobalDrawController: NSViewController {
         if(loaded) {
             if(drawing_view.pen_width > 1) {
                 drawing_view.pen_width = CGFloat(drawing_view.pen_width - 1.0)
+                drawing_view.needsDisplay = true
                 drawing_view.window!.title = "Brush size: \(drawing_view.pen_width)"
             }
         }
@@ -111,6 +113,8 @@ class LineDrawer : NSImageView {
     var lastPt : CGPoint = CGPoint()
     var newPt : CGPoint = CGPoint()
     
+    var mouseBrushPt : CGPoint = CGPoint()
+    
     
 //    var username : String = ""
     
@@ -121,6 +125,19 @@ class LineDrawer : NSImageView {
     var rainbowPenToolOn : Bool = false
     
     var flattenedImage: NSImage?
+    
+    var trackingArea : NSTrackingArea?
+
+    override func updateTrackingAreas() {
+        if trackingArea != nil {
+            self.removeTrackingArea(trackingArea!)
+        }
+        let options : NSTrackingArea.Options =
+            [.mouseEnteredAndExited, .mouseMoved, .activeInKeyWindow]
+        trackingArea = NSTrackingArea(rect: self.bounds, options: options,
+                                      owner: self, userInfo: nil)
+        self.addTrackingArea(trackingArea!)
+    }
     
     public func deleteLayers(_ handle : String) {
         layerOrder = layerOrder.filter { !($0.components(separatedBy: "::!!::").first == handle) }
@@ -239,6 +256,21 @@ class LineDrawer : NSImageView {
         nameHash.removeAll()
     }
     
+    func draw_mouse_brush_point() {
+        let myView: NSView? = self // The view you are converting coordinates to
+        let globalLocation = NSEvent.mouseLocation
+        let windowLocation = myView?.window?.convertPoint(fromScreen: globalLocation)
+        let viewLocation = myView?.convert(windowLocation ?? NSPoint.zero, from: nil)
+        if NSPointInRect(viewLocation ?? NSPoint.zero, myView?.bounds ?? NSRect.zero) {
+            var drawPoint = CGPoint()
+            drawPoint.x = mouseBrushPt.x - 1
+            drawPoint.y = mouseBrushPt.y
+            drawLineTo(mouseBrushPt, drawPoint, pen_color, pen_width)
+        }
+
+
+    }
+    
     
     func redraw() {
         NSColor.white.setFill() // allow configuration of this later
@@ -278,6 +310,8 @@ class LineDrawer : NSImageView {
             }
         }
         
+        draw_mouse_brush_point()
+        
     }
 
     
@@ -288,6 +322,19 @@ class LineDrawer : NSImageView {
             // drawing code for object
             redraw()
         }
+    }
+    
+    override func mouseExited(with event: NSEvent) {
+        setNeedsDisplay(bounds)
+    }
+    
+    override func mouseMoved(with event: NSEvent) {
+//        super.mouseMoved(with: event)
+        
+        mouseBrushPt = convert(event.locationInWindow, from: nil)
+        
+        setNeedsDisplay(bounds)
+        
     }
 
     override func mouseDown(with event: NSEvent) {
