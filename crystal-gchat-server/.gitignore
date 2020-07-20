@@ -6,3 +6,5 @@
 buffer.txt
 messages.txt
 config.yml
+.key
+.crt

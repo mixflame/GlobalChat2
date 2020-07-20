@@ -33,7 +33,7 @@ class GlobalChatServer
   def handle_client(client)
     ssl_socket = OpenSSL::SSL::Socket::Server.new(client, @context)
     
-    ip = ssl_socket.remote_address.address.to_s
+    ip = ssl_socket.remote_address.to_s
     if(@ban_length[ip]? && @ban_length[ip] > Time.utc)
       puts "denying banned ip, time left: #{(@ban_length[ip] - Time.utc).to_i} seconds"
       send_message(ssl_socket, "ALERT", ["You are banned. Time left: #{(@ban_length[ip] - Time.utc).to_i} seconds"])
@@ -191,7 +191,7 @@ class GlobalChatServer
           time_length = time_length.chomp.to_i.minutes
           # puts "banning #{handle_to_ban} for #{time_length.to_i} seconds"
           socket = @socket_by_handle[handle_to_ban]
-          ip = socket.remote_address.address.to_s
+          ip = socket.remote_address.to_s
           
           @banned[handle_to_ban] = ip
           if typeof(time_length) == Time::Span
@@ -203,7 +203,7 @@ class GlobalChatServer
         else
           puts "banning #{handle_to_ban} forever"
           socket = @socket_by_handle[handle_to_ban]
-          ip = socket.remote_address.address.to_s
+          ip = socket.remote_address.to_s
           
           @banned[handle_to_ban] = ip
           @banned_ips << ip
