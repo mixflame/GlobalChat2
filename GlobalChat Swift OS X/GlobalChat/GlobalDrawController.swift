@@ -67,13 +67,17 @@ class GlobalDrawController: NSViewController {
     
     
     func saveImage() {
+        
         let savePanel = NSSavePanel()
         savePanel.allowedFileTypes = ["png"]
         savePanel.begin { (result) in
             if result.rawValue == NSApplication.ModalResponse.OK.rawValue {
                 let path = savePanel.url!.path
                 
+                self.drawing_view.should_draw_brush = false
+                self.drawing_view.needsDisplay = true
                 let image = self.drawing_view.imageRepresentation()
+                self.drawing_view.should_draw_brush = true
                 
                 let imgRep = image.representations[0] as! NSBitmapImageRep
                 let data = imgRep.representation(using: NSBitmapImageRep.FileType.png, properties: [:])
@@ -84,6 +88,7 @@ class GlobalDrawController: NSViewController {
 
             }
         }
+        
     }
 
     
@@ -114,6 +119,8 @@ class LineDrawer : NSImageView {
     var newPt : CGPoint = CGPoint()
     
     var mouseBrushPt : CGPoint = CGPoint()
+    
+    var should_draw_brush = true
     
     
 //    var username : String = ""
@@ -261,7 +268,7 @@ class LineDrawer : NSImageView {
         let globalLocation = NSEvent.mouseLocation
         let windowLocation = myView?.window?.convertPoint(fromScreen: globalLocation)
         let viewLocation = myView?.convert(windowLocation ?? NSPoint.zero, from: nil)
-        if NSPointInRect(viewLocation ?? NSPoint.zero, myView?.bounds ?? NSRect.zero) {
+        if should_draw_brush && NSPointInRect(viewLocation ?? NSPoint.zero, myView?.bounds ?? NSRect.zero) {
             var drawPoint = CGPoint()
             drawPoint.x = mouseBrushPt.x - 1
             drawPoint.y = mouseBrushPt.y
