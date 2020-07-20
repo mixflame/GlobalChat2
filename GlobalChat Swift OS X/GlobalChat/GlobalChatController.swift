@@ -138,7 +138,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
                 let results = regex.matches(in: nick,
                 range: NSRange(nick.startIndex..., in: nick))
                 
-                for match in results {
+                for _ in results {
                     // what will be the code
 //                    let range = match.range
                     let matchString = nsString as String
