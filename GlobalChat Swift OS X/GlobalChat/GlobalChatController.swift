@@ -740,7 +740,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             
 
         } else {
-            draw_window!.showWindow(self)
+            draw_window?.window?.setFrame(NSRect(x: 0, y: 0, width: width, height: height), display: true)
+            draw_window?.showWindow(self)
         }
         
         send_message("GETPOINTS", args: [chat_token])

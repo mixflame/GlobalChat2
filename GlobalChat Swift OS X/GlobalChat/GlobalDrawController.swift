@@ -336,7 +336,15 @@ class LineDrawer : NSImageView {
     }
     
     override func mouseMoved(with event: NSEvent) {
-//        super.mouseMoved(with: event)
+        super.mouseMoved(with: event)
+        
+        if points_total < gdc.points_size! - 1 {
+            return
+        }
+        
+        if(rainbowPenToolOn) {
+            pen_color = NSColor.random()
+        }
         
         mouseBrushPt = convert(event.locationInWindow, from: nil)
         
@@ -376,6 +384,8 @@ class LineDrawer : NSImageView {
         if points_total < gdc.points_size! - 1 {
             return
         }
+        
+        mouseBrushPt = convert(event.locationInWindow, from: nil)
         
         if(rainbowPenToolOn) {
             pen_color = NSColor.random()
