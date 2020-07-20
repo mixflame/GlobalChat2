@@ -28,6 +28,10 @@ class GlobalChatServer
   @banned = {} of String => String
   @banned_ips = [] of String
   @ban_length = {} of String => Time
+  @file_size_limit = 2e+7
+  @log_size = 0.0
+  @canvas_file_size = 0.0
+
 
   def handle_client(client)
     ip = client.remote_address.address.to_s
@@ -109,6 +113,11 @@ class GlobalChatServer
       elsif command == "MESSAGE"
         msg = parr[1]
         @buffer << [handle, msg]
+        @log_size = File.size("messages.txt")
+        if @log_size > @file_size_limit
+          puts "logs too big, pruning"
+          File.delete("messages.txt")
+        end
         File.write("messages.txt", "#{handle}: #{msg}\n", mode: "a")
         broadcast_message(io, "SAY", [handle, msg])
       elsif command == "PING"
@@ -150,6 +159,11 @@ class GlobalChatServer
         alpha = parr[7]
         width = parr[8]
         broadcast_message(io, "POINT", [x, y, dragging, red, green, blue, alpha, width, handle])
+        @canvas_file_size = File.size("buffer.txt")
+        if @canvas_file_size > @file_size_limit
+          puts "canvas too large, pruning"
+          File.delete("buffer.txt")
+        end
         File.write("buffer.txt", "#{@points.last}\n", mode: "a")
       elsif command == "GETPOINTS"
         send_points(io)
@@ -349,6 +363,9 @@ class GlobalChatServer
   def status
     passworded = (@password != "")
     scrollback = @scrollback
+    @log_size = File.size("messages.txt")
+    @canvas_file_size = File.size("buffer.txt")
+    log "Log size: #{@log_size} bytes Canvas size: #{@canvas_file_size} Limit #{@file_size_limit}"
     log "#{@server_name} running on GlobalChat2 platform Replay:#{scrollback} Passworded:#{passworded}"
   end
 
