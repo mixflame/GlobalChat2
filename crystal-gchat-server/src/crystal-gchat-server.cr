@@ -168,8 +168,9 @@ class GlobalChatServer
       elsif command == "BAN"
         return unless @admins.includes?(handle) # admin function
         handle_to_ban = parr[1]
-        time_length = parr[2]
-        if(time_length != nil)
+        
+        if(parr.size > 3)
+          time_length = parr[2]
           time_length = time_length.chomp.to_i.minutes
           # puts "banning #{handle_to_ban} for #{time_length.to_i} seconds"
           socket = @socket_by_handle[handle_to_ban]
