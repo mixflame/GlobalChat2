@@ -4,6 +4,7 @@ require "uri"
 require "http/client"
 require "yaml"
 require "crypto/bcrypt/password"
+require "big"
 
 class GlobalChatServer
   @sockets = [] of TCPSocket
@@ -438,6 +439,7 @@ class GlobalChatServer
       @canvas_size = yaml["canvas_size"].as_s
       @scrollback = yaml["scrollback"].as_bool
       @buffer_line_limit = yaml["buffer_line_limit"].as_i
+      @file_size_limit = yaml["file_size_limit"].as_f
     else
       puts "Use the change-password command to create config.yml"
     end

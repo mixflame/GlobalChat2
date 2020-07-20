@@ -2,6 +2,7 @@ require "yaml"
 require "crypto/bcrypt/password"
 require "option_parser"
 require "atomic_write"
+require "big"
 
 module Globals
   def self.interactive
@@ -29,6 +30,9 @@ module Globals
     puts "how many lines to replay?"
     buffer_line_limit = gets.to_s.chomp.to_i
 
+    puts "server file size limit (canvas, replay) in bytes"
+    file_size_limit = gets.to_s.chomp.to_f64
+
     File.atomic_write("config.yml") { |f| YAML.dump({
       server_name:    server_name,
       port:           port,
@@ -37,7 +41,8 @@ module Globals
       is_private:     is_private,
       canvas_size:    canvas_size,
       scrollback: scrollback,
-      buffer_line_limit: buffer_line_limit
+      buffer_line_limit: buffer_line_limit,
+      file_size_limit: file_size_limit
     }, f) }
 
     exit
