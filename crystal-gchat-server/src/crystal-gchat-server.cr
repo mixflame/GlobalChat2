@@ -15,20 +15,40 @@ class GlobalChatServer
   # @port_keys = {} # unnecessary in PING design
   @handle_last_pinged = {} of String => Time # used for clone removal
   @buffer = [] of Array(String)
-  @password = "" # use change-password to change this
+  @password = ""       # use change-password to change this
   @admin_password = "" # change for admin ability
   @server_name = "GC-crystal"
   @public_keys = {} of String => String
   @scrollback = true
+  @buffer_line_limit = 100
   @port = 9994
   @is_private = false
   @canvas_size = "1280x690"
   @points = [] of String
   @admins = [] of String # warning, this controls admin
+  @banned = {} of String => String
+  @banned_ips = [] of String
+  @ban_length = {} of String => Time
 
   def handle_client(client)
     ssl_socket = OpenSSL::SSL::Socket::Server.new(client, @context)
     
+    ip = ssl_socket.remote_address.address.to_s
+    if(@ban_length[ip]? && @ban_length[ip] > Time.utc)
+      puts "denying banned ip, time left: #{(@ban_length[ip] - Time.utc).to_i} seconds"
+      send_message(ssl_socket, "ALERT", ["You are banned. Time left: #{(@ban_length[ip] - Time.utc).to_i} seconds"])
+      ssl_socket.close
+      remove_dead_socket(ssl_socket)
+      return
+    elsif !@ban_length[ip]?
+      if(@banned_ips.includes?(ip))
+        puts "denying banned ip"
+        send_message(ssl_socket, "ALERT", ["You are banned."])
+        ssl_socket.close
+        remove_dead_socket(ssl_socket)
+        return
+      end
+    end
     begin
       while message = ssl_socket.gets("\0")
         
@@ -71,19 +91,19 @@ class GlobalChatServer
       end
       if handle == nil || handle == ""
         send_message(io, "ALERT", ["You cannot have a blank name."])
-        #remove_dead_socket io
+        # remove_dead_socket io
         io.close
         return
       end
       bcrypt_pass = Crypto::Bcrypt::Password.new(@password)
       bcrypt_admin_pass = Crypto::Bcrypt::Password.new(@admin_password)
-      if bcrypt_admin_pass.verify(password.to_s) && @admin_password != nil && @admin_password != ""
+      if bcrypt_admin_pass.verify(password.to_s)
         @admins << handle
         puts "admins: #{@admins}"
         # uuid are guaranteed unique
         welcome_handle(io, handle)
       else
-        if (bcrypt_pass.verify(password.to_s) || ((password === nil) && (@password == "")))
+        if bcrypt_pass.verify(password.to_s)
           # uuid are guaranteed unique
           welcome_handle(io, handle)
         else
@@ -94,9 +114,7 @@ class GlobalChatServer
       return
     end
 
-
     chat_token = parr.last
-
 
     if check_token(chat_token)
       handle = get_handle(chat_token)
@@ -139,7 +157,6 @@ class GlobalChatServer
           send_message(io, "PUBKEY", [public_key, handle])
         end
       elsif command == "POINT"
-        
         @points << line.gsub(parr.last, handle)
         x = parr[1]
         y = parr[2]
@@ -153,8 +170,61 @@ class GlobalChatServer
         File.write("buffer.txt", "#{@points.last}\n", mode: "a")
       elsif command == "GETPOINTS"
         send_points(io)
+      elsif command == "CLEARCANVAS"
+        return unless @admins.includes?(handle) # admin function
+        if File.exists?("buffer.txt")
+          File.delete("buffer.txt")
+        end
+        @points = [] of String
+        broadcast_message(nil, "CLEARCANVAS", [handle])
+      elsif command == "DELETELAYERS"
+        return unless @admins.includes?(handle) # admin function
+        handle_to_delete = parr[1]
+        delete_layers(handle_to_delete)
+        broadcast_message(nil, "DELETELAYERS", [handle_to_delete])
+      elsif command == "BAN"
+        return unless @admins.includes?(handle) # admin function
+        handle_to_ban = parr[1]
+        
+        if(parr.size > 3)
+          time_length = parr[2]
+          time_length = time_length.chomp.to_i.minutes
+          # puts "banning #{handle_to_ban} for #{time_length.to_i} seconds"
+          socket = @socket_by_handle[handle_to_ban]
+          ip = socket.remote_address.address.to_s
+          
+          @banned[handle_to_ban] = ip
+          if typeof(time_length) == Time::Span
+            @ban_length[ip] = Time.utc + Time::Span.new(seconds: time_length.to_i)
+          end
+          @banned_ips << ip
+          socket.close
+          remove_dead_socket(socket)
+        else
+          puts "banning #{handle_to_ban} forever"
+          socket = @socket_by_handle[handle_to_ban]
+          ip = socket.remote_address.address.to_s
+          
+          @banned[handle_to_ban] = ip
+          @banned_ips << ip
+          socket.close
+          remove_dead_socket(socket)
+        end
+      elsif command == "UNBAN"
+        return unless @admins.includes?(handle) # admin function
+        handle_to_unban = parr[1]
+        ip = @banned[handle_to_unban]
+        @banned_ips.reject! { |banned| banned == ip}
+        @banned.delete handle_to_unban if @banned.includes?(handle_to_unban)
+        @ban_length.delete ip if @ban_length.has_key?(ip)
       end
     end
+  end
+
+  def delete_layers(handle)
+    @points.reject! { |p| p.split("::!!::").last == handle }
+
+    File.write("buffer.txt", @points.join("\n"), mode: "w")
   end
 
   def send_points(io)
@@ -172,14 +242,14 @@ class GlobalChatServer
     # sock_send(io, points_str)
   end
 
-  def clean_handles
-    @handle_keys.each do |k, v|
-      if @handle_last_pinged[v] && @handle_last_pinged[v] < Time.utc - 30.seconds
-        log "removed clone handle: #{v}"
-        remove_user_by_handle(v)
-      end
-    end
-  end
+  # def clean_handles
+  #   @handle_keys.each do |k, v|
+  #     if @handle_last_pinged[v] && @handle_last_pinged[v] < Time.utc - 30.seconds
+  #       log "removed clone handle: #{v}"
+  #       remove_user_by_handle(v)
+  #     end
+  #   end
+  # end
 
   def send_message(io, opcode, args)
     msg = opcode + "::!!::" + args.join("::!!::")
@@ -196,7 +266,7 @@ class GlobalChatServer
     broadcast msg, sender
   end
 
-  def broadcast(message, sender=nil)
+  def broadcast(message, sender = nil)
     @sockets.each do |socket|
       begin
         sock_send(socket, message) unless socket == sender
@@ -212,6 +282,7 @@ class GlobalChatServer
     ct = @socket_keys[socket] if @socket_keys.has_key?(socket)
     handle = @handle_keys[ct] if @handle_keys.has_key?(ct)
     @handles.delete handle if @handles.includes?(handle)
+    @admins.delete handle if @admins.includes?(handle)
     @handle_keys.delete ct if @handle_keys.has_key?(ct)
     @socket_keys.delete socket if @socket_keys.has_key?(socket)
     @socket_by_handle.delete handle if @socket_by_handle.has_key?(handle)
@@ -239,13 +310,9 @@ class GlobalChatServer
     end
   end
 
-  # Send to a single socket
-  # Params:
-  # +io+:: Sending socket
-  # +msg+:: Entirety of command sans the null terminator
   def sock_send(io, msg)
     msg = "#{msg}\0"
-    log "Server: #{msg}"
+    # log "Server: #{msg}"
     io << msg
   end
 
@@ -314,7 +381,7 @@ class GlobalChatServer
   def build_chat_log
     return "" unless @scrollback
     output = ""
-    displayed_buffer = @buffer.size > 30 ? @buffer[@buffer.size-30..-1] : @buffer
+    displayed_buffer = @buffer.size > @buffer_line_limit ? @buffer[@buffer.size - @buffer_line_limit..-1] : @buffer
     displayed_buffer.each do |msg|
       output += "#{msg[0]}: #{msg[1]}\n"
     end
@@ -323,9 +390,7 @@ class GlobalChatServer
 
   def ping_nexus(chatnet_name, port)
     puts "Pinging NexusNet that I'm Online!!"
-    
-    #query = {:name => chatnet_name, :port => port, :host => host}
-    #uri.query = URI.encode_www_form( query )
+
     response = HTTP::Client.get "http://nexus-msl.herokuapp.com/online?name=#{chatnet_name}&port=#{port}"
     @published = true
 
@@ -333,14 +398,13 @@ class GlobalChatServer
       nexus_offline
       exit
     end
-  
+
     at_exit do |status|
       nexus_offline
     end
-  
   end
 
-    # Tell Nexus I am no longer online
+  # Tell Nexus I am no longer online
   def nexus_offline
     if @published == true
       puts "Informing NexusNet that I have exited!!!"
@@ -350,31 +414,25 @@ class GlobalChatServer
   end
 
   def read_config
-
     if File.exists?("config.yml")
-
       puts "reading config from config.yml"
 
       yaml = File.open("config.yml") do |file|
         YAML.parse(file)
       end
 
-      @server_name = yaml["server_name"].to_s
-      @port = yaml["port"].to_s.to_i
-      @password = yaml["password"].to_s # bcrypted
-      @admin_password = yaml["admin_password"].to_s # bcrypted
-      @is_private = yaml["is_private"].to_s == "y"
-      @canvas_size = yaml["canvas_size"].to_s
-
+      @server_name = yaml["server_name"].as_s
+      @port = yaml["port"].as_i
+      @password = yaml["password"].as_s             # bcrypted
+      @admin_password = yaml["admin_password"].as_s # bcrypted
+      @is_private = yaml["is_private"].as_bool
+      @canvas_size = yaml["canvas_size"].as_s
+      @scrollback = yaml["scrollback"].as_bool
+      @buffer_line_limit = yaml["buffer_line_limit"].as_i
     else
-
       puts "Use the change-password command to create config.yml"
-
     end
-
   end
-
 end
 
 gcs = GlobalChatServer.new
-

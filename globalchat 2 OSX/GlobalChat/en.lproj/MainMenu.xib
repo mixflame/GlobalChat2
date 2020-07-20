@@ -20,31 +20,6 @@
                             <menuItem title="GlobalChat 2 Pro #{ver}" id="708">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                             </menuItem>
-                            <menuItem title="Change Color" keyEquivalent="k" id="3lR-Vm-Kpr">
-                                <connections>
-                                    <action selector="changeColor:" target="580" id="aaC-1r-KMm"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Make Brush Bigger" keyEquivalent="=" id="RvF-LD-AM4">
-                                <connections>
-                                    <action selector="brushBigger:" target="580" id="kTc-xu-jBG"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Make Brush Smaller" keyEquivalent="-" id="AWF-8S-rAf">
-                                <connections>
-                                    <action selector="brushSmaller:" target="580" id="u8Y-CF-s33"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Save Image to File" keyEquivalent="s" id="Kta-sT-148">
-                                <connections>
-                                    <action selector="saveImage:" target="580" id="3VG-Tg-nlN"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Toggle Rainbow Colors" keyEquivalent="r" id="QNs-YA-4Gl">
-                                <connections>
-                                    <action selector="toggleRainbowColors:" target="580" id="KVq-vJ-q62"/>
-                                </connections>
-                            </menuItem>
                             <menuItem title="Hide" keyEquivalent="h" id="704">
                                 <connections>
                                     <action selector="hide:" target="-1" id="705"/>
@@ -78,6 +53,48 @@
                         </items>
                     </menu>
                 </menuItem>
+                <menuItem title="Canvas" enabled="NO" id="B76-8K-JtK">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Canvas" id="2Om-Q7-zMd">
+                        <items>
+                            <menuItem title="Change Color" enabled="NO" keyEquivalent="k" id="a5G-vI-qhe">
+                                <connections>
+                                    <action selector="changeColor:" target="580" id="NCv-DU-Abb"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Make Brush Bigger" enabled="NO" keyEquivalent="=" id="isP-MR-seB">
+                                <connections>
+                                    <action selector="brushBigger:" target="580" id="ccI-cg-UeN"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Make Brush Smaller" enabled="NO" keyEquivalent="-" id="GRu-Mo-M9I">
+                                <connections>
+                                    <action selector="brushSmaller:" target="580" id="g6E-7X-X6Z"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Save Image to File" enabled="NO" keyEquivalent="s" id="0fs-Wb-zGd">
+                                <connections>
+                                    <action selector="saveImage:" target="580" id="3kh-Eb-dUf"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Toggle Rainbow Colors" enabled="NO" keyEquivalent="r" id="5K0-Xl-F2D">
+                                <connections>
+                                    <action selector="toggleRainbowColors:" target="580" id="Jrn-9G-037"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Clear Canvas (Admin)" enabled="NO" keyEquivalent="C" id="mAO-EX-T4h">
+                                <connections>
+                                    <action selector="clearCanvas:" target="580" id="fYi-Du-AS0"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Delete Layers (Admin)" enabled="NO" keyEquivalent="D" id="gRd-Ql-4X3">
+                                <connections>
+                                    <action selector="deleteLayers:" target="580" id="bAj-8s-rUc"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
             </items>
             <point key="canvasLocation" x="140" y="154"/>
         </menu>
@@ -85,7 +102,7 @@
             <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="668" y="56" width="732" height="384"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="800"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <value key="minSize" type="size" width="732" height="384"/>
             <view key="contentView" id="372">
                 <rect key="frame" x="0.0" y="0.0" width="732" height="384"/>
@@ -216,6 +233,7 @@
         <customObject id="580" customClass="GlobalChatController" customModule="GlobalChat">
             <connections>
                 <outlet property="application" destination="-3" id="596"/>
+                <outlet property="canvas_menu_item" destination="B76-8K-JtK" id="ad6-EZ-McK"/>
                 <outlet property="chat_message" destination="544" id="591"/>
                 <outlet property="chat_window" destination="371" id="586"/>
                 <outlet property="chat_window_text" destination="681" id="684"/>
@@ -228,7 +246,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="131" y="159" width="480" height="322"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="800"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <view key="contentView" id="603">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="322"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -238,7 +256,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <clipView key="contentView" drawsBackground="NO" id="L6x-aH-wa4">
                             <rect key="frame" x="1" y="1" width="480" height="152"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" id="605">
                                     <rect key="frame" x="0.0" y="0.0" width="480" height="152"/>

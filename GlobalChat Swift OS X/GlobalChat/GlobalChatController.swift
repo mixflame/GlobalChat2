@@ -19,6 +19,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     @IBOutlet weak var nicks_table: NSTableView!
     @IBOutlet weak var scroll_view: NSScrollView!
     @IBOutlet weak var server_list_window: NSWindow!
+    @IBOutlet weak var canvas_menu_item: NSMenuItem!
     
     var nicks: [String] = []
     var msg_count: Int = 0
@@ -178,7 +179,11 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
       
     @IBAction func quit(_ sender: Any) {
-        application.terminate(self)
+        if connected == false {
+            application.terminate(self)
+        } else {
+            return_to_server_list()
+        }
     }
     
     @IBAction func sendMessage(_ sender: NSTextField) {
@@ -235,6 +240,32 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             priv_msg(handle, message: msg!)
         } else if command == "/canvas" {
             draw_window?.showWindow(self)
+        } else if command == "/clearcanvas" {
+            // attempt to clear the canvas
+            send_message("CLEARCANVAS", args: [chat_token])
+        } else if command == "/deletelayers" {
+            let handle = message.components(separatedBy: " ")[1]
+            if handle == "" {
+                return
+            }
+            send_message("DELETELAYERS", args: [handle, chat_token])
+        } else if command == "/ban" {
+            let handle = message.components(separatedBy: " ")[1]
+            if handle == "" {
+                return
+            }
+            if message.components(separatedBy: " ").count > 2 {
+                let time = message.components(separatedBy: " ")[2]
+                send_message("BAN", args: [handle, time, chat_token])
+            } else {
+                send_message("BAN", args: [handle, chat_token])
+            }
+        } else if command == "/unban" {
+            let handle = message.components(separatedBy: " ")[1]
+            if handle == "" {
+                return
+            }
+            send_message("UNBAN", args: [handle, chat_token])
         }
     }
     
@@ -283,7 +314,6 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             sign_on_array = [handle, password]
         }
         send_message("SIGNON", args: sign_on_array)
-        should_autoreconnect = true
         read_line()
     }
     
@@ -363,6 +393,16 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).receive_point(x, y: y, dragging: dragging, red: red, green: green, blue: blue, alpha: alpha, width: width, clickName: clickName)
                 
 //            }
+        } else if command == "CLEARCANVAS" {
+            let handle = parr[1]
+            ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).clearCanvas()
+            
+            output_to_chat_window("\(handle) cleared the canvas")
+        } else if command == "DELETELAYERS" {
+            let handle = parr[1]
+            ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).deleteLayers(handle)
+            
+            output_to_chat_window("\(handle)'s layers were deleted by admin\n")
         }
     }
     
@@ -379,14 +419,16 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
 
     func return_to_server_list() {
-        should_autoreconnect = false
+        
         sign_out()
-        DispatchQueue.main.async {
-            self.server_list_window.makeKeyAndOrderFront(nil)
-            self.chat_window.orderOut(self)
-            self.cleanup()
-            self.connected = false
-        }
+//        DispatchQueue.main.async {
+        self.server_list_window.makeKeyAndOrderFront(nil)
+        self.chat_window.orderOut(self)
+        self.draw_window?.window?.orderOut(self)
+        self.cleanup()
+        self.connected = false
+        self.should_autoreconnect = false
+//        }
     }
     
     
@@ -486,7 +528,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         queue.async {
             if self.should_autoreconnect != false {
                 while(true) {
-                    if self.connected == true {
+                    if self.connected == true || self.should_autoreconnect == false {
                         break
                     }
                   DispatchQueue.main.sync {
@@ -716,7 +758,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             
 
         } else {
-            draw_window!.showWindow(self)
+            draw_window?.window?.setFrame(NSRect(x: 0, y: 0, width: width, height: height), display: true)
+            draw_window?.showWindow(self)
         }
         
         send_message("GETPOINTS", args: [chat_token])
@@ -764,4 +807,37 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     @IBAction func toggleRainbowColors(_ sender : Any) {
         (draw_window?.contentViewController as! GlobalDrawController).drawing_view.rainbowPenToolOn = !(draw_window?.contentViewController as! GlobalDrawController).drawing_view.rainbowPenToolOn
     }
+    
+    @IBAction func clearCanvas(_ sender : Any) {
+        send_message("CLEARCANVAS", args: [chat_token])
+    }
+    
+    func getString(title: String, question: String, defaultValue: String) -> String {
+        let msg = NSAlert()
+        msg.addButton(withTitle: "OK")      // 1st button
+        msg.addButton(withTitle: "Cancel")  // 2nd button
+        msg.messageText = title
+        msg.informativeText = question
+
+        let txt = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
+        txt.stringValue = defaultValue
+
+        msg.accessoryView = txt
+        let response: NSApplication.ModalResponse = msg.runModal()
+
+        if (response == NSApplication.ModalResponse.alertFirstButtonReturn) {
+            return txt.stringValue
+        } else {
+            return ""
+        }
+    }
+    
+    @IBAction func deleteLayers(_ sender : Any) {
+        let handle_to_delete = getString(title: "Handle to delete", question: "Which handle's layers to delete?", defaultValue: "")
+        if handle_to_delete == "" {
+            return
+        }
+        send_message("DELETELAYERS", args: [handle_to_delete, chat_token])
+    }
+    
 }
