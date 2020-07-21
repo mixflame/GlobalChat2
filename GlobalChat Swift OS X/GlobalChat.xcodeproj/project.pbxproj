@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7211855A24BFEA960009D522 /* myIcon.iconset in Resources */ = {isa = PBXBuildFile; fileRef = 7211855924BFEA960009D522 /* myIcon.iconset */; };
+		7266C1E524C684ED00E70DAF /* Sodium in Frameworks */ = {isa = PBXBuildFile; productRef = 7266C1E424C684ED00E70DAF /* Sodium */; };
 		72CBCB1924AD6475007B8B3D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72CBCB1824AD6475007B8B3D /* AppDelegate.swift */; };
 		72CBCB1B24AD6477007B8B3D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72CBCB1A24AD6477007B8B3D /* Assets.xcassets */; };
 		72CBCB2824AD651F007B8B3D /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72CBCB2624AD651E007B8B3D /* MainMenu.xib */; };
@@ -42,6 +43,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				72F8AF1024AFE25B00BC9FC3 /* CocoaAsyncSocket in Frameworks */,
+				7266C1E524C684ED00E70DAF /* Sodium in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +103,7 @@
 			name = GlobalChat;
 			packageProductDependencies = (
 				72F8AF0F24AFE25B00BC9FC3 /* CocoaAsyncSocket */,
+				7266C1E424C684ED00E70DAF /* Sodium */,
 			);
 			productName = GlobalChat;
 			productReference = 72CBCB1524AD6475007B8B3D /* GlobalChat.app */;
@@ -132,6 +135,7 @@
 			mainGroup = 72CBCB0C24AD6475007B8B3D;
 			packageReferences = (
 				72F8AF0E24AFE25B00BC9FC3 /* XCRemoteSwiftPackageReference "CocoaAsyncSocket" */,
+				7266C1E324C684ED00E70DAF /* XCRemoteSwiftPackageReference "swift-sodium" */,
 			);
 			productRefGroup = 72CBCB1624AD6475007B8B3D /* Products */;
 			projectDirPath = "";
@@ -365,6 +369,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7266C1E324C684ED00E70DAF /* XCRemoteSwiftPackageReference "swift-sodium" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jedisct1/swift-sodium";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.8.0;
+			};
+		};
 		72F8AF0E24AFE25B00BC9FC3 /* XCRemoteSwiftPackageReference "CocoaAsyncSocket" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/robbiehanson/CocoaAsyncSocket";
@@ -376,6 +388,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7266C1E424C684ED00E70DAF /* Sodium */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7266C1E324C684ED00E70DAF /* XCRemoteSwiftPackageReference "swift-sodium" */;
+			productName = Sodium;
+		};
 		72F8AF0F24AFE25B00BC9FC3 /* CocoaAsyncSocket */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 72F8AF0E24AFE25B00BC9FC3 /* XCRemoteSwiftPackageReference "CocoaAsyncSocket" */;

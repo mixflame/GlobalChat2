@@ -12,6 +12,8 @@ description: |
 dependencies:
   atomic_write:
     github: chris-huxtable/atomic_write.cr
+  sodium:
+    github: didactic-drunk/sodium.cr
 
 targets:
   crystal-gchat-server:
