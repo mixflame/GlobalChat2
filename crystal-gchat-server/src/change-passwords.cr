@@ -30,7 +30,7 @@ module Globals
     puts "how many lines to replay?"
     buffer_line_limit = gets.to_s.chomp.to_i
 
-    puts "server file size limit (canvas, replay) in bytes"
+    puts "server file size limit (canvas, replay) in bytes (ie 10e+7 for 100 megabytes)"
     file_size_limit = gets.to_s.chomp.to_f64
 
     File.atomic_write("config.yml") { |f| YAML.dump({
