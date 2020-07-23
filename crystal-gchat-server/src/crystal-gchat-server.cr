@@ -245,15 +245,15 @@ class GlobalChatServer
 
   def send_points(io)
     # points_str = ""
-    spawn do
-      @points.each do |point|
-        # points_str += "#{point}\0"
-        sock_send(io, "#{point}\0")
-        # sleep 0.seconds
-        # Fiber.yield
-      end
-      send_message(io, "PONG", [build_handle_list])
+    # spawn do
+    @points.each do |point|
+      # points_str += "#{point}\0"
+      sock_send(io, "#{point}\0")
+      # sleep 0.seconds
+      # Fiber.yield
     end
+    send_message(io, "PONG", [build_handle_list])
+    # end
 
     # sock_send(io, points_str)
   end
