@@ -1,0 +1,14 @@
+[Unit]
+Description=GlobalDraw Service
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+ExecStart=/usr/bin/crystal src/crystal-gchat-server.cr
+WorkingDirectory=/root/GlobalChat2/crystal-gchat-server
+
+[Install]
+WantedBy=multi-user.target
