@@ -114,10 +114,12 @@ class GlobalChatServer
       elsif command == "MESSAGE"
         msg = parr[1]
         @buffer << [handle, msg]
-        @log_size = File.size("messages.txt")
-        if @log_size > @file_size_limit
-          puts "logs too big, pruning"
-          File.delete("messages.txt")
+        if File.exists?("messages.txt")
+          @log_size = File.size("messages.txt")
+          if @log_size > @file_size_limit
+            puts "logs too big, pruning"
+            File.delete("messages.txt")
+          end
         end
         File.write("messages.txt", "#{handle}: #{msg}\n", mode: "a")
         broadcast_message(io, "SAY", [handle, msg])
@@ -160,10 +162,12 @@ class GlobalChatServer
         alpha = parr[7]
         width = parr[8]
         broadcast_message(io, "POINT", [x, y, dragging, red, green, blue, alpha, width, handle])
-        @canvas_file_size = File.size("buffer.txt")
-        if @canvas_file_size > @file_size_limit
-          puts "canvas too large, pruning"
-          File.delete("buffer.txt")
+        if File.exists?("buffer.txt")
+          @canvas_file_size = File.size("buffer.txt")
+          if @canvas_file_size > @file_size_limit
+            puts "canvas too large, pruning"
+            File.delete("buffer.txt")
+          end
         end
         File.write("buffer.txt", "#{@points.last}\n", mode: "a")
       elsif command == "GETPOINTS"
