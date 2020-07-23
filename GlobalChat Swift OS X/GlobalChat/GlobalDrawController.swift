@@ -147,10 +147,8 @@ class LineDrawer : NSImageView {
     }
     
     public func deleteLayers(_ handle : String) {
-        layerOrder = layerOrder.filter { !($0.components(separatedBy: "::!!::").first == handle) }
-        flattenedImage = nil
-        print(layerOrder)
-        setNeedsDisplay(bounds)
+        clearCanvas()
+        gdc.gcc?.send_message("GETPOINTS", args: [gdc.gcc!.chat_token])
     }
     
     public func clearCanvas() {
