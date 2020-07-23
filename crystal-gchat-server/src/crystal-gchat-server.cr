@@ -364,8 +364,16 @@ class GlobalChatServer
   def status
     passworded = (@password != "")
     scrollback = @scrollback
-    @log_size = File.size("messages.txt")
+    if File.exists?("messages.txt")
+    @log_size = File.size("messages.txt") 
+    else
+    @log_size = 0.0
+    end
+    if File.exists?("buffer.txt")
     @canvas_file_size = File.size("buffer.txt")
+    else
+    @canvas_file_size = 0.0
+    end
     log "Log size: #{@log_size} bytes Canvas size: #{@canvas_file_size} Limit #{@file_size_limit}"
     log "#{@server_name} running on GlobalChat2 platform Replay:#{scrollback} Passworded:#{passworded}"
   end
