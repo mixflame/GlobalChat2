@@ -379,7 +379,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             let points_size = parr[2]
             open_draw_window(Int(width)!, Int(height)!, Int(points_size)!)
         } else if command == "POINT" {
-//            if parr.count == 10 {
+            if parr.count == 10 {
                 let x = CGFloat(Double(parr[1])!)
                 let y = CGFloat(Double(parr[2])!)
                 let dragging = Bool(parr[3])!
@@ -391,7 +391,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
                 let clickName = parr[9]
             ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).receive_point(x, y: y, dragging: dragging, red: red, green: green, blue: blue, alpha: alpha, width: width, clickName: clickName)
                 
-//            }
+            }
         } else if command == "CLEARCANVAS" {
             let handle = parr[1]
             ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).clearCanvas()
