@@ -304,7 +304,7 @@ class GlobalChatServer
     @socket_by_handle.delete handle if @socket_by_handle.has_key?(handle)
 
     begin
-      broadcast_message(socket, "LEAVE", [handle])
+      broadcast_message(socket, "LEAVE", [handle]) if handle != "" && handle != nil
     rescue
       log "failed to broadcast LEAVE for handle #{handle}"
     end
@@ -320,7 +320,7 @@ class GlobalChatServer
     @socket_keys.delete socket if @socket_keys.has_key?(socket)
     @socket_by_handle.delete handle if @socket_by_handle.has_key?(handle)
     begin
-      broadcast_message(socket, "LEAVE", [handle])
+      broadcast_message(socket, "LEAVE", [handle]) if handle != "" && handle != nil
     rescue
       log "failed to broadcast LEAVE for handle #{handle}"
     end
