@@ -171,6 +171,7 @@ class GlobalChatServer
         end
         File.write("buffer.txt", "#{@points.last}\n", mode: "a")
       elsif command == "GETPOINTS"
+        send_message(io, "CANVAS", [@canvas_size, @points.size])
         send_points(io)
       elsif command == "CLEARCANVAS"
         return unless @admins.includes?(handle) # admin function
