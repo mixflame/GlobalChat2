@@ -243,7 +243,9 @@ class LineDrawer : NSImageView {
         let maxPoints = 200
         if line.count > maxPoints {
 //            print("too many points")
+            should_draw_brush = false
             flattenedImage = self.imageRepresentation()
+            should_draw_brush = true
 
             // we leave one point to ensure no gaps in drawing
             line.removeAll()
@@ -254,7 +256,9 @@ class LineDrawer : NSImageView {
     }
     
     func flattenImage() {
+        should_draw_brush = false
         flattenedImage = self.imageRepresentation()
+        should_draw_brush = true
         points.removeAll()
         layerOrder.removeAll()
         layers.removeAll()
