@@ -9,6 +9,7 @@
 import Cocoa
 import CocoaAsyncSocket
 import CryptoKit
+import Sodium
 
 class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSocketDelegate, NSTextFieldDelegate, NSTableViewDelegate {
     
@@ -49,6 +50,9 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     var publicKey : Curve25519.KeyAgreement.PublicKey? = nil
     var public_keys : [String: String] = [:]
     
+    let sodium = Sodium()
+    var ourKeyPair : Box.KeyPair? = nil
+    var serverPublicKey : String = ""
     
     var last_key_was_tab : Bool = false
     var first_tab : Bool = false
@@ -58,6 +62,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     var pm_windows = [NSWindowController]()
     
     var draw_window : NSWindowController? = nil
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -299,6 +305,15 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         }
         
     }
+    
+    func sendSocketKey() {
+        ourKeyPair = sodium.box.keyPair()!
+        let publicKey = ourKeyPair!.publicKey
+        let data = NSData(bytes: publicKey, length: publicKey.count)
+        let b64Data = data.base64EncodedData(options: NSData.Base64EncodingOptions.lineLength64Characters)
+        let b64String = NSString(data: b64Data as Data, encoding: String.Encoding.utf8.rawValue)! as String
+        send_message("KEY", args: [b64String])
+    }
   
     func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
         print("Connected")
@@ -308,21 +323,43 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         should_autoreconnect = true
         connected = true
         last_ping = Date()
+        
+        sendSocketKey()
+        read_line()
+    }
+    
+    func send_signon() {
         var sign_on_array: Array<String>
         if password == "" {
             sign_on_array = [handle]
         } else {
-            sign_on_array = [handle, password]
+            let nsdata = NSData(base64Encoded: serverPublicKey, options:NSData.Base64DecodingOptions.ignoreUnknownCharacters)
+            let recipient_pub_key = Array(nsdata as! Data) as Bytes
+            let encryptedPassword: Bytes =
+                sodium.box.seal(message: password.bytes,
+                            recipientPublicKey: recipient_pub_key,
+                            senderSecretKey: ourKeyPair!.secretKey)!
+            let data = NSData(bytes: encryptedPassword, length: encryptedPassword.count)
+            let b64Data = data.base64EncodedData(options: NSData.Base64EncodingOptions.lineLength64Characters)
+            let b64String = NSString(data: b64Data as Data, encoding: String.Encoding.utf8.rawValue)! as String
+            sign_on_array = [handle, b64String]
         }
         send_message("SIGNON", args: sign_on_array)
-        read_line()
     }
     
     func parse_line(_ line: String) {
         print("Server: \(line)")
         let parr = line.replacingOccurrences(of: "\0", with: "").components(separatedBy: "::!!::")
         let command = parr.first
-        if command == "TOKEN" {
+        if command == "KEY" {
+            
+            serverPublicKey = parr[1]
+            
+            print(serverPublicKey)
+            
+            send_signon()
+
+        } else if command == "TOKEN" {
             chat_token = parr[1]
             handle = parr[2]
             server_name = parr[3]

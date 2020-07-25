@@ -5,6 +5,8 @@ require "http/client"
 require "yaml"
 require "crypto/bcrypt/password"
 require "big"
+require "sodium"
+require "base64"
 
 class GlobalChatServer
   @sockets = [] of TCPSocket
@@ -18,7 +20,9 @@ class GlobalChatServer
   @password = ""       # use change-password to change this
   @admin_password = "" # change for admin ability
   @server_name = "GC-crystal"
-  @public_keys = {} of String => String
+  @public_keys = {} of String => String # cryptokit
+  @client_pub_keys = {} of String => String # sodium
+  @server_keypair = Sodium::CryptoBox::SecretKey.new
   @scrollback = true
   @buffer_line_limit = 100
   @port = 9994
@@ -68,10 +72,16 @@ class GlobalChatServer
   def parse_line(line, io)
     parr = line.split("::!!::")
     command = parr[0]
+    if command == "KEY"
+      @client_pub_keys[io.remote_address.to_s] = parr[1]
+      server_pub_key = Base64.encode(@server_keypair.to_slice)
+      send_message(io, "KEY", [server_pub_key])
+      return
+    end
     # puts command
     if command == "SIGNON"
       handle = parr[1]
-      password = parr[2] if parr.size > 2
+      encrypted_password = parr[2] if parr.size > 2
       if @handles.includes?(handle)
         send_message(io, "ALERT", ["Your handle is in use."])
         io.close
@@ -83,6 +93,14 @@ class GlobalChatServer
         io.close
         return
       end
+      password_bytes = Base64.decode(encrypted_password || "")
+      client_pub_key = Sodium::CryptoBox::PublicKey.new(Base64.decode(@client_pub_keys[io.remote_address.to_s] || ""))
+      plaintext = ""
+      @server_keypair.box client_pub_key do |box|
+        plaintext = box.decrypt password_bytes
+      end
+      puts "password: #{plaintext}"
+      return
       bcrypt_pass = Crypto::Bcrypt::Password.new(@password)
       bcrypt_admin_pass = Crypto::Bcrypt::Password.new(@admin_password)
       if bcrypt_admin_pass.verify(password.to_s)
@@ -334,6 +352,7 @@ class GlobalChatServer
   end
 
   def initialize
+    @server_keypair = Sodium::CryptoBox::SecretKey.new
     read_config
     load_canvas_buffer
     load_text_buffer
