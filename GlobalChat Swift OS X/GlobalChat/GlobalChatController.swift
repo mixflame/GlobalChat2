@@ -21,6 +21,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     @IBOutlet weak var server_list_window: NSWindow!
     @IBOutlet weak var canvas_menu_item: NSMenuItem!
     
+    @IBOutlet weak var admin_menu_item: NSMenuItem!
+    
     var nicks: [String] = []
     var msg_count: Int = 0
     var handle: String = ""
@@ -330,6 +332,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             get_pub_keys()
             send_pub_key() // generate and send
             connected = true
+            admin_menu_item.isEnabled = true
         } else if command == "HANDLES" {
             nicks = parr.last!.components(separatedBy: "\n")
             nicks_table.reloadData()
@@ -403,7 +406,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             
             output_to_chat_window("\(handle)'s layers were deleted by admin\n")
         } else if command == "ENDPOINTS" {
-            
+            // unlock canvas menu
+            canvas_menu_item.isEnabled = true
             // unlock canvas
             ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).locked = false
         }
@@ -492,6 +496,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
         print(err.debugDescription)
         self.connected = false
+        admin_menu_item.isEnabled = false
+        canvas_menu_item.isEnabled = false
         autoreconnect()
     }
     
@@ -842,6 +848,27 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             return
         }
         send_message("DELETELAYERS", args: [handle_to_delete, chat_token])
+    }
+    
+    @IBAction func banUser(_ sender : Any) {
+        let handle_to_ban = getString(title: "Handle to ban", question: "Which handle to ban?", defaultValue: "")
+        if handle_to_ban  == "" {
+            return
+        }
+        let time_limit = getString(title: "How long to ban for?", question: "How long to ban in minutes?", defaultValue: "")
+        if time_limit != "" {
+            send_message("BAN", args: [handle_to_ban, time_limit, chat_token])
+        } else {
+            send_message("BAN", args: [handle_to_ban, chat_token])
+        }
+    }
+    
+    @IBAction func unbanUser(_ sender : Any) {
+        let handle_to_unban = getString(title: "Handle to unban", question: "Which handle to unban?", defaultValue: "")
+        if handle_to_unban  == "" {
+            return
+        }
+        send_message("UNBAN", args: [handle_to_unban, chat_token])
     }
     
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -90,6 +90,25 @@
                             <menuItem title="Delete Layers (Admin)" enabled="NO" keyEquivalent="D" id="gRd-Ql-4X3">
                                 <connections>
                                     <action selector="deleteLayers:" target="580" id="bAj-8s-rUc"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Admin" enabled="NO" id="tqo-Uh-aMw">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Admin" id="W2e-Vl-Mrz">
+                        <items>
+                            <menuItem title="Ban user" enabled="NO" id="ytf-oE-F6f">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="banUser:" target="580" id="Sch-s1-gZI"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Unban user" enabled="NO" id="hHk-fh-Mz5">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="unbanUser:" target="580" id="I0s-E1-646"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -232,6 +251,7 @@
         <customObject id="420" customClass="NSFontManager"/>
         <customObject id="580" customClass="GlobalChatController" customModule="GlobalChat">
             <connections>
+                <outlet property="admin_menu_item" destination="tqo-Uh-aMw" id="dRi-V9-VHf"/>
                 <outlet property="application" destination="-3" id="596"/>
                 <outlet property="canvas_menu_item" destination="B76-8K-JtK" id="ad6-EZ-McK"/>
                 <outlet property="chat_message" destination="544" id="591"/>

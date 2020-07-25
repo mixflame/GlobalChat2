@@ -42,7 +42,6 @@ class GlobalDrawController: NSViewController {
 //        drawing_view.pen_width = CGFloat(5.0)
         loaded = true
         drawing_view.gdc = self
-        gcc?.canvas_menu_item.isEnabled = true
     }
     
     func brushBigger() {
