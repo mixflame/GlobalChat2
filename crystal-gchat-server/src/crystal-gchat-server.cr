@@ -94,11 +94,8 @@ class GlobalChatServer
         return
       end
       password_bytes = Base64.decode(encrypted_password || "")
-      client_pub_key = Sodium::CryptoBox::PublicKey.new(Base64.decode(@client_pub_keys[io.remote_address.to_s] || ""))
-      plaintext = ""
-      @server_keypair.box client_pub_key do |box|
-        plaintext = box.decrypt password_bytes
-      end
+      # client_pub_key = Sodium::CryptoBox::PublicKey.new(Base64.decode(@client_pub_keys[io.remote_address.to_s] || ""))
+      plaintext = @server_keypair.decrypt password_bytes
       puts "password: #{plaintext}"
       return
       bcrypt_pass = Crypto::Bcrypt::Password.new(@password)

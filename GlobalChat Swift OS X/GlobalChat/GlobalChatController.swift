@@ -334,11 +334,10 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             sign_on_array = [handle]
         } else {
             let nsdata = NSData(base64Encoded: serverPublicKey, options:NSData.Base64DecodingOptions.ignoreUnknownCharacters)
-            let recipient_pub_key = Array(nsdata as! Data) as Bytes
+            let recipient_pub_key = Array(nsdata! as Data) as Bytes
             let encryptedPassword: Bytes =
                 sodium.box.seal(message: password.bytes,
-                            recipientPublicKey: recipient_pub_key,
-                            senderSecretKey: ourKeyPair!.secretKey)!
+                            recipientPublicKey: recipient_pub_key)!
             let data = NSData(bytes: encryptedPassword, length: encryptedPassword.count)
             let b64Data = data.base64EncodedData(options: NSData.Base64EncodingOptions.lineLength64Characters)
             let b64String = NSString(data: b64Data as Data, encoding: String.Encoding.utf8.rawValue)! as String
