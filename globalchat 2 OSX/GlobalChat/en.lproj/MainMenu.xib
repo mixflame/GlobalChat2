@@ -87,16 +87,6 @@
                                     <action selector="toggleEraser:" target="580" id="E25-4W-i9G"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Clear Canvas (Admin)" enabled="NO" keyEquivalent="C" id="mAO-EX-T4h">
-                                <connections>
-                                    <action selector="clearCanvas:" target="580" id="fYi-Du-AS0"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Delete Layers (Admin)" enabled="NO" keyEquivalent="D" id="gRd-Ql-4X3">
-                                <connections>
-                                    <action selector="deleteLayers:" target="580" id="bAj-8s-rUc"/>
-                                </connections>
-                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>
@@ -104,16 +94,24 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Admin" id="W2e-Vl-Mrz">
                         <items>
-                            <menuItem title="Ban user" enabled="NO" id="ytf-oE-F6f">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Ban user" enabled="NO" keyEquivalent="b" id="ytf-oE-F6f">
                                 <connections>
                                     <action selector="banUser:" target="580" id="Sch-s1-gZI"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Unban user" enabled="NO" id="hHk-fh-Mz5">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Unban user" enabled="NO" keyEquivalent="u" id="hHk-fh-Mz5">
                                 <connections>
                                     <action selector="unbanUser:" target="580" id="I0s-E1-646"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Clear Canvas" enabled="NO" keyEquivalent="C" id="mAO-EX-T4h">
+                                <connections>
+                                    <action selector="clearCanvas:" target="580" id="fYi-Du-AS0"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Delete Layers" enabled="NO" keyEquivalent="D" id="gRd-Ql-4X3">
+                                <connections>
+                                    <action selector="deleteLayers:" target="580" id="bAj-8s-rUc"/>
                                 </connections>
                             </menuItem>
                         </items>
