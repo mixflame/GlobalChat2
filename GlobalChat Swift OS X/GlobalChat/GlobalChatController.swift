@@ -396,12 +396,16 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             let handle = parr[1]
             ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).clearCanvas()
             
-            output_to_chat_window("\(handle) cleared the canvas")
+            output_to_chat_window("\(handle) cleared the canvas\n")
         } else if command == "DELETELAYERS" {
             let handle = parr[1]
             ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).deleteLayers(handle)
             
             output_to_chat_window("\(handle)'s layers were deleted by admin\n")
+        } else if command == "ENDPOINTS" {
+            
+            // unlock canvas
+            ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).locked = false
         }
     }
     
@@ -736,7 +740,6 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             
             // pass data
             gdc.gcc = self
-            gdc.points_size = points_size
             
             
             let newWindow = NSWindow(contentViewController: gdc)
@@ -760,7 +763,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             draw_window?.window?.setFrame(NSRect(x: 0, y: 0, width: width, height: height), display: true)
             draw_window?.showWindow(self)
         }
-        
+        (draw_window?.contentViewController as! GlobalDrawController).drawing_view.locked = true
         send_message("GETPOINTS", args: [chat_token])
     }
     

@@ -32,8 +32,6 @@ class GlobalDrawController: NSViewController {
     
     var gcc: GlobalChatController?
     
-    var points_size : Int?
-    
     var loaded = false
 
     
@@ -134,6 +132,8 @@ class LineDrawer : NSImageView {
     var flattenedImage: NSImage?
     
     var trackingArea : NSTrackingArea?
+    
+    var locked = true // lock input until ENDPOINTS is received
 
     override func updateTrackingAreas() {
         if trackingArea != nil {
@@ -147,6 +147,7 @@ class LineDrawer : NSImageView {
     }
     
     public func deleteLayers(_ handle : String) {
+        locked = true
         clearCanvas()
         gdc.gcc?.send_message("GETPOINTS", args: [gdc.gcc!.chat_token])
     }
@@ -158,7 +159,6 @@ class LineDrawer : NSImageView {
         layers.removeAll()
         nameHash.removeAll()
         points_total = 0
-        gdc.points_size = 1 // to prevent off by one
         setNeedsDisplay(bounds)
     }
     
@@ -181,7 +181,7 @@ class LineDrawer : NSImageView {
     public func addClick(_ x: CGFloat, y: CGFloat, dragging: Bool, red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, width: CGFloat, clickName: String) {
         
 //        print("num points \(points.count)")
-        (self.window?.contentViewController as! GlobalDrawController).title = "\(points_total)/\(gdc.points_size! - 1) \(clickName) is drawing"
+        (self.window?.contentViewController as! GlobalDrawController).title = "\(points_total) points total, \(clickName) is drawing"
         
         var point : [String : Any] = [:]
         point["x"] = x
@@ -340,7 +340,7 @@ class LineDrawer : NSImageView {
     override func mouseMoved(with event: NSEvent) {
         super.mouseMoved(with: event)
         
-        if points_total < gdc.points_size! - 1 {
+        if locked {
             return
         }
         
@@ -357,7 +357,7 @@ class LineDrawer : NSImageView {
     override func mouseDown(with event: NSEvent) {
         super.mouseDown(with: event)
         
-        if points_total < gdc.points_size! - 1 {
+        if locked {
             return
         }
         
@@ -379,7 +379,7 @@ class LineDrawer : NSImageView {
 
     override func mouseDragged(with event: NSEvent) {
         super.mouseDragged(with: event)
-        if points_total < gdc.points_size! - 1 {
+        if locked {
             return
         }
         

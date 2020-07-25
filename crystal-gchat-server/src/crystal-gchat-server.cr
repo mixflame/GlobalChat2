@@ -252,6 +252,7 @@ class GlobalChatServer
       # sleep 0.seconds
       # Fiber.yield
     end
+    send_message(io, "ENDPOINTS", [] of String)
     send_message(io, "PONG", [build_handle_list])
     # end
 
