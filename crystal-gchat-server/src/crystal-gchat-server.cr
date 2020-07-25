@@ -74,7 +74,7 @@ class GlobalChatServer
     command = parr[0]
     if command == "KEY"
       @client_pub_keys[io.remote_address.to_s] = parr[1]
-      server_pub_key = Base64.encode(@server_keypair.to_slice)
+      server_pub_key = Base64.encode(@server_keypair.public_key.to_slice)
       send_message(io, "KEY", [server_pub_key])
       return
     end
@@ -93,20 +93,22 @@ class GlobalChatServer
         io.close
         return
       end
-      password_bytes = Base64.decode(encrypted_password || "")
-      # client_pub_key = Sodium::CryptoBox::PublicKey.new(Base64.decode(@client_pub_keys[io.remote_address.to_s] || ""))
-      plaintext = @server_keypair.decrypt password_bytes
-      puts "password: #{plaintext}"
-      return
+      plaintext = ""
+      if encrypted_password != nil
+        password_bytes = Base64.decode(encrypted_password || "")
+        plaintext = String.new(@server_keypair.decrypt password_bytes)
+      else
+        plaintext = ""
+      end
       bcrypt_pass = Crypto::Bcrypt::Password.new(@password)
       bcrypt_admin_pass = Crypto::Bcrypt::Password.new(@admin_password)
-      if bcrypt_admin_pass.verify(password.to_s)
+      if bcrypt_admin_pass.verify(plaintext)
         @admins << handle
         puts "admins: #{@admins}"
         # uuid are guaranteed unique
         welcome_handle(io, handle)
       else
-        if bcrypt_pass.verify(password.to_s)
+        if bcrypt_pass.verify(plaintext)
           # uuid are guaranteed unique
           welcome_handle(io, handle)
         else
