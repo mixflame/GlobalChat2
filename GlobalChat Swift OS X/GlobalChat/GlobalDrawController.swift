@@ -269,7 +269,7 @@ class LineDrawer : NSImageView {
         let globalLocation = NSEvent.mouseLocation
         let windowLocation = myView?.window?.convertPoint(fromScreen: globalLocation)
         let viewLocation = myView?.convert(windowLocation ?? NSPoint.zero, from: nil)
-        if should_draw_brush && NSPointInRect(viewLocation ?? NSPoint.zero, myView?.bounds ?? NSRect.zero) {
+        if should_draw_brush && !locked && NSPointInRect(viewLocation ?? NSPoint.zero, myView?.bounds ?? NSRect.zero) {
             var drawPoint = CGPoint()
             drawPoint.x = mouseBrushPt.x - 1
             drawPoint.y = mouseBrushPt.y
