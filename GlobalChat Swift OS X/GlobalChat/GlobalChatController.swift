@@ -818,6 +818,10 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         (draw_window?.contentViewController as! GlobalDrawController).drawing_view.rainbowPenToolOn = !(draw_window?.contentViewController as! GlobalDrawController).drawing_view.rainbowPenToolOn
     }
     
+    @IBAction func toggleEraser(_ sender : Any) {
+        (draw_window?.contentViewController as! GlobalDrawController).drawing_view.chooseEraser()
+      }
+    
     @IBAction func clearCanvas(_ sender : Any) {
         send_message("CLEARCANVAS", args: [chat_token])
     }

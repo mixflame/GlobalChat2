@@ -82,6 +82,11 @@
                                     <action selector="toggleRainbowColors:" target="580" id="Jrn-9G-037"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Toggle Eraser" enabled="NO" keyEquivalent="e" id="m0m-HS-FQk">
+                                <connections>
+                                    <action selector="toggleEraser:" target="580" id="E25-4W-i9G"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Clear Canvas (Admin)" enabled="NO" keyEquivalent="C" id="mAO-EX-T4h">
                                 <connections>
                                     <action selector="clearCanvas:" target="580" id="fYi-Du-AS0"/>

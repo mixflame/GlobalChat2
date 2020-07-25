@@ -133,6 +133,19 @@ class LineDrawer : NSImageView {
     var trackingArea : NSTrackingArea?
     
     var locked = true // lock input until ENDPOINTS is received
+    
+    var old_color : NSColor = NSColor.black.usingColorSpace(NSColorSpace.deviceRGB)!
+    
+    func chooseEraser() {
+        
+        if(pen_color != NSColor.white.usingColorSpace(NSColorSpace.deviceRGB)!) {
+            old_color = pen_color
+            pen_color = NSColor.white.usingColorSpace(NSColorSpace.deviceRGB)!
+        } else {
+            pen_color = old_color
+        }
+        
+    }
 
     override func updateTrackingAreas() {
         if trackingArea != nil {
