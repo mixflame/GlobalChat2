@@ -343,7 +343,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         } else if command == "BUFFER" {
             let buffer : String = parr[1]
             if buffer != "" {
-              chat_buffer = buffer
+              chat_buffer = chat_buffer + buffer
               update_and_scroll()
             }
         } else if command == "SAY" {
@@ -380,6 +380,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             let width = parr[1].components(separatedBy: "x")[0]
             let height = parr[1].components(separatedBy: "x")[1]
             let points_size = parr[2]
+            output_to_chat_window("Receiving \(points_size) points from server...\n")
             open_draw_window(Int(width)!, Int(height)!, Int(points_size)!)
         } else if command == "POINT" {
             if parr.count == 10 {
