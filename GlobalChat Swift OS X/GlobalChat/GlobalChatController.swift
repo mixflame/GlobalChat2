@@ -286,7 +286,15 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
     
     func post_message(_ message: String) {
-        send_message("MESSAGE", args: [message, chat_token])
+        let nsdata = NSData(base64Encoded: serverPublicKey, options:NSData.Base64DecodingOptions.ignoreUnknownCharacters)
+        let recipient_pub_key = Array(nsdata! as Data) as Bytes
+        let encryptedPassword: Bytes =
+            sodium.box.seal(message: message.bytes,
+                        recipientPublicKey: recipient_pub_key)!
+        let data = NSData(bytes: encryptedPassword, length: encryptedPassword.count)
+        let b64Data = data.base64EncodedData(options: NSData.Base64EncodingOptions.endLineWithLineFeed)
+        let b64String = NSString(data: b64Data as Data, encoding: String.Encoding.utf8.rawValue)! as String
+        send_message("MESSAGE", args: [b64String, chat_token])
         add_msg(self.handle, message: message)
     }
     
@@ -385,7 +393,17 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         } else if command == "SAY" {
             let handle = parr[1]
             let msg = parr[2]
-            add_msg(handle, message: msg)
+            let nsdata = NSData(base64Encoded: msg, options:NSData.Base64DecodingOptions.ignoreUnknownCharacters)
+            let message_bytes = Array(nsdata! as Data) as Bytes
+            let decryptedMessage: Bytes =
+                sodium.box.open(anonymousCipherText: message_bytes,
+                                recipientPublicKey: ourKeyPair!.publicKey,
+                                recipientSecretKey: ourKeyPair!.secretKey)!
+            let data = NSData(bytes: decryptedMessage, length: decryptedMessage.count)
+            
+            let decryptedString = NSString(data: data as Data, encoding: String.Encoding.utf8.rawValue)! as String
+            
+            add_msg(handle, message: decryptedString)
         } else if command == "JOIN" {
             get_pub_keys()
             let handle = parr[1]

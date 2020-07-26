@@ -130,7 +130,10 @@ class GlobalChatServer
         send_message(io, "BUFFER", [buffer])
       elsif command == "MESSAGE"
         msg = parr[1]
-        @buffer << [handle, msg]
+        msg_bytes = Base64.decode(msg || "")
+        plaintext = String.new(@server_keypair.decrypt msg_bytes)
+
+        @buffer << [handle, plaintext]
         if File.exists?("messages.txt")
           @log_size = File.size("messages.txt")
           if @log_size > @file_size_limit
@@ -138,8 +141,8 @@ class GlobalChatServer
             File.delete("messages.txt")
           end
         end
-        File.write("messages.txt", "#{handle}: #{msg}\n", mode: "a")
-        broadcast_message(io, "SAY", [handle, msg])
+        File.write("messages.txt", "#{handle}: #{plaintext}\n", mode: "a")
+        broadcast_say_encrypted(io, handle, plaintext)
       elsif command == "PING"
         unless @handles.includes?(handle)
           @handles << handle
@@ -298,6 +301,20 @@ class GlobalChatServer
   def broadcast_message(sender, opcode, args)
     msg = opcode + "::!!::" + args.join("::!!::")
     broadcast msg, sender
+  end
+
+  def broadcast_say_encrypted(sender, handle, message)
+    @sockets.each do |socket|
+      # begin
+        client_pub_key = Sodium::CryptoBox::PublicKey.new(Base64.decode(@client_pub_keys[socket.remote_address.to_s]))
+        encrypted_message = Base64.encode(client_pub_key.encrypt message)
+        output = "SAY::!!::#{handle}::!!::#{encrypted_message}"
+        sock_send(socket, output) unless socket == sender
+      # rescue
+      #   log "broadcast fail removal event"
+      #   remove_dead_socket socket
+      # end
+    end
   end
 
   def broadcast(message, sender = nil)
