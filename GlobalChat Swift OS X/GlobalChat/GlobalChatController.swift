@@ -387,8 +387,18 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         } else if command == "BUFFER" {
             let buffer : String = parr[1]
             if buffer != "" {
-              chat_buffer = chat_buffer + buffer
-              update_and_scroll()
+                let nsdata = NSData(base64Encoded: buffer, options:NSData.Base64DecodingOptions.ignoreUnknownCharacters)
+                let message_bytes = Array(nsdata! as Data) as Bytes
+                let decryptedMessage: Bytes =
+                    sodium.box.open(anonymousCipherText: message_bytes,
+                                    recipientPublicKey: ourKeyPair!.publicKey,
+                                    recipientSecretKey: ourKeyPair!.secretKey)!
+                let data = NSData(bytes: decryptedMessage, length: decryptedMessage.count)
+
+                let decryptedString = NSString(data: data as Data, encoding: String.Encoding.utf8.rawValue)! as String
+
+                chat_buffer = chat_buffer + decryptedString
+                update_and_scroll()
             }
         } else if command == "SAY" {
             let handle = parr[1]

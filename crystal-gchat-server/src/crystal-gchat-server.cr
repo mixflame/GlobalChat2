@@ -34,7 +34,6 @@ class GlobalChatServer
   @banned_ips = [] of String
   @ban_length = {} of String => Time
   @file_size_limit = 2e+7
-  @log_size = 0.0
   @canvas_file_size = 0.0
 
 
@@ -127,21 +126,16 @@ class GlobalChatServer
         send_message(io, "HANDLES", [build_handle_list])
       elsif command == "GETBUFFER"
         buffer = build_chat_log
-        send_message(io, "BUFFER", [buffer])
+        client_pub_key = Sodium::CryptoBox::PublicKey.new(Base64.decode(@client_pub_keys[io.remote_address.to_s]))
+        encrypted_message = Base64.encode(client_pub_key.encrypt buffer)
+
+        send_message(io, "BUFFER", [encrypted_message])
       elsif command == "MESSAGE"
         msg = parr[1]
         msg_bytes = Base64.decode(msg || "")
         plaintext = String.new(@server_keypair.decrypt msg_bytes)
 
         @buffer << [handle, plaintext]
-        if File.exists?("messages.txt")
-          @log_size = File.size("messages.txt")
-          if @log_size > @file_size_limit
-            puts "logs too big, pruning"
-            File.delete("messages.txt")
-          end
-        end
-        File.write("messages.txt", "#{handle}: #{plaintext}\n", mode: "a")
         broadcast_say_encrypted(io, handle, plaintext)
       elsif command == "PING"
         unless @handles.includes?(handle)
@@ -371,7 +365,6 @@ class GlobalChatServer
     @server_keypair = Sodium::CryptoBox::SecretKey.new
     read_config
     load_canvas_buffer
-    load_text_buffer
     unless @is_private == true
       ping_nexus(@server_name, @port)
     end
@@ -392,29 +385,15 @@ class GlobalChatServer
     end
   end
 
-  def load_text_buffer
-    if File.exists?("messages.txt")
-      lines = File.read("messages.txt").chomp.split("\n")
-      lines.each do |line|
-        @buffer << [line.split(": ").first, line.split(": ").last]
-      end
-    end
-  end
-
   def status
     passworded = (@password != "")
     scrollback = @scrollback
-    if File.exists?("messages.txt")
-    @log_size = File.size("messages.txt") 
-    else
-    @log_size = 0.0
-    end
     if File.exists?("buffer.txt")
     @canvas_file_size = File.size("buffer.txt")
     else
     @canvas_file_size = 0.0
     end
-    log "Log size: #{@log_size} bytes Canvas size: #{@canvas_file_size} Limit #{@file_size_limit}"
+    log "Canvas size: #{@canvas_file_size} Limit #{@file_size_limit}"
     log "#{@server_name} running on GlobalChat2 platform Replay:#{scrollback} Passworded:#{passworded}"
   end
 
