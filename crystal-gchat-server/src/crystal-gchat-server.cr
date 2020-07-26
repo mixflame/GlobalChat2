@@ -20,7 +20,7 @@ class GlobalChatServer
   @password = ""       # use change-password to change this
   @admin_password = "" # change for admin ability
   @server_name = "GC-crystal"
-  @public_keys = {} of String => String # cryptokit
+  @public_keys = {} of String => String     # cryptokit
   @client_pub_keys = {} of String => String # sodium
   @server_keypair = Sodium::CryptoBox::SecretKey.new
   @scrollback = true
@@ -36,17 +36,16 @@ class GlobalChatServer
   @file_size_limit = 2e+7
   @canvas_file_size = 0.0
 
-
   def handle_client(client)
     ip = client.remote_address.address.to_s
-    if(@ban_length[ip]? && @ban_length[ip] > Time.utc)
+    if (@ban_length[ip]? && @ban_length[ip] > Time.utc)
       puts "denying banned ip, time left: #{(@ban_length[ip] - Time.utc).to_i} seconds"
       send_message(client, "ALERT", ["You are banned. Time left: #{(@ban_length[ip] - Time.utc).to_i} seconds"])
       client.close
       remove_dead_socket(client)
       return
     elsif !@ban_length[ip]?
-      if(@banned_ips.includes?(ip))
+      if (@banned_ips.includes?(ip))
         puts "denying banned ip"
         send_message(client, "ALERT", ["You are banned."])
         client.close
@@ -201,14 +200,14 @@ class GlobalChatServer
       elsif command == "BAN"
         return unless @admins.includes?(handle) # admin function
         handle_to_ban = parr[1]
-        
-        if(parr.size > 3)
+
+        if (parr.size > 3)
           time_length = parr[2]
           time_length = time_length.chomp.to_i.minutes
           # puts "banning #{handle_to_ban} for #{time_length.to_i} seconds"
           socket = @socket_by_handle[handle_to_ban]
           ip = socket.remote_address.address.to_s
-          
+
           @banned[handle_to_ban] = ip
           if typeof(time_length) == Time::Span
             @ban_length[ip] = Time.utc + Time::Span.new(seconds: time_length.to_i)
@@ -220,7 +219,7 @@ class GlobalChatServer
           puts "banning #{handle_to_ban} forever"
           socket = @socket_by_handle[handle_to_ban]
           ip = socket.remote_address.address.to_s
-          
+
           @banned[handle_to_ban] = ip
           @banned_ips << ip
           socket.close
@@ -230,7 +229,7 @@ class GlobalChatServer
         return unless @admins.includes?(handle) # admin function
         handle_to_unban = parr[1]
         ip = @banned[handle_to_unban]
-        @banned_ips.reject! { |banned| banned == ip}
+        @banned_ips.reject! { |banned| banned == ip }
         @banned.delete handle_to_unban if @banned.includes?(handle_to_unban)
         @ban_length.delete ip if @ban_length.has_key?(ip)
       end
@@ -300,10 +299,10 @@ class GlobalChatServer
   def broadcast_say_encrypted(sender, handle, message)
     @sockets.each do |socket|
       # begin
-        client_pub_key = Sodium::CryptoBox::PublicKey.new(Base64.decode(@client_pub_keys[socket.remote_address.to_s]))
-        encrypted_message = Base64.encode(client_pub_key.encrypt message)
-        output = "SAY::!!::#{handle}::!!::#{encrypted_message}"
-        sock_send(socket, output) unless socket == sender
+      client_pub_key = Sodium::CryptoBox::PublicKey.new(Base64.decode(@client_pub_keys[socket.remote_address.to_s]))
+      encrypted_message = Base64.encode(client_pub_key.encrypt message)
+      output = "SAY::!!::#{handle}::!!::#{encrypted_message}"
+      sock_send(socket, output) unless socket == sender
       # rescue
       #   log "broadcast fail removal event"
       #   remove_dead_socket socket
@@ -389,9 +388,9 @@ class GlobalChatServer
     passworded = (@password != "")
     scrollback = @scrollback
     if File.exists?("buffer.txt")
-    @canvas_file_size = File.size("buffer.txt")
+      @canvas_file_size = File.size("buffer.txt")
     else
-    @canvas_file_size = 0.0
+      @canvas_file_size = 0.0
     end
     log "Canvas size: #{@canvas_file_size} Limit #{@file_size_limit}"
     log "#{@server_name} running on GlobalChat2 platform Replay:#{scrollback} Passworded:#{passworded}"
