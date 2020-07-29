@@ -45,7 +45,7 @@
                                     <action selector="paste:" target="-1" id="689"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Quit GlobalChat 2 Pro" keyEquivalent="q" id="136">
+                            <menuItem title="Quit GlobalChat" keyEquivalent="q" id="136">
                                 <connections>
                                     <action selector="quit:" target="580" id="594"/>
                                 </connections>
