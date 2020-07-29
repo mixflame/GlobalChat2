@@ -23,7 +23,7 @@
 
 /* Begin PBXFileReference section */
 		7211855924BFEA960009D522 /* myIcon.iconset */ = {isa = PBXFileReference; lastKnownFileType = folder.iconset; name = myIcon.iconset; path = "../../globalchat 2 OSX/myIcon.iconset"; sourceTree = "<group>"; };
-		72CBCB1524AD6475007B8B3D /* GlobalChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GlobalChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		72CBCB1524AD6475007B8B3D /* GlobalChat Draw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GlobalChat Draw.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		72CBCB1824AD6475007B8B3D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		72CBCB1A24AD6477007B8B3D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		72CBCB1F24AD6477007B8B3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -61,7 +61,7 @@
 		72CBCB1624AD6475007B8B3D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				72CBCB1524AD6475007B8B3D /* GlobalChat.app */,
+				72CBCB1524AD6475007B8B3D /* GlobalChat Draw.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -88,9 +88,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		72CBCB1424AD6475007B8B3D /* GlobalChat */ = {
+		72CBCB1424AD6475007B8B3D /* GlobalChat Draw */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 72CBCB2324AD6477007B8B3D /* Build configuration list for PBXNativeTarget "GlobalChat" */;
+			buildConfigurationList = 72CBCB2324AD6477007B8B3D /* Build configuration list for PBXNativeTarget "GlobalChat Draw" */;
 			buildPhases = (
 				72CBCB1124AD6475007B8B3D /* Sources */,
 				72CBCB1224AD6475007B8B3D /* Frameworks */,
@@ -100,13 +100,13 @@
 			);
 			dependencies = (
 			);
-			name = GlobalChat;
+			name = "GlobalChat Draw";
 			packageProductDependencies = (
 				72F8AF0F24AFE25B00BC9FC3 /* CocoaAsyncSocket */,
 				7266C1E424C684ED00E70DAF /* Sodium */,
 			);
 			productName = GlobalChat;
-			productReference = 72CBCB1524AD6475007B8B3D /* GlobalChat.app */;
+			productReference = 72CBCB1524AD6475007B8B3D /* GlobalChat Draw.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -124,7 +124,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 72CBCB1024AD6475007B8B3D /* Build configuration list for PBXProject "GlobalChat" */;
+			buildConfigurationList = 72CBCB1024AD6475007B8B3D /* Build configuration list for PBXProject "GlobalChat Draw" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -141,7 +141,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				72CBCB1424AD6475007B8B3D /* GlobalChat */,
+				72CBCB1424AD6475007B8B3D /* GlobalChat Draw */,
 			);
 		};
 /* End PBXProject section */
@@ -352,7 +352,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		72CBCB1024AD6475007B8B3D /* Build configuration list for PBXProject "GlobalChat" */ = {
+		72CBCB1024AD6475007B8B3D /* Build configuration list for PBXProject "GlobalChat Draw" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				72CBCB2124AD6477007B8B3D /* Debug */,
@@ -361,7 +361,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		72CBCB2324AD6477007B8B3D /* Build configuration list for PBXNativeTarget "GlobalChat" */ = {
+		72CBCB2324AD6477007B8B3D /* Build configuration list for PBXNativeTarget "GlobalChat Draw" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				72CBCB2424AD6477007B8B3D /* Debug */,

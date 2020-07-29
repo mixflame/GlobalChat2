@@ -14,10 +14,10 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <menu title="AMainMenu" systemMenu="main" id="29">
             <items>
-                <menuItem title="GlobalChat" id="56">
-                    <menu key="submenu" title="GlobalChat" systemMenu="apple" id="57">
+                <menuItem title="GlobalChat Draw" id="56">
+                    <menu key="submenu" title="GlobalChat Draw" systemMenu="apple" id="57">
                         <items>
-                            <menuItem title="GlobalChat #{ver}" id="708">
+                            <menuItem title="GlobalChat Draw #{ver}" id="708">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                             </menuItem>
                             <menuItem title="Hide" keyEquivalent="h" id="704">
@@ -45,7 +45,7 @@
                                     <action selector="paste:" target="-1" id="689"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Quit GlobalChat" keyEquivalent="q" id="136">
+                            <menuItem title="Quit GlobalChat Draw" keyEquivalent="q" id="136">
                                 <connections>
                                     <action selector="quit:" target="580" id="594"/>
                                 </connections>
@@ -243,7 +243,7 @@
             </view>
             <point key="canvasLocation" x="-388" y="-181"/>
         </window>
-        <customObject id="494" customClass="AppDelegate" customModule="GlobalChat" customModuleProvider="target">
+        <customObject id="494" customClass="AppDelegate" customModule="GlobalChat_Draw">
             <connections>
                 <outlet property="gcc" destination="580" id="669"/>
                 <outlet property="slc" destination="616" id="668"/>
@@ -252,7 +252,7 @@
             </connections>
         </customObject>
         <customObject id="420" customClass="NSFontManager"/>
-        <customObject id="580" customClass="GlobalChatController" customModule="GlobalChat">
+        <customObject id="580" customClass="GlobalChatController" customModule="GlobalChat_Draw">
             <connections>
                 <outlet property="admin_menu_item" destination="tqo-Uh-aMw" id="dRi-V9-VHf"/>
                 <outlet property="application" destination="-3" id="596"/>
@@ -419,7 +419,7 @@
             </view>
             <point key="canvasLocation" x="-388" y="270"/>
         </window>
-        <customObject id="616" customClass="ServerListController" customModule="GlobalChat">
+        <customObject id="616" customClass="ServerListController" customModule="GlobalChat_Draw">
             <connections>
                 <outlet property="chat_window" destination="371" id="647"/>
                 <outlet property="gcc" destination="580" id="626"/>
@@ -431,6 +431,6 @@
                 <outlet property="server_list_window" destination="602" id="618"/>
             </connections>
         </customObject>
-        <customObject id="sFe-dP-nHo" customClass="GlobalDrawController" customModule="GlobalChat" customModuleProvider="target"/>
+        <customObject id="sFe-dP-nHo" customClass="GlobalDrawController" customModule="GlobalChat_Draw"/>
     </objects>
 </document>
