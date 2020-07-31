@@ -249,6 +249,8 @@ class LineDrawer : NSImageView {
         context.addLine(to: endPoint)
         context.strokePath()
         
+        
+        
     }
     
     func checkIfTooManyPointsIn(_ line: inout [[String : Any]]) {
@@ -284,7 +286,7 @@ class LineDrawer : NSImageView {
         let viewLocation = myView?.convert(windowLocation ?? NSPoint.zero, from: nil)
         if should_draw_brush && !locked && NSPointInRect(viewLocation ?? NSPoint.zero, myView?.bounds ?? NSRect.zero) {
             var drawPoint = CGPoint()
-            drawPoint.x = mouseBrushPt.x - 1
+            drawPoint.x = mouseBrushPt.x
             drawPoint.y = mouseBrushPt.y
             drawLineTo(mouseBrushPt, drawPoint, pen_color, pen_width)
         }
@@ -324,7 +326,7 @@ class LineDrawer : NSImageView {
                     drawLineTo(lastPoint, thisPoint, penColor, penWidth)
                 } else {
                     var drawPoint = NSPoint()
-                    drawPoint.x = thisPoint.x - 1
+                    drawPoint.x = thisPoint.x
                     drawPoint.y = thisPoint.y
                     drawLineTo(thisPoint, drawPoint, penColor, penWidth)
                 }
