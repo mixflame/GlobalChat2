@@ -50,6 +50,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApplication.shared.dockTile.badgeLabel = nil
         self.gcc.msg_count = 0
     }
+    
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        NSApplication.shared.terminate(self)
+        return true
+    }
 
 
 }

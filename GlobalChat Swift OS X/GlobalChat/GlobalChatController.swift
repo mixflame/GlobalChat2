@@ -582,13 +582,11 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
     
     func show_chat() {
-        DispatchQueue.main.async {
-            self.server_list_window.orderOut(self)
-            self.chat_window.makeKeyAndOrderFront(nil)
-            if self.server_name != "" {
-                self.log("Connected to \(self.server_name) \n")
-                self.chat_window.title = self.server_name
-            }
+        self.server_list_window.orderOut(self)
+        self.chat_window.makeKeyAndOrderFront(nil)
+        if self.server_name != "" {
+            self.log("Connected to \(self.server_name) \n")
+            self.chat_window.title = self.server_name
         }
     }
     

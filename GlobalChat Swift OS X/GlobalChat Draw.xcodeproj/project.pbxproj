@@ -14,12 +14,29 @@
 		72CBCB2824AD651F007B8B3D /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72CBCB2624AD651E007B8B3D /* MainMenu.xib */; };
 		72CBCB2A24AFA89E007B8B3D /* ServerListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72CBCB2924AFA89E007B8B3D /* ServerListController.swift */; };
 		72CBCB2D24AFA909007B8B3D /* GlobalChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72CBCB2B24AFA909007B8B3D /* GlobalChatController.swift */; };
+		72D2AB2824DCB2E7001B5C62 /* libsodium.23.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D2AB2724DCB2E7001B5C62 /* libsodium.23.dylib */; };
+		72D2AB2924DCB2E7001B5C62 /* libsodium.23.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 72D2AB2724DCB2E7001B5C62 /* libsodium.23.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		72D2AB2B24DCB326001B5C62 /* libsodium.23.dylib in Resources */ = {isa = PBXBuildFile; fileRef = 72D2AB2724DCB2E7001B5C62 /* libsodium.23.dylib */; };
 		72D97CFF24B7CAFD0098E17C /* GlobalDrawController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D97CFD24B7CAFD0098E17C /* GlobalDrawController.swift */; };
 		72D97D0024B7CAFD0098E17C /* GlobalDrawController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72D97CFE24B7CAFD0098E17C /* GlobalDrawController.xib */; };
 		72F8AF1024AFE25B00BC9FC3 /* CocoaAsyncSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 72F8AF0F24AFE25B00BC9FC3 /* CocoaAsyncSocket */; };
 		72F8AF1924B26C0300BC9FC3 /* PrivateMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72F8AF1724B26C0300BC9FC3 /* PrivateMessageController.swift */; };
 		72F8AF1A24B26C0300BC9FC3 /* PrivateMessageController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72F8AF1824B26C0300BC9FC3 /* PrivateMessageController.xib */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		72D2AB2A24DCB2E7001B5C62 /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				72D2AB2924DCB2E7001B5C62 /* libsodium.23.dylib in Embed Libraries */,
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		7211855924BFEA960009D522 /* myIcon.iconset */ = {isa = PBXFileReference; lastKnownFileType = folder.iconset; name = myIcon.iconset; path = "../../globalchat 2 OSX/myIcon.iconset"; sourceTree = "<group>"; };
@@ -31,6 +48,7 @@
 		72CBCB2724AD651E007B8B3D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "../../globalchat 2 OSX/GlobalChat/en.lproj/MainMenu.xib"; sourceTree = "<group>"; };
 		72CBCB2924AFA89E007B8B3D /* ServerListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerListController.swift; sourceTree = "<group>"; };
 		72CBCB2B24AFA909007B8B3D /* GlobalChatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalChatController.swift; sourceTree = "<group>"; };
+		72D2AB2724DCB2E7001B5C62 /* libsodium.23.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsodium.23.dylib; path = ../../../../../usr/local/Cellar/libsodium/1.0.18_1/lib/libsodium.23.dylib; sourceTree = "<group>"; };
 		72D97CFD24B7CAFD0098E17C /* GlobalDrawController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalDrawController.swift; sourceTree = "<group>"; };
 		72D97CFE24B7CAFD0098E17C /* GlobalDrawController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GlobalDrawController.xib; sourceTree = "<group>"; };
 		72F8AF1724B26C0300BC9FC3 /* PrivateMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateMessageController.swift; sourceTree = "<group>"; };
@@ -42,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72D2AB2824DCB2E7001B5C62 /* libsodium.23.dylib in Frameworks */,
 				72F8AF1024AFE25B00BC9FC3 /* CocoaAsyncSocket in Frameworks */,
 				7266C1E524C684ED00E70DAF /* Sodium in Frameworks */,
 			);
@@ -55,6 +74,7 @@
 			children = (
 				72CBCB1724AD6475007B8B3D /* GlobalChat */,
 				72CBCB1624AD6475007B8B3D /* Products */,
+				72D2AB2624DCB2E7001B5C62 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -85,6 +105,14 @@
 			path = GlobalChat;
 			sourceTree = "<group>";
 		};
+		72D2AB2624DCB2E7001B5C62 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				72D2AB2724DCB2E7001B5C62 /* libsodium.23.dylib */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -95,6 +123,8 @@
 				72CBCB1124AD6475007B8B3D /* Sources */,
 				72CBCB1224AD6475007B8B3D /* Frameworks */,
 				72CBCB1324AD6475007B8B3D /* Resources */,
+				72D2AB2A24DCB2E7001B5C62 /* Embed Libraries */,
+				72D2AB2C24DCB342001B5C62 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -156,10 +186,31 @@
 				72CBCB1B24AD6477007B8B3D /* Assets.xcassets in Resources */,
 				72CBCB2824AD651F007B8B3D /* MainMenu.xib in Resources */,
 				72F8AF1A24B26C0300BC9FC3 /* PrivateMessageController.xib in Resources */,
+				72D2AB2B24DCB326001B5C62 /* libsodium.23.dylib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		72D2AB2C24DCB342001B5C62 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "install_name_tool -change /usr/local/opt/libsodium/lib/libsodium.23.dylib @executable_path/../Frameworks/libsodium.23.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME\";\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		72CBCB1124AD6475007B8B3D /* Sources */ = {
@@ -320,6 +371,11 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					/usr/local/Cellar/libsodium/1.0.18_1/lib,
+				);
 				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mindynamics.globalchat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -341,6 +397,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					/usr/local/Cellar/libsodium/1.0.18_1/lib,
 				);
 				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mindynamics.globalchat;
