@@ -46,27 +46,23 @@ class PrivateMessageController: NSViewController, NSTextFieldDelegate {
     }
     
     func parse_links() {
-        DispatchQueue.main.async {
-            self.pm_window_text.isEditable = true
-            self.pm_window_text.isAutomaticLinkDetectionEnabled = true
-            self.pm_window_text.textStorage!.setAttributedString(NSAttributedString.init(string: self.pm_buffer))
-            if self.gcc!.osxMode == "Dark" {
-                self.pm_window_text.textColor = NSColor.white
-            }
-            self.pm_window_text.checkTextInDocument(nil)
-            self.pm_window_text.isEditable = false
+        self.pm_window_text.isEditable = true
+        self.pm_window_text.isAutomaticLinkDetectionEnabled = true
+        self.pm_window_text.textStorage!.setAttributedString(NSAttributedString.init(string: self.pm_buffer))
+        if self.gcc!.osxMode == "Dark" {
+            self.pm_window_text.textColor = NSColor.white
         }
+        self.pm_window_text.checkTextInDocument(nil)
+        self.pm_window_text.isEditable = false
     }
     
     func update_chat_views() {
-          DispatchQueue.main.async {
-            //let frame_height = self.scroll_view.documentView!.frame.size.height
-            //let content_size = self.scroll_view.contentSize.height
-            let y = self.pm_window_text.string.count
-            self.scroll_view.drawsBackground = false
-            self.pm_window_text.scrollRangeToVisible(NSRange.init(location: y, length: 0))
-            self.scroll_view.reflectScrolledClipView(self.scroll_view.contentView)
-        }
+        //let frame_height = self.scroll_view.documentView!.frame.size.height
+        //let content_size = self.scroll_view.contentSize.height
+        let y = self.pm_window_text.string.count
+        self.scroll_view.drawsBackground = false
+        self.pm_window_text.scrollRangeToVisible(NSRange.init(location: y, length: 0))
+        self.scroll_view.reflectScrolledClipView(self.scroll_view.contentView)
     }
     
 }

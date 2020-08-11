@@ -505,11 +505,9 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     
     func alert(_ msg: String) {
-        DispatchQueue.main.async {
-            let alert = NSAlert.init()
-            alert.messageText = msg
-            alert.runModal()
-        }
+        let alert = NSAlert.init()
+        alert.messageText = msg
+        alert.runModal()
     }
     
     func check_if_pinged(_ handle: String, message: String) {
@@ -625,27 +623,23 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
 
     func parse_links() {
-        DispatchQueue.main.async {
-            self.chat_window_text.isEditable = true
-            self.chat_window_text.isAutomaticLinkDetectionEnabled = true
-            self.chat_window_text.textStorage!.setAttributedString(NSAttributedString.init(string: self.chat_buffer))
-            if self.osxMode == "Dark" {
-                self.chat_window_text.textColor = NSColor.white
-            }
-            self.chat_window_text.checkTextInDocument(nil)
-            self.chat_window_text.isEditable = false
+        self.chat_window_text.isEditable = true
+        self.chat_window_text.isAutomaticLinkDetectionEnabled = true
+        self.chat_window_text.textStorage!.setAttributedString(NSAttributedString.init(string: self.chat_buffer))
+        if self.osxMode == "Dark" {
+            self.chat_window_text.textColor = NSColor.white
         }
+        self.chat_window_text.checkTextInDocument(nil)
+        self.chat_window_text.isEditable = false
     }
     
     func update_chat_views() {
-          DispatchQueue.main.async {
-            //let frame_height = self.scroll_view.documentView!.frame.size.height
-            //let content_size = self.scroll_view.contentSize.height
-            let y = self.chat_window_text.string.count
-            self.scroll_view.drawsBackground = false
-            self.chat_window_text.scrollRangeToVisible(NSRange.init(location: y, length: 0))
-            self.scroll_view.reflectScrolledClipView(self.scroll_view.contentView)
-        }
+        //let frame_height = self.scroll_view.documentView!.frame.size.height
+        //let content_size = self.scroll_view.contentSize.height
+        let y = self.chat_window_text.string.count
+        self.scroll_view.drawsBackground = false
+        self.chat_window_text.scrollRangeToVisible(NSRange.init(location: y, length: 0))
+        self.scroll_view.reflectScrolledClipView(self.scroll_view.contentView)
     }
     
     func controlTextDidChange(_ notification: Notification) {

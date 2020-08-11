@@ -51,9 +51,9 @@ class ServerListController: NSViewController, NSTableViewDataSource {
             }
             
             
-            DispatchQueue.main.async {
-                self.server_list_table.reloadData()
-            }
+            
+            self.server_list_table.reloadData()
+            
             
         }
 
