@@ -15,8 +15,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var slc: ServerListController!
     @IBOutlet weak var gcc: GlobalChatController!
     @IBOutlet weak var ver_menu_item: NSMenuItem!
+    @IBOutlet weak var tos: NSWindow!
     
     var connected = false
+    
+    
+    @IBAction func acceptTos(sender: Any) {
+        tos.orderOut(sender)
+        slc.server_list_window.makeKeyAndOrderFront(sender)
+        let prefs = UserDefaults.standard
+        prefs.set(true, forKey: "accepted")
+    }
+    
+    @IBAction func declineTos(sender: Any) {
+        NSApplication.shared.terminate(self)
+    }
 
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -25,6 +38,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         slc.handle.stringValue = (prefs.string(forKey: "handle") ?? "")
         slc.host.stringValue = (prefs.string(forKey: "host") ?? "")
         slc.port.stringValue = (prefs.string(forKey: "port") ?? "")
+        
+        let accepted : Bool = (prefs.bool(forKey: "accepted"))
+        
+        if accepted {
+            acceptTos(sender: self)
+        }
         
         slc.server_list_table.target = slc
         let selector : Selector = #selector(ServerListController.connect(_:))
