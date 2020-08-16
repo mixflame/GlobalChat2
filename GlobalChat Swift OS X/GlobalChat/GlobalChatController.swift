@@ -63,6 +63,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     var draw_window : NSWindowController? = nil
     
+    let prefs = UserDefaults.standard
+    
     
     
     override func viewDidLoad() {
@@ -274,6 +276,39 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
                 return
             }
             send_message("UNBAN", args: [handle, chat_token])
+        } else if command == "/block" {
+            let handle = message.components(separatedBy: " ")[1]
+            if handle == "" {
+                return
+            }
+            // client-side block
+            prefs.set(true, forKey: "\(handle)_blocked")
+            // server-side block
+            //            send_message("BLOCK", args: [handle, chat_token])
+            // global block
+            // to be implemented
+            
+            update_and_scroll() // removes blocked messages
+            
+            
+            for window in pm_windows {
+                if (window.window?.contentViewController as! PrivateMessageController).handle == handle {
+                    window.close()
+                }
+            }
+        } else if command == "/unblock" {
+            let handle = message.components(separatedBy: " ")[1]
+            if handle == "" {
+                return
+            }
+            // client-side block
+            prefs.set(false, forKey: "\(handle)_blocked")
+            // server-side block
+            //            send_message("UNBLOCK", args: [handle, chat_token])
+            // global block
+            // to be implemented
+            chat_buffer = ""
+            send_message("GETBUFFER", args: [chat_token])
         }
     }
     
@@ -321,6 +356,26 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         let b64Data = data.base64EncodedData(options: NSData.Base64EncodingOptions.lineLength64Characters)
         let b64String = NSString(data: b64Data as Data, encoding: String.Encoding.utf8.rawValue)! as String
         send_message("KEY", args: [b64String])
+    }
+    
+    func remove_blocked_messages(_ chat_buffer: String) -> String {
+        var buffer = ""
+        
+        let lines = chat_buffer.components(separatedBy: "\n")
+        
+        for line in lines {
+            let parts = line.components(separatedBy: ": ")
+            let handle = parts[0]
+            let blocked = prefs.bool(forKey: "\(handle)_blocked")
+            if blocked != true {
+                buffer += line + "\n"
+            }
+            
+        }
+        
+        buffer = buffer.replacingOccurrences(of: "\n\n", with: "\n")
+        
+        return buffer
     }
   
     func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
@@ -402,6 +457,10 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             }
         } else if command == "SAY" {
             let handle = parr[1]
+            let blocked = prefs.bool(forKey: "\(handle)_blocked")
+            if blocked {
+                return
+            }
             let msg = parr[2]
             let nsdata = NSData(base64Encoded: msg, options:NSData.Base64DecodingOptions.ignoreUnknownCharacters)
             let message_bytes = Array(nsdata! as Data) as Bytes
@@ -415,14 +474,22 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             
             add_msg(handle, message: decryptedString)
         } else if command == "JOIN" {
-            get_pub_keys()
             let handle = parr[1]
+            let blocked = prefs.bool(forKey: "\(handle)_blocked")
+            if blocked {
+                return
+            }
+            get_pub_keys()
             output_to_chat_window("\(handle) has entered\n")
             nicks.append(handle)
 //            @nicks.uniq!
             nicks_table.reloadData()
         } else if command == "LEAVE" {
             let handle = parr[1]
+            let blocked = prefs.bool(forKey: "\(handle)_blocked")
+            if blocked {
+                return
+            }
             output_to_chat_window("\(handle) has exited\n")
             nicks = nicks.filter { $0 != handle }
             nicks_table.reloadData()
@@ -434,10 +501,18 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             // add pub key to dictionary
             let pub_key = parr[1]
             let handle = parr[2]
+            let blocked = prefs.bool(forKey: "\(handle)_blocked")
+            if blocked {
+                return
+            }
             public_keys[handle] = pub_key
 //            print(public_keys)
         } else if command == "PRIVMSG" {
             let handle = parr[1] // who sent it
+            let blocked = prefs.bool(forKey: "\(handle)_blocked")
+            if blocked {
+                return
+            }
             let b64_cipher_text = parr[2]
             receive_encrypted_message(handle, b64_cipher_text: b64_cipher_text)
         } else if command == "CANVAS" {
@@ -457,6 +532,10 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
                 let alpha = CGFloat(Double(parr[7])!)
                 let width = CGFloat(Double(parr[8])!)
                 let clickName = parr[9]
+                let blocked = prefs.bool(forKey: "\(clickName)_blocked")
+                if blocked {
+                    return
+                }
             ((draw_window?.window?.contentViewController as! GlobalDrawController).drawing_view!).receive_point(x, y: y, dragging: dragging, red: red, green: green, blue: blue, alpha: alpha, width: width, clickName: clickName)
                 
             }
@@ -617,8 +696,9 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     }
     
     func update_and_scroll() {
-      parse_links()
-      update_chat_views()
+        chat_buffer = remove_blocked_messages(chat_buffer)
+        parse_links()
+        update_chat_views()
     }
     
 
