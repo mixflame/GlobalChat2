@@ -39,6 +39,9 @@ class ServerListController: NSViewController, NSTableViewDataSource {
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
             guard let data = data else { return }
             print(String(data: data, encoding: .utf8)!)
+            if(String(data: data, encoding: .utf8)!.contains("failed")){
+                return
+            }
             let data_string = String(data: data, encoding: .utf8)
             let each_line = data_string!.split(separator: Character("\n"))
             for server in each_line {
