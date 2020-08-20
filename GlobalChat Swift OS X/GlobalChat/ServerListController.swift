@@ -34,7 +34,7 @@ class ServerListController: NSViewController, NSTableViewDataSource {
         print("get_servers:")
         self.names = []
         
-        let url = URL(string: "https://nervous-shockley-ec99bc.netlify.app/.netlify/functions/msl")!
+        let url = URL(string: "https://wonderful-heyrovsky-0c77d0.netlify.app/.netlify/functions/msl")!
 
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
             guard let data = data else { return }
@@ -51,8 +51,9 @@ class ServerListController: NSViewController, NSTableViewDataSource {
             }
             
             
-            
-            self.server_list_table.reloadData()
+            DispatchQueue.main.sync {
+                self.server_list_table.reloadData()
+            }
             
             
         }
