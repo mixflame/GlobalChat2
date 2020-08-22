@@ -31,7 +31,11 @@ class PrivateMessageController: NSViewController, NSTextFieldDelegate {
         if message == "" {
             return
         }
-        gcc!.priv_msg(handle, message: message)
+        if message.components(separatedBy: " ").first?.prefix(1) != "/" {
+            gcc!.priv_msg(handle, message: message)
+        } else {
+            gcc!.run_command(message)
+        }
         chat_message.stringValue = ""
     }
 
