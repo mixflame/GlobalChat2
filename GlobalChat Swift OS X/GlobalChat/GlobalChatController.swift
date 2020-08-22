@@ -24,6 +24,8 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
     
     @IBOutlet weak var admin_menu_item: NSMenuItem!
     
+    @IBOutlet weak var report_menu_item: NSMenuItem!
+    
     var nicks: [String] = []
     var msg_count: Int = 0
     var handle: String = ""
@@ -210,6 +212,33 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         chat_message.stringValue = ""
     }
     
+    func report_messages_by(_ handle : String) {
+        let nsdata = NSData(base64Encoded: serverPublicKey, options:NSData.Base64DecodingOptions.ignoreUnknownCharacters)
+        let recipient_pub_key = Array(nsdata! as Data) as Bytes
+        let encryptedPassword: Bytes =
+            sodium.box.seal(message: chat_buffer.bytes,
+                        recipientPublicKey: recipient_pub_key)!
+        let data = NSData(bytes: encryptedPassword, length: encryptedPassword.count)
+        let b64Data = data.base64EncodedData(options: NSData.Base64EncodingOptions.endLineWithLineFeed)
+        let b64String = NSString(data: b64Data as Data, encoding: String.Encoding.utf8.rawValue)! as String
+        send_message("REPORT", args: [handle, b64String, chat_token]);
+        
+        for window in pm_windows {
+            if (window.window?.contentViewController as! PrivateMessageController).handle == handle {
+                let pm_body = (window.window?.contentViewController as! PrivateMessageController).pm_buffer
+                let nsdata = NSData(base64Encoded: serverPublicKey, options:NSData.Base64DecodingOptions.ignoreUnknownCharacters)
+                let recipient_pub_key = Array(nsdata! as Data) as Bytes
+                let encryptedPassword: Bytes =
+                    sodium.box.seal(message: pm_body.bytes,
+                                recipientPublicKey: recipient_pub_key)!
+                let data = NSData(bytes: encryptedPassword, length: encryptedPassword.count)
+                let b64Data = data.base64EncodedData(options: NSData.Base64EncodingOptions.endLineWithLineFeed)
+                let b64String = NSString(data: b64Data as Data, encoding: String.Encoding.utf8.rawValue)! as String
+                send_message("REPORT", args: [handle, b64String, chat_token]);
+            }
+        }
+    }
+    
     func run_command(_ message : String) {
         let command = message.components(separatedBy: " ").first
         if command == "/privmsg" {
@@ -309,6 +338,12 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             // to be implemented
             chat_buffer = ""
             send_message("GETBUFFER", args: [chat_token])
+        } else if command == "/report" {
+            let handle = message.components(separatedBy: " ")[1]
+            if handle == "" {
+                return
+            }
+            report_messages_by(handle)
         }
     }
     
@@ -432,6 +467,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             send_pub_key() // generate and send
             connected = true
             admin_menu_item.isEnabled = true
+            report_menu_item.isEnabled = true
         } else if command == "HANDLES" {
             nicks = parr.last!.components(separatedBy: "\n")
             nicks_table.reloadData()
@@ -455,6 +491,9 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
                 chat_buffer = chat_buffer + decryptedString
                 update_and_scroll()
             }
+        } else if command == "CLEARTEXT" {
+            chat_buffer = ""
+            update_and_scroll()
         } else if command == "SAY" {
             let handle = parr[1]
             let blocked = prefs.bool(forKey: "\(handle)_blocked")
@@ -639,6 +678,7 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         print(err.debugDescription)
         self.connected = false
         admin_menu_item.isEnabled = false
+        report_menu_item.isEnabled = false
         canvas_menu_item.isEnabled = false
         autoreconnect()
     }
@@ -1010,6 +1050,14 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             return
         }
         send_message("UNBAN", args: [handle_to_unban, chat_token])
+    }
+    
+    @IBAction func reportUser(_ sender : Any) {
+        let handle_to_report = getString(title: "Handle to report", question: "Which handle to report?", defaultValue: "")
+        if handle_to_report  == "" {
+            return
+        }
+        report_messages_by(handle_to_report)
     }
     
 }
