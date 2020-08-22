@@ -127,6 +127,18 @@
                                     <action selector="reportUser:" target="580" id="r44-MI-fWO"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Block User" enabled="NO" id="2fD-73-ide">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="blockUser:" target="580" id="c8o-mv-vak"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Unblock User" enabled="NO" id="OPM-YR-HCk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="unblockUser:" target="580" id="FLM-4G-3x5"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>

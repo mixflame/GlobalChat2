@@ -239,6 +239,34 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
         }
     }
     
+    func block_messages_from_handle(_ handle: String) {
+        prefs.set(true, forKey: "\(handle)_blocked")
+        // server-side block
+        //            send_message("BLOCK", args: [handle, chat_token])
+        // global block
+        // to be implemented
+        
+        update_and_scroll() // removes blocked messages
+        
+        
+        for window in pm_windows {
+            if (window.window?.contentViewController as! PrivateMessageController).handle == handle {
+                window.close()
+            }
+        }
+    }
+    
+    func unblock_messages_from_handle(_ handle: String) {
+        // client-side block
+        prefs.set(false, forKey: "\(handle)_blocked")
+        // server-side block
+        //            send_message("UNBLOCK", args: [handle, chat_token])
+        // global block
+        // to be implemented
+        chat_buffer = ""
+        send_message("GETBUFFER", args: [chat_token])
+    }
+    
     func run_command(_ message : String) {
         let command = message.components(separatedBy: " ").first
         if command == "/privmsg" {
@@ -311,33 +339,13 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
                 return
             }
             // client-side block
-            prefs.set(true, forKey: "\(handle)_blocked")
-            // server-side block
-            //            send_message("BLOCK", args: [handle, chat_token])
-            // global block
-            // to be implemented
-            
-            update_and_scroll() // removes blocked messages
-            
-            
-            for window in pm_windows {
-                if (window.window?.contentViewController as! PrivateMessageController).handle == handle {
-                    window.close()
-                }
-            }
+            block_messages_from_handle(handle)
         } else if command == "/unblock" {
             let handle = message.components(separatedBy: " ")[1]
             if handle == "" {
                 return
             }
-            // client-side block
-            prefs.set(false, forKey: "\(handle)_blocked")
-            // server-side block
-            //            send_message("UNBLOCK", args: [handle, chat_token])
-            // global block
-            // to be implemented
-            chat_buffer = ""
-            send_message("GETBUFFER", args: [chat_token])
+            unblock_messages_from_handle(handle)
         } else if command == "/report" {
             let handle = message.components(separatedBy: " ")[1]
             if handle == "" {
@@ -1058,6 +1066,26 @@ class GlobalChatController: NSViewController, NSTableViewDataSource, GCDAsyncSoc
             return
         }
         report_messages_by(handle_to_report)
+    }
+    
+    @IBAction func blockUser(_ sender : Any) {
+        let handle_to_block = getString(title: "Handle to block", question: "Which handle to block?", defaultValue: "")
+        if handle_to_block  == "" {
+            return
+        }
+        
+        block_messages_from_handle(handle)
+        
+    }
+    
+    @IBAction func unblockUser(_ sender : Any) {
+        let handle_to_unblock = getString(title: "Handle to block", question: "Which handle to block?", defaultValue: "")
+        if handle_to_unblock  == "" {
+            return
+        }
+        
+        unblock_messages_from_handle(handle)
+        
     }
     
 }
